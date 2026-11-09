@@ -1,227 +1,64 @@
-import { NextRequest, NextResponse } from "next/server";
-import * as XLSX from "xlsx";
-import { CUSTOMER_SESSION_COOKIE, parseSessionCookieValue } from "@/lib/customer-session";
-import { getCustomerSupabaseAdmin } from "@/lib/customer-supabase-server";
-import { normalizeOrderQuantity } from "@/lib/order-quantity";
+import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'node:crypto';
+import * as XLSX from 'xlsx';
+import { getCustomerSupabaseAdmin } from '@/lib/customer-supabase-server';
+import { resolveExcelCustomerId } from '@/lib/order-import/customer-auth';
+import { inspectExcelWorkbook, parseExcelWorkbook, readExcelWorkbook, type ExcelMapping } from '@/lib/order-import/excel';
+import { previewCustomerExcel } from '@/lib/order-import/customer-excel';
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+export const runtime = 'nodejs';
+const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization' };
+function json(body: unknown, status = 200) { return NextResponse.json(body, { status, headers: cors }); }
+export async function OPTIONS() { return new NextResponse(null, { status: 204, headers: cors }); }
 
-function json(body: unknown, status = 200) {
-  return NextResponse.json(body, { status, headers: corsHeaders });
-}
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: corsHeaders });
-}
-
-async function resolveCustomerId(req: NextRequest, supabase: ReturnType<typeof getCustomerSupabaseAdmin>, tokenFromForm?: string) {
-  const websiteSession = parseSessionCookieValue(req.cookies.get(CUSTOMER_SESSION_COOKIE)?.value);
-  const token = tokenFromForm || websiteSession?.orderSessionToken || req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  if (!token) return null;
-  const { data } = await supabase
-    .from("customer_sessions")
-    .select("customer_id, expires_at")
-    .eq("token", token)
-    .gt("expires_at", new Date().toISOString())
-    .maybeSingle();
-  return data?.customer_id || null;
-}
-
-// Giai đoạn E, mục 9 — khách tải file mẫu để đặt hàng loạt.
 export async function GET() {
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet([
-    ["Tên hoặc Mã hàng", "Số lượng", "Ghi chú"],
-    ["VD: Bắp chuối nguyên cái", 5, ""],
+    ['Tên hoặc Mã hàng', 'Số lượng', 'Ghi chú'],
+    ['VD: Bắp chuối nguyên cái', 5, ''],
   ]);
-  ws["!cols"] = [{ wch: 32 }, { wch: 10 }, { wch: 30 }];
-  XLSX.utils.book_append_sheet(wb, ws, "Dat hang");
-  const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
-  return new NextResponse(buffer, {
-    status: 200,
-    headers: {
-      ...corsHeaders,
-      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "Content-Disposition": 'attachment; filename="mau-dat-hang.xlsx"',
-    },
-  });
-}
-
-function normalize(s: string) {
-  return s
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/đ|Đ/g, "d")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-// Trigram Dice coefficient — đo độ giống nhau giữa 2 chuỗi đã chuẩn hóa, đủ
-// tốt để gợi ý "gần đúng" mà không cần bật extension pg_trgm trong Postgres
-// (giữ mọi thứ chạy được ngay, không cần thêm migration cho tính năng này).
-function trigrams(s: string) {
-  const padded = `  ${s} `;
-  const grams = new Set<string>();
-  for (let i = 0; i < padded.length - 2; i++) grams.add(padded.slice(i, i + 3));
-  return grams;
-}
-function similarityFromGrams(ga: Set<string>, gb: Set<string>) {
-  if (ga.size === 0 || gb.size === 0) return 0;
-  let overlap = 0;
-  for (const g of ga) if (gb.has(g)) overlap++;
-  return (2 * overlap) / (ga.size + gb.size);
-}
-
-interface MatchResult {
-  row: number;
-  input: string;
-  quantity: number;
-  note: string;
-  requestedQuantity?: number;
-  adjustmentAcknowledged?: boolean;
-  adjustmentMessage?: string;
-  status: "matched" | "ambiguous" | "not_found" | "invalid_quantity";
-  product?: { id: string; sku: string; name: string; unit: string; price: number; priceOnRequest: boolean; minOrderQty: number; orderStep: number; enforceOrderStep: boolean; quantityPrecision: number; quantityAdjustmentMode: string };
-  suggestions?: { id: string; sku: string; name: string; unit: string; price: number; priceOnRequest: boolean; minOrderQty: number; orderStep: number; enforceOrderStep: boolean; quantityPrecision: number; quantityAdjustmentMode: string; score: number }[];
+  ws['!cols'] = [{ wch: 32 }, { wch: 10 }, { wch: 30 }];
+  XLSX.utils.book_append_sheet(wb, ws, 'Dat hang');
+  const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+  return new NextResponse(buffer, { status: 200, headers: {
+    ...cors, 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'Content-Disposition': 'attachment; filename="mau-dat-hang.xlsx"',
+  } });
 }
 
 export async function POST(req: NextRequest) {
-  const formData = await req.formData().catch(() => null);
-  const file = formData?.get("file");
-  const tokenFromForm = formData?.get("token");
-
-  const supabase = getCustomerSupabaseAdmin();
-  const customerId = await resolveCustomerId(req, supabase, typeof tokenFromForm === "string" ? tokenFromForm : undefined);
-  if (!customerId) return json({ ok: false, error: "Vui lòng đăng nhập lại" }, 401);
-
-  if (!(file instanceof File)) return json({ ok: false, error: "Thiếu file Excel" }, 400);
-
+  const form = await req.formData().catch(() => null);
+  const file = form?.get('file');
+  const customerId = await resolveExcelCustomerId(req, String(form?.get('token') || ''));
+  if (!customerId) return json({ ok: false, code: 'SESSION_EXPIRED', error: 'Vui lòng đăng nhập lại' }, 401);
+  if (!(file instanceof File)) return json({ ok: false, code: 'MISSING_FILE', error: 'Thiếu file Excel' }, 400);
+  if (!/\.(xlsx|xls)$/i.test(file.name) || file.size > 4 * 1024 * 1024 || !file.size) {
+    return json({ ok: false, code: 'INVALID_EXCEL_FILE', error: 'Chỉ nhận file Excel tối đa 4 MB' }, 400);
+  }
   try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const wb = XLSX.read(buffer, { type: "buffer" });
-    const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[wb.SheetNames[0]], { defval: null });
-    if (rows.length === 0) return json({ ok: false, error: "File không có dữ liệu" }, 400);
-    if (rows.length > 300) return json({ ok: false, error: "File quá nhiều dòng (tối đa 300/lần)" }, 400);
-
-    const { data: products, error } = await supabase
-      .from("products")
-      .select("id, sku, name, unit, price_retail, price_wholesale, min_order_qty, order_step, enforce_order_step, quantity_precision, quantity_adjustment_mode")
-      .eq("active", true);
-    if (error) throw error;
-
-    // Tính giá cho TẤT CẢ sản phẩm 1 lần trong bộ nhớ (thay vì gọi RPC
-    // resolve_product_price cho từng dòng/gợi ý — với file tới 300 dòng x 3
-    // gợi ý sẽ ra hàng trăm round-trip DB tuần tự, dễ timeout). Lấy đúng thứ
-    // tự ưu tiên như hàm SQL: giá hợp đồng riêng > giá theo hạng > giá gốc.
-    const [{ data: customer }, { data: contractRows }] = await Promise.all([
-      supabase.from("vip_accounts").select("discount_tier").eq("id", customerId).maybeSingle(),
-      supabase.from("customer_contract_prices").select("product_id, price, valid_until").eq("customer_id", customerId),
-    ]);
-    const tier = customer?.discount_tier || null;
-    const now = new Date();
-    const contractByProduct = new Map(
-      (contractRows || [])
-        .filter((c) => !c.valid_until || new Date(c.valid_until) > now)
-        .map((c) => [c.product_id, Number(c.price)])
-    );
-    const { data: tierPriceRows } = tier
-      ? await supabase.from("product_tier_prices").select("product_id, price").eq("tier", tier)
-      : { data: [] as { product_id: string; price: number }[] };
-    const tierPriceByProduct = new Map((tierPriceRows || []).map((t) => [t.product_id, Number(t.price)]));
-
-    function priceFor(p: { id: string; price_retail: number | null; price_wholesale: number | null }) {
-      if (contractByProduct.has(p.id)) return contractByProduct.get(p.id)!;
-      if (tierPriceByProduct.has(p.id)) return tierPriceByProduct.get(p.id)!;
-      return Number(p.price_retail) || Number(p.price_wholesale) || 0;
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const xlsx = bytes.subarray(0, 2).toString() === 'PK';
+    const xls = bytes.subarray(0, 8).toString('hex') === 'd0cf11e0a1b11ae1';
+    if (!xlsx && !xls) return json({ ok: false, code: 'INVALID_EXCEL_FILE', error: 'File không đúng định dạng Excel' }, 400);
+    const wb = readExcelWorkbook(bytes);
+    const inspected = inspectExcelWorkbook(wb);
+    let mapping = inspected.mapping;
+    const requested = form?.get('mapping');
+    if (typeof requested === 'string' && requested.trim()) {
+      try { mapping = JSON.parse(requested) as ExcelMapping; }
+      catch { return json({ ok: false, code: 'INVALID_MAPPING', error: 'Cách chọn cột không hợp lệ' }, 400); }
     }
-
-    const bySkuLower = new Map((products || []).map((p) => [String(p.sku || "").toLowerCase(), p]));
-    const byNormalizedName = new Map((products || []).map((p) => [normalize(p.name), p]));
-    // Tính sẵn chuẩn hóa + trigram 1 lần cho toàn bộ sản phẩm, tránh lặp lại
-    // hàng trăm nghìn lần trong vòng lặp gợi ý gần đúng bên dưới (chậm/timeout).
-    const productsWithGrams = (products || []).map((p) => {
-      const norm = normalize(p.name);
-      return { p, norm, grams: trigrams(norm) };
-    });
-
-    const results: MatchResult[] = [];
-    for (let idx = 0; idx < rows.length; idx++) {
-      const r = rows[idx];
-      const input = String(r["Tên hoặc Mã hàng"] ?? r["Mã hàng"] ?? r["Tên hàng"] ?? r["SKU"] ?? "").trim();
-      const qtyRaw = r["Số lượng"] ?? r["Quantity"];
-      const note = String(r["Ghi chú"] ?? r["Note"] ?? "").trim();
-      const rowNum = idx + 2;
-      if (!input) continue;
-
-      const quantity = Number(qtyRaw);
-      if (!Number.isFinite(quantity) || quantity <= 0) {
-        results.push({ row: rowNum, input, quantity, note, status: "invalid_quantity" });
-        continue;
-      }
-
-      // 1. Khớp đúng mã hàng (SKU)
-      const skuMatch = bySkuLower.get(input.toLowerCase());
-      if (skuMatch) {
-        const price = priceFor(skuMatch);
-        const quantityResult = normalizeOrderQuantity(skuMatch, quantity, skuMatch.unit);
-        if (!quantityResult.ok) { results.push({ row: rowNum, input, quantity, note, requestedQuantity: quantity, status: "invalid_quantity" }); continue; }
-        results.push({
-          row: rowNum, input, quantity: Number(quantityResult.quantity), note, requestedQuantity: quantity,
-          adjustmentAcknowledged: true, adjustmentMessage: quantityResult.adjusted ? quantityResult.message : undefined, status: "matched",
-          product: { id: skuMatch.id, sku: skuMatch.sku, name: skuMatch.name, unit: skuMatch.unit || "Kg", price, priceOnRequest: price <= 0, minOrderQty: Number(skuMatch.min_order_qty) || 1, orderStep: Number(skuMatch.order_step) || 1, enforceOrderStep: Boolean(skuMatch.enforce_order_step), quantityPrecision: Number(skuMatch.quantity_precision ?? 3), quantityAdjustmentMode: skuMatch.quantity_adjustment_mode || "reject" },
-        });
-        continue;
-      }
-      // 2. Khớp đúng tên (đã chuẩn hóa)
-      const nameMatch = byNormalizedName.get(normalize(input));
-      if (nameMatch) {
-        const price = priceFor(nameMatch);
-        const quantityResult = normalizeOrderQuantity(nameMatch, quantity, nameMatch.unit);
-        if (!quantityResult.ok) { results.push({ row: rowNum, input, quantity, note, requestedQuantity: quantity, status: "invalid_quantity" }); continue; }
-        results.push({
-          row: rowNum, input, quantity: Number(quantityResult.quantity), note, requestedQuantity: quantity,
-          adjustmentAcknowledged: true, adjustmentMessage: quantityResult.adjusted ? quantityResult.message : undefined, status: "matched",
-          product: { id: nameMatch.id, sku: nameMatch.sku, name: nameMatch.name, unit: nameMatch.unit || "Kg", price, priceOnRequest: price <= 0, minOrderQty: Number(nameMatch.min_order_qty) || 1, orderStep: Number(nameMatch.order_step) || 1, enforceOrderStep: Boolean(nameMatch.enforce_order_step), quantityPrecision: Number(nameMatch.quantity_precision ?? 3), quantityAdjustmentMode: nameMatch.quantity_adjustment_mode || "reject" },
-        });
-        continue;
-      }
-      // 3. Gần đúng — tối đa 3 gợi ý, ngưỡng độ giống >= 0.28
-      const inputGrams = trigrams(normalize(input));
-      const scored = productsWithGrams
-        .map(({ p, grams }) => ({ p, score: similarityFromGrams(inputGrams, grams) }))
-        .filter((x) => x.score >= 0.28)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
-
-      if (scored.length > 0) {
-        const suggestions = scored.map(({ p, score }) => {
-          const price = priceFor(p);
-          return { id: p.id, sku: p.sku, name: p.name, unit: p.unit || "Kg", price, priceOnRequest: price <= 0, minOrderQty: Number(p.min_order_qty) || 1, orderStep: Number(p.order_step) || 1, enforceOrderStep: Boolean(p.enforce_order_step), quantityPrecision: Number(p.quantity_precision ?? 3), quantityAdjustmentMode: p.quantity_adjustment_mode || "reject", score: Math.round(score * 100) / 100 };
-        });
-        results.push({ row: rowNum, input, quantity, note, status: "ambiguous", suggestions });
-      } else {
-        results.push({ row: rowNum, input, quantity, note, status: "not_found" });
-      }
-    }
-
-    return json({
-      ok: true,
-      results,
-      summary: {
-        total: results.length,
-        matched: results.filter((r) => r.status === "matched").length,
-        ambiguous: results.filter((r) => r.status === "ambiguous").length,
-        notFound: results.filter((r) => r.status === "not_found").length,
-        invalidQuantity: results.filter((r) => r.status === "invalid_quantity").length,
-      },
-    });
+    const fileHash = crypto.createHash('sha256').update(bytes).digest('hex');
+    if (!mapping) return json({ ok: true, needsMapping: true, fileHash, sheets: inspected.sheets, mapping: null, results: [], summary: null });
+    const lines = parseExcelWorkbook(wb, file.name, mapping);
+    if (!lines.length) return json({ ok: true, needsMapping: true, fileHash, sheets: inspected.sheets, mapping, results: [], summary: null });
+    const matched = await previewCustomerExcel(getCustomerSupabaseAdmin(), customerId, mapping.sheet, lines);
+    return json({ ok: true, needsMapping: false, fileHash, sheets: inspected.sheets, mapping, ...matched });
   } catch (error) {
-    console.error("POST /api/customer/order/import-excel lỗi:", error);
-    return json({ ok: false, error: "Không đọc được file. Kiểm tra đúng định dạng mẫu chưa." }, 500);
+    console.error('POST /api/customer/order/import-excel:', error);
+    const message = error instanceof Error ? error.message : 'Không đọc được file Excel';
+    const badFile = /Excel|sheet|cột|dòng/i.test(message);
+    return json({ ok: false, code: badFile ? 'INVALID_EXCEL_FILE' : 'EXCEL_PREVIEW_FAILED',
+      error: badFile ? message : 'Không đọc được file Excel, vui lòng thử lại' }, badFile ? 400 : 500);
   }
 }

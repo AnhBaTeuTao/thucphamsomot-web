@@ -54,7 +54,7 @@ export function normalizeUnit(value: unknown) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/đ/g, 'd')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim();
   const aliases: Record<string, string> = {
     ky: 'kg', kilo: 'kg', kilogram: 'kg', kilograms: 'kg',
@@ -62,6 +62,7 @@ export function normalizeUnit(value: unknown) {
     lit: 'l', litre: 'l', liter: 'l', l: 'l',
     cai: 'cai', qua: 'qua', trai: 'qua',
     bich: 'bich', goi: 'goi', hop: 'hop', khay: 'khay', thung: 'thung', bao: 'bao', can: 'can', bo: 'bo',
+    公斤: 'kg', 千克: 'kg', 克: 'g', 升: 'l', 个: 'cai', 件: 'cai', 包: 'goi', 袋: 'bich', 箱: 'thung', 盒: 'hop', 瓶: 'chai', 罐: 'lon',
   };
   return aliases[unit] || unit;
 }
