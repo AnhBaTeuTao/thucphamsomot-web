@@ -520,6 +520,7 @@ export async function POST(req: NextRequest) {
     status: order.status,
     pricingStatus: order.pricing_status || (pricing.priceResolutionStatus === "resolved" ? "resolved" : "provisional"),
     total: committedTotal,
+    pendingPriceCount: pricing.resolved.filter((row) => row.price <= 0).length,
     deliveryDate,
     isLate,
     warnings: warnings.length ? warnings : undefined,
