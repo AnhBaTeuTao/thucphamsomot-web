@@ -45,6 +45,10 @@ function activeAt(row: any, now: number) {
 export async function GET(req: NextRequest) {
   const auth = await resolveCustomerApiAuth(req);
   if (!auth) return json({ ok: false, error: "Phiên đăng nhập đã hết hạn" }, 401);
+  if (req.nextUrl.searchParams.get("mobile") === "1") {
+    const account = await mobileAccount(auth);
+    return account ? json({ ok: true, account }) : json({ ok: false, error: "Không tải được tài khoản" }, 500);
+  }
   const { supabase, customerId } = auth;
   const now = Date.now();
   try {
