@@ -47,6 +47,7 @@ interface LineItem {
   base_unit_price: number;
   unit_price: number;
   pricing_note?: string;
+  customer_note?: string;
   vat_rate: 5 | 8;
   vat_amount?: number;
   isNew?: boolean;
@@ -295,6 +296,7 @@ export default function OrderDetailPage() {
         base_unit_price: Number(item.base_unit_price),
         unit_price: Number(item.unit_price),
         pricing_note: item.pricing_note || '',
+        customer_note: item.customer_note || '',
         vat_rate: Number(item.vat_rate) === 8 ? 8 : 5,
         vat_amount: Number(item.vat_amount || 0),
       })));
@@ -790,6 +792,7 @@ export default function OrderDetailPage() {
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2 flex-wrap">
                             <p className="font-medium text-slate-800">{line.name}</p>
+                            {!line.productId && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">Ngoài danh mục · Chờ xác nhận</span>}
                             {hasContract && (
                               <span className="text-[10px] font-bold text-purple-700 bg-purple-100 border border-purple-200 px-1.5 py-0.5 rounded-full shrink-0">
                                 📋 Giá HĐ
@@ -797,6 +800,7 @@ export default function OrderDetailPage() {
                             )}
                           </div>
                           <p className="text-xs text-slate-400">{line.sku ? `SKU: ${line.sku} · ` : ''}Giá gốc {money(line.base_unit_price)}</p>
+                          {line.customer_note && <p className="mt-1 text-xs text-amber-800">Khách ghi chú: {line.customer_note}</p>}
                           {!isLocked && (
                             <input type="text" value={line.pricing_note || ''} onChange={e => updateLine(idx, 'pricing_note', e.target.value)}
                               placeholder="Quy cách / ghi chú riêng..." className="mt-1 text-xs w-full border-0 border-b border-slate-200 focus:outline-none focus:border-green-500 bg-transparent text-slate-500" />

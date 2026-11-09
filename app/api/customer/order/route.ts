@@ -16,6 +16,8 @@ interface OrderItemInput {
   adjustmentAcknowledged?: boolean;
   note?: string;
   sourceImportLineId?: string;
+  isUnlisted?: boolean;
+  unit?: string;
 }
 
 interface CreateOrderBody {
@@ -175,30 +177,42 @@ export async function POST(req: NextRequest) {
           requestedQuantity: Number(item.requestedQuantity ?? item.quantity) || 0,
           adjustmentAcknowledged: Boolean(item.adjustmentAcknowledged),
           name: String(item.name || item.title || "").trim(),
-          note: typeof item.note === "string" ? item.note.trim().slice(0, 200) : "",
+          note: typeof item.note === "string" ? item.note.trim().slice(0, 500) : "",
           sourceImportLineId: typeof item.sourceImportLineId === "string" ? item.sourceImportLineId.trim() || undefined : undefined,
+          isUnlisted: item.isUnlisted === true,
+          unit: String(item.unit || "").trim().slice(0, 50),
         }))
-        .filter((item) => item.productId && item.quantity > 0)
+        .filter((item) => item.quantity > 0 && (item.isUnlisted || item.productId))
     : [];
 
   if (items.length === 0) {
     return json({ ok: false, error: "Giỏ hàng đang trống" }, 400);
   }
+  if (items.length > 300 || items.some((item) => item.isUnlisted && (
+    !/^unlisted:[0-9a-f-]{36}$/i.test(item.productId) || !item.name || item.name.length > 200
+    || !item.unit || item.quantity < 0.001 || item.quantity > 999999
+    || Math.abs(item.quantity * 1000 - Math.round(item.quantity * 1000)) > 1e-7
+    || item.requestedQuantity !== item.quantity
+  ))) {
+    return json({ ok: false, code: "INVALID_UNLISTED_ITEM", error: "Mặt hàng ngoài danh mục cần tên, đơn vị và số lượng hợp lệ" }, 400);
+  }
+  const catalogItems = items.filter((item) => !item.isUnlisted);
+  const unlistedItems = items.filter((item) => item.isUnlisted);
 
   // Chuẩn hóa số lượng trên server. Client chỉ hiển thị/ghi nhận xác nhận;
   // không được tự quyết định số lượng cuối cùng.
-  const uniqueProductIds = [...new Set(items.map((item) => item.productId))];
-  const { data: quantityProducts, error: quantityProductsError } = await supabaseAdmin
+  const uniqueProductIds = [...new Set(catalogItems.map((item) => item.productId))];
+  const { data: quantityProducts, error: quantityProductsError } = uniqueProductIds.length ? await supabaseAdmin
     .from("products")
     .select("id, name, unit, short_description, min_order_qty, order_step, enforce_order_step, quantity_precision, quantity_adjustment_mode")
     .in("id", uniqueProductIds)
-    .eq("active", true);
+    .eq("active", true) : { data: [], error: null };
   if (quantityProductsError) {
     return json({ ok: false, error: "Không kiểm tra được quy cách sản phẩm" }, 500);
   }
   const quantityProductMap = new Map((quantityProducts || []).map((product: any) => [product.id, product]));
   const quantityAdjustments: Array<{ productId: string; productName: string; requestedQuantity: number; normalizedQuantity: number; message: string }> = [];
-  for (const item of items) {
+  for (const item of catalogItems) {
     const product: any = quantityProductMap.get(item.productId);
     if (!product) {
       return json({ ok: false, error: `Không tìm thấy sản phẩm ${item.productId} trong danh mục` }, 400);
@@ -249,7 +263,7 @@ export async function POST(req: NextRequest) {
 
   const sourceImportBatchId = String(body.sourceImportBatchId || "").trim() || null;
   const sourceLinesById = new Map<string, any>();
-  if (!sourceImportBatchId && items.some((item) => item.sourceImportLineId)) {
+  if (!sourceImportBatchId && catalogItems.some((item) => item.sourceImportLineId)) {
     return json({ ok: false, error: "Thiếu mã phiên nhập đơn thông minh" }, 409);
   }
   if (sourceImportBatchId) {
@@ -261,7 +275,7 @@ export async function POST(req: NextRequest) {
       || importBatch.actor_id !== customerId || importBatch.status !== "confirmed") {
       return json({ ok: false, error: "Phiên nhập đơn thông minh không hợp lệ hoặc chưa được xác nhận" }, 409);
     }
-    const requestedLineIds = items.map((item) => item.sourceImportLineId).filter(Boolean) as string[];
+    const requestedLineIds = catalogItems.map((item) => item.sourceImportLineId).filter(Boolean) as string[];
     if (!requestedLineIds.length) {
       return json({ ok: false, error: "Phiên nhập đơn không còn dòng hàng nào trong giỏ" }, 409);
     }
@@ -272,7 +286,7 @@ export async function POST(req: NextRequest) {
     for (const line of sourceLines || []) sourceLinesById.set(line.id, line);
     if (sourceLinesById.size !== new Set(requestedLineIds).size
       || [...sourceLinesById.values()].some((line) => line.status !== "matched")
-      || items.some((item) => item.sourceImportLineId
+      || catalogItems.some((item) => item.sourceImportLineId
         && sourceLinesById.get(item.sourceImportLineId)?.selected_product_id !== item.productId)) {
       return json({ ok: false, error: "Có dòng nhập thông minh không hợp lệ, vui lòng đọc lại tài liệu" }, 409);
     }
@@ -333,6 +347,14 @@ export async function POST(req: NextRequest) {
     .eq("idempotency_key", idempotencyKey)
     .maybeSingle();
   if (existingOrder) {
+    if (unlistedItems.length) {
+      const { data: savedUnlisted } = await supabaseAdmin.from("order_items")
+        .select("product_local_id").eq("order_id", existingOrder.id)
+        .in("product_local_id", unlistedItems.map((item) => item.productId));
+      if ((savedUnlisted || []).length !== unlistedItems.length) {
+        return json({ ok: false, code: "ORDER_INCOMPLETE", error: "Đơn đang được hoàn tất, vui lòng thử lại" }, 409);
+      }
+    }
     return json({
       ok: true,
       orderId: existingOrder.id,
@@ -345,25 +367,27 @@ export async function POST(req: NextRequest) {
 
   let pricing;
   try {
-    pricing = await resolveOrderPriceBook(
+    pricing = catalogItems.length ? await resolveOrderPriceBook(
       supabaseAdmin,
       customerId,
-      items.map((item) => ({ productId: item.productId, quantity: item.quantity })),
-    );
+      catalogItems.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+    ) : null;
   } catch (error) {
     return json({ ok: false, error: error instanceof Error ? error.message : "Không áp được bảng giá" }, 400);
   }
-  if (pricing.errors.length) {
+  if (pricing?.errors.length) {
     return json({ ok: false, error: pricing.errors.join("; "), code: "INVALID_ORDER_QUANTITY" }, 400);
   }
 
   // Security lockdown không cho anon/authenticated gọi trực tiếp RPC ghi dữ liệu.
   // Route đã xác thực orderSessionToken ở trên, nên thao tác ghi phải dùng kết nối
   // server service_role thay vì quay lại anon client như luồng legacy.
-  const { data, error } = await supabaseAdmin.rpc("customer_create_order", {
+  let data: any = null;
+  let error: any = null;
+  if (catalogItems.length) ({ data, error } = await supabaseAdmin.rpc("customer_create_order", {
     p_session_token: orderSessionToken,
     p_source: source,
-    p_items: items.map(({ note: _n, sourceImportLineId: _source, requestedQuantity: _requested, adjustmentAcknowledged: _ack, ...it }) => it),
+    p_items: catalogItems.map(({ note: _n, sourceImportLineId: _source, requestedQuantity: _requested, adjustmentAcknowledged: _ack, isUnlisted: _unlisted, unit: _unit, ...it }) => it),
     p_delivery_type: deliveryType,
     p_delivery_alias: deliveryAlias,
     p_delivery_address: deliveryAddress,
@@ -373,7 +397,26 @@ export async function POST(req: NextRequest) {
     p_idempotency_key: idempotencyKey,
     p_voucher_code: (body as any).voucherCode || null,
     p_admin_id: null, // không nhận adminId từ client: khách không được giả danh nhân viên (2026-09-20)
-  });
+  }));
+  else {
+    const { data: customer, error: customerError } = await supabaseAdmin.from("vip_accounts")
+      .select("partner_code, name, phone, company, discount_tier, sales_rep_id, is_active, verification_status")
+      .eq("id", customerId).single();
+    if (customerError || !customer?.is_active || customer.verification_status === "rejected") {
+      return json({ ok: false, error: "Tài khoản chưa được phép đặt hàng" }, 403);
+    }
+    const created = await supabaseAdmin.from("orders").insert({
+      order_code: `DH-${todayYmd.replaceAll("-", "")}-U${crypto.randomUUID().replaceAll("-", "").slice(0, 10).toUpperCase()}`,
+      customer_id: customerId, customer_code: customer.partner_code, customer_name: customer.name,
+      customer_phone: customer.phone, customer_company: customer.company, customer_tier: customer.discount_tier,
+      sales_rep_id: customer.sales_rep_id || null, source, delivery_type: deliveryType,
+      delivery_alias: deliveryAlias, delivery_address: deliveryAddress, delivery_name: deliveryName,
+      delivery_phone: deliveryPhone, delivery_date: deliveryDate, note, idempotency_key: idempotencyKey,
+      item_count: unlistedItems.length, price_resolution_status: "pending",
+    }).select("*").single();
+    data = created.data;
+    error = created.error;
+  }
 
   if (error) {
     const { data: racedOrder } = await supabaseAdmin
@@ -383,6 +426,14 @@ export async function POST(req: NextRequest) {
       .eq("idempotency_key", idempotencyKey)
       .maybeSingle();
     if (racedOrder) {
+      if (unlistedItems.length) {
+        const { data: savedUnlisted } = await supabaseAdmin.from("order_items")
+          .select("product_local_id").eq("order_id", racedOrder.id)
+          .in("product_local_id", unlistedItems.map((item) => item.productId));
+        if ((savedUnlisted || []).length !== unlistedItems.length) {
+          return json({ ok: false, code: "ORDER_INCOMPLETE", error: "Đơn đang được hoàn tất, vui lòng thử lại" }, 409);
+        }
+      }
       return json({ ok: true, orderId: racedOrder.id, orderCode: racedOrder.order_code, status: racedOrder.status, pricingStatus: racedOrder.pricing_status || "provisional", reused: true });
     }
     console.error("customer_create_order error:", error);
@@ -434,14 +485,16 @@ export async function POST(req: NextRequest) {
 
   let committedTotal = Number(order.grand_total || 0);
   try {
-    const pricingSnapshot = await applyOrderPricingSnapshot(supabaseAdmin, order.id, pricing);
-    committedTotal = pricingSnapshot.grandTotal;
+    if (pricing) {
+      const pricingSnapshot = await applyOrderPricingSnapshot(supabaseAdmin, order.id, pricing);
+      committedTotal = pricingSnapshot.grandTotal;
+    }
     const { data: createdLines, error: createdLinesError } = await supabaseAdmin.from("order_items")
       .select("id, product_id, quantity")
       .eq("order_id", order.id)
       .order("created_at", { ascending: true });
     if (createdLinesError) throw createdLinesError;
-    const remainingInputs = [...items];
+    const remainingInputs = [...catalogItems];
     const snapshotUpdates = [];
     for (const createdLine of createdLines || []) {
       let index = remainingInputs.findIndex((item) => item.productId === createdLine.product_id && Math.abs(item.quantity - Number(createdLine.quantity)) < 1e-7);
@@ -469,6 +522,30 @@ export async function POST(req: NextRequest) {
   } catch (pricingSnapshotError) {
     console.error("Lỗi lưu snapshot bảng giá sau customer_create_order:", pricingSnapshotError);
     warnings.push("pricing_snapshot_not_saved");
+  }
+  if (unlistedItems.length) {
+    const { error: unlistedError } = await supabaseAdmin.from("order_items").insert(unlistedItems.map((item) => ({
+      order_id: order.id, product_id: null, product_local_id: item.productId, sku: null,
+      name: item.name, unit: item.unit, quantity: item.quantity, requested_quantity: item.quantity,
+      base_unit_price: 0, unit_price: 0, line_total: 0, final_unit_price: 0, final_line_total: 0,
+      customer_note: item.note || null, price_source: "unlisted",
+    })));
+    if (unlistedError) {
+      console.error("Không lưu được hàng ngoài danh mục:", unlistedError);
+      await supabaseAdmin.from("orders").delete().eq("id", order.id);
+      return json({ ok: false, code: "UNLISTED_SAVE_FAILED", error: "Không lưu được mặt hàng ngoài danh mục, vui lòng thử lại" }, 500);
+    }
+    const { error: countError } = await supabaseAdmin.from("orders").update({
+      item_count: catalogItems.length + unlistedItems.length, price_resolution_status: "pending",
+    }).eq("id", order.id);
+    if (countError) warnings.push("unlisted_count_not_saved");
+    if (!catalogItems.length) {
+      const { error: historyError } = await supabaseAdmin.from("order_history").insert({
+        order_id: order.id, action: "created", to_status: order.status || "pending",
+        actor: "customer:website", payload: { source, unlisted_item_count: unlistedItems.length },
+      });
+      if (historyError) warnings.push("history_not_saved");
+    }
   }
 
   // Google Sheets chỉ là bản sao vận hành. Lỗi Sheets không làm mất đơn trung tâm.
@@ -518,9 +595,9 @@ export async function POST(req: NextRequest) {
     orderId: order.id,
     orderCode: order.order_code,
     status: order.status,
-    pricingStatus: order.pricing_status || (pricing.priceResolutionStatus === "resolved" ? "resolved" : "provisional"),
+    pricingStatus: order.pricing_status || (pricing?.priceResolutionStatus === "resolved" && !unlistedItems.length ? "resolved" : "provisional"),
     total: committedTotal,
-    pendingPriceCount: pricing.resolved.filter((row) => row.price <= 0).length,
+    pendingPriceCount: (pricing?.resolved.filter((row) => row.price <= 0).length || 0) + unlistedItems.length,
     deliveryDate,
     isLate,
     warnings: warnings.length ? warnings : undefined,

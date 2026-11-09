@@ -104,7 +104,7 @@ export async function previewCustomerExcel(supabase: SupabaseAdmin, customerId: 
     }
     if (certainUniqueName(exactNames.length, line.note)) return { line, product: exactNames[0], candidates: [] };
     if (exactNames.length === 1) return { line, candidates: [{ product: exactNames[0], score: 1 }], warning: 'Ghi chú yêu cầu kiểm tra lại; vui lòng chọn sản phẩm' };
-    if (exactNames.length > 1) return { line, candidates: exactNames.slice(0, 5).map((product) => ({ product, score: 1 })) };
+    if (exactNames.length > 1) return { line, candidates: exactNames.slice(0, 30).map((product) => ({ product, score: 1 })) };
     const inputGrams = grams(name || normalizeExcelName(line.sku));
     const candidates = searchable.map(({ product, grams: candidateGrams }) => ({
       product, score: Math.max(...candidateGrams.map((candidate) => similarity(inputGrams, candidate))),
@@ -157,9 +157,24 @@ export async function previewCustomerExcel(supabase: SupabaseAdmin, customerId: 
     invalidQuantity: results.filter((r) => r.status === 'invalid_quantity' || r.status === 'unit_conflict').length } };
 }
 
-export type ExcelSelection = { sourceSheet: string; row: number; productId: string; quantity: number; unit: string; note: string };
+export type ExcelSelection = { sourceSheet: string; row: number; productId: string; quantity: number; unit: string; note: string; unlisted?: boolean; name?: string };
 export async function resolveCustomerExcelSelection(supabase: SupabaseAdmin, customerId: string, selections: ExcelSelection[]) {
-  const ids = [...new Set(selections.map((item) => item.productId))];
+  const ids = [...new Set(selections.filter((item) => !item.unlisted).map((item) => item.productId))];
+  const unlisted = selections.filter((item) => item.unlisted);
+  const errors: Array<{ row: number; sourceSheet: string; message: string }> = [];
+  for (const item of unlisted) {
+    if (!item.name?.trim() || !item.unit.trim() || item.quantity < 0.001 || item.quantity > 999999
+      || !Number.isFinite(item.quantity) || Math.abs(item.quantity * 1000 - Math.round(item.quantity * 1000)) > 1e-7) {
+      errors.push({ row: item.row, sourceSheet: item.sourceSheet, message: 'Hàng ngoài danh mục cần tên, đơn vị và số lượng hợp lệ' });
+    }
+  }
+  if (errors.length) return { items: [], errors };
+  if (!ids.length) return { errors: [], items: unlisted.map((item) => ({
+    id: `unlisted:${crypto.randomUUID()}`, sku: '', name: item.name!.trim(), unit: item.unit.trim(),
+    price: 0, priceOnRequest: true, isUnlisted: true, sourceSheet: item.sourceSheet, row: item.row,
+    quantity: item.quantity, requestedQuantity: item.quantity, adjusted: false, adjustmentMessage: null,
+    note: item.note.slice(0, 500), minOrderQty: 0, orderStep: 0, enforceOrderStep: false,
+  })) };
   const { data: products, error } = await supabase.from('products')
     .select('id, sku, name, unit, active, min_order_qty, order_step, enforce_order_step, quantity_precision, quantity_adjustment_mode')
     .in('id', ids).eq('active', true);
@@ -168,8 +183,7 @@ export async function resolveCustomerExcelSelection(supabase: SupabaseAdmin, cus
   const { data: conversions } = await supabase.from('product_unit_conversions')
     .select('product_id, input_unit, input_unit_normalized, factor_to_order_unit')
     .eq('is_active', true).in('product_id', ids);
-  const errors: Array<{ row: number; sourceSheet: string; message: string }> = [];
-  const valid = selections.flatMap((selection) => {
+  const valid = selections.filter((item) => !item.unlisted).flatMap((selection) => {
     const product = byId.get(selection.productId);
     if (!product) { errors.push({ row: selection.row, sourceSheet: selection.sourceSheet, message: 'Sản phẩm không còn bán' }); return []; }
     const check = validateOrderQuantity(product, Number(selection.quantity), selection.unit || product.unit,
@@ -185,10 +199,15 @@ export async function resolveCustomerExcelSelection(supabase: SupabaseAdmin, cus
     valid.map(({ product, check }) => ({ productId: product.id, quantity: check.quantity! })));
   if (pricing.errors.length) return { items: [], errors: [{ row: 0, sourceSheet: '', message: pricing.errors.join('; ') }] };
   const priceById = new Map(pricing.resolved.map((row) => [row.productId, row.price]));
-  return { errors: [], items: valid.map(({ selection, product, check }) => ({
+  return { errors: [], items: [...valid.map(({ selection, product, check }) => ({
     ...productFor(product, priceById.get(product.id) || 0), sourceSheet: selection.sourceSheet,
     row: selection.row, quantity: check.quantity!, requestedQuantity: selection.quantity,
     adjusted: Boolean(check.adjusted), adjustmentMessage: check.message || null,
     note: selection.note.slice(0, 500),
-  })) };
+  })), ...unlisted.map((item) => ({
+    id: `unlisted:${crypto.randomUUID()}`, sku: '', name: item.name!.trim(), unit: item.unit.trim(),
+    price: 0, priceOnRequest: true, isUnlisted: true, sourceSheet: item.sourceSheet, row: item.row,
+    quantity: item.quantity, requestedQuantity: item.quantity, adjusted: false, adjustmentMessage: null,
+    note: item.note.slice(0, 500), minOrderQty: 0, orderStep: 0, enforceOrderStep: false,
+  }))] };
 }

@@ -22,10 +22,12 @@ export async function POST(req: NextRequest) {
     const item = {
       sourceSheet: String(value?.sourceSheet || '').slice(0, 100), row: Number(value?.row),
       productId: String(value?.productId || ''), quantity: Number(value?.quantity),
-      unit: String(value?.unit || '').slice(0, 50), note: String(value?.note || '').slice(0, 500),
+      unit: String(value?.unit || '').trim().slice(0, 50), note: String(value?.note || '').slice(0, 500),
+      unlisted: value?.unlisted === true, name: String(value?.name || '').trim().slice(0, 200),
     };
     const key = `${item.sourceSheet}:${item.row}`;
-    if (!item.productId || !Number.isInteger(item.row) || item.row < 1 || !Number.isFinite(item.quantity)
+    if ((!item.unlisted && !item.productId) || (item.unlisted && (item.productId || !item.name || !item.unit))
+      || !Number.isInteger(item.row) || item.row < 1 || !Number.isFinite(item.quantity)
       || item.quantity <= 0 || keys.has(key)) {
       return json({ ok: false, code: 'INVALID_SELECTION', error: 'Dòng hàng đã chọn không hợp lệ hoặc bị trùng' }, 400);
     }
