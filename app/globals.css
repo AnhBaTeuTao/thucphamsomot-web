@@ -8280,9 +8280,93 @@ a {
   }
 }
 
-/* Compact laptops do not have enough room for the full navigation plus two
-   header CTAs. Switch to the menu before any label can collide with the logo. */
-@media (min-width: 769px) and (max-width: 1360px) {
+/* Responsive header tiers. Laptops at 125% Windows scaling land in
+   1101–1360px, so the main navigation must stay visible there:
+   - >= 1361px : full header.
+   - 1101–1360 : compact desktop header, nav stays inline with tighter spacing.
+   - 1101–1300 : additionally the VIP portal button collapses to its icon.
+   - 769–1100  : tablet header, logo + CTAs + menu button. */
+@media (min-width: 1101px) and (max-width: 1360px) {
+  .site-header .site-header__inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 16px;
+  }
+
+  .site-header .site-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .site-header .site-brand__mark {
+    width: 150px;
+    height: 50px;
+  }
+
+  .site-header .site-nav,
+  .site-header .site-nav--minimal {
+    display: flex !important;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    justify-content: center;
+    gap: 18px;
+    margin: 0;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .site-header .site-nav--minimal .site-nav__link {
+    font-size: 0.86rem;
+    white-space: nowrap;
+  }
+
+  .site-header .site-header__actions {
+    grid-area: auto;
+    grid-column: 3;
+    grid-row: 1;
+    width: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+
+  .site-header .site-header__lang-dropdown {
+    margin-right: 4px;
+  }
+
+  .site-header .site-menu-toggle,
+  .site-header .site-mobile-nav {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 1200px) {
+  .site-header .site-header__inner {
+    gap: 12px;
+  }
+
+  .site-header .site-nav,
+  .site-header .site-nav--minimal {
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 1300px) {
+  .site-header .site-header__cta-group .btn-header-outline {
+    gap: 0;
+    padding: 8px 10px;
+  }
+
+  .site-header .site-header__cta-group .btn-header-outline__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
   .site-header__inner {
     grid-template-columns: auto minmax(0, 1fr) auto;
     gap: 12px;
@@ -8296,6 +8380,7 @@ a {
   .site-header__actions {
     grid-column: 2;
     grid-row: 1;
+    justify-content: flex-end;
   }
 
   .site-menu-toggle {

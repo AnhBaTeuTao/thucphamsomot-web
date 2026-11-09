@@ -175,8 +175,8 @@ export function SiteHeader() {
                 className="btn-header-outline"
                 title={isEnglish ? "VIP Partner Portal" : "Cổng Đối Tác VIP"}
               >
-                <Users size={14} />
-                {isEnglish ? "VIP Portal" : "Cổng Đối Tác VIP"}
+                <Users size={14} aria-hidden="true" />
+                <span className="btn-header-outline__label">{isEnglish ? "VIP Portal" : "Cổng Đối Tác VIP"}</span>
               </Link>
               <Link
                 href={isEnglish ? "/en/bao-gia" : "/bao-gia"}
