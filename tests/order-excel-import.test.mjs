@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import XLSX from 'xlsx';
 import { inspectExcelWorkbook, parseExcelWorkbook, parseExcelNumber, readExcelWorkbook } from '../lib/order-import/excel.ts';
 import { validateOrderQuantity } from '../lib/order-quantity.ts';
+import { certainSkuName, certainUniqueName, uncertainOrderNote } from '../lib/order-import/confidence.ts';
 
 function workbook(sheets) {
   const book = XLSX.utils.book_new();
@@ -54,6 +55,15 @@ test('stops before signatures even when there is no total row', () => {
   assert.equal(parseExcelWorkbook(book, 'signature.xlsx', mapping).length, 1);
 });
 
+test('does not auto-select duplicate names, conflicting SKU names or uncertain notes', () => {
+  const normalize = (value) => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  assert.equal(certainUniqueName(3, ''), false);
+  assert.equal(certainUniqueName(1, 'Hoá đơn ghi kg, kiểm lại có phải 1 thùng không'), false);
+  assert.equal(uncertainOrderNote('Nhiều khả năng là 500 quả'), true);
+  assert.equal(certainSkuName('tc-thanhlongtr', 'Thanh long (2-3 quả/kg)', ['thanh long 2 3qura kg'], normalize), false);
+  assert.equal(certainSkuName('r-que', 'Rau quế', ['rau que'], normalize), true);
+});
+
 test('reads the supplied TPS1 delivery note without importing its total', { skip: !process.env.TPS1_EXCEL_FIXTURE || !existsSync(process.env.TPS1_EXCEL_FIXTURE) }, () => {
   const book = readExcelWorkbook(readFileSync(process.env.TPS1_EXCEL_FIXTURE));
   const mapping = inspectExcelWorkbook(book).mapping;
@@ -66,4 +76,18 @@ test('reads the supplied TPS1 delivery note without importing its total', { skip
   assert.equal(lines.find((line) => line.sku === 'r-que')?.quantity, 0.3);
   assert.equal(lines.find((line) => line.sku === 'r-muong')?.quantity, 10.7);
   assert.equal(lines[0].unit, 'Gói');
+});
+
+test('reads the Mekons order including units and uncertain source notes', { skip: !process.env.TPS1_MEKONS_FIXTURE || !existsSync(process.env.TPS1_MEKONS_FIXTURE) }, () => {
+  const book = readExcelWorkbook(readFileSync(process.env.TPS1_MEKONS_FIXTURE));
+  const mapping = inspectExcelWorkbook(book).mapping;
+  assert.equal(mapping?.headerRow, 1);
+  assert.deepEqual(mapping?.columns, { name: 0, quantity: 1, note: 2, unit: 3 });
+  const lines = parseExcelWorkbook(book, 'mekons.xlsx', mapping);
+  assert.equal(lines.length, 27);
+  assert.equal(lines[0].sourceRow, 2);
+  assert.equal(lines.at(-1).sourceRow, 28);
+  assert.equal(lines.find((line) => line.name === 'Trứng gà')?.quantity, 500);
+  assert.match(lines.find((line) => line.name === 'Trứng gà')?.note || '', /nhiều khả năng/);
+  assert.equal(lines.find((line) => line.name === 'Tương cà Cholimex 2lit\/bình')?.unit, 'thùng');
 });

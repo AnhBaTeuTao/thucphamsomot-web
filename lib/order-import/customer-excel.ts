@@ -3,6 +3,7 @@ import { resolveOrderPriceBook } from '@/lib/order-price-book';
 import type { ExtractedOrderLine } from './types';
 import englishNames from './data/catalog-names-en.json';
 import chineseNames from './data/catalog-names-zh-CN.json';
+import { certainSkuName, certainUniqueName, uncertainOrderNote } from './confidence';
 
 type SupabaseAdmin = any;
 type ProductRow = {
@@ -92,16 +93,17 @@ export async function previewCustomerExcel(supabase: SupabaseAdmin, customerId: 
     const name = normalizeExcelName(line.name);
     const codeMatch = sku ? bySku.get(sku) : undefined;
     const exactNames = [...new Map((byName.get(name) || []).map((p) => [p.id, p])).values()];
+    const uncertainNote = uncertainOrderNote(line.note);
     if (codeMatch) {
-      if (!name || name === normalizeExcelName(codeMatch.sku) || namesFor(codeMatch).includes(name)) {
-        return { line, product: codeMatch, candidates: [] };
+      if (certainSkuName(codeMatch.sku, line.name, namesFor(codeMatch), normalizeExcelName)) {
+        return uncertainNote
+          ? { line, candidates: [{ product: codeMatch, score: 1 }], warning: 'Ghi chú yêu cầu kiểm tra lại; vui lòng chọn sản phẩm' }
+          : { line, product: codeMatch, candidates: [] };
       }
-      const inputGrams = grams(name);
-      const close = namesFor(codeMatch).some((candidate) => similarity(inputGrams, grams(candidate)) >= 0.45);
-      if (close) return { line, product: codeMatch, candidates: [] };
       return { line, candidates: [{ product: codeMatch, score: 1 }, ...exactNames.filter((p) => p.id !== codeMatch.id).map((product) => ({ product, score: 0.95 }))], warning: 'Mã và tên hàng không khớp; vui lòng chọn lại' };
     }
-    if (exactNames.length === 1) return { line, product: exactNames[0], candidates: [] };
+    if (certainUniqueName(exactNames.length, line.note)) return { line, product: exactNames[0], candidates: [] };
+    if (exactNames.length === 1) return { line, candidates: [{ product: exactNames[0], score: 1 }], warning: 'Ghi chú yêu cầu kiểm tra lại; vui lòng chọn sản phẩm' };
     if (exactNames.length > 1) return { line, candidates: exactNames.slice(0, 5).map((product) => ({ product, score: 1 })) };
     const inputGrams = grams(name || normalizeExcelName(line.sku));
     const candidates = searchable.map(({ product, grams: candidateGrams }) => ({

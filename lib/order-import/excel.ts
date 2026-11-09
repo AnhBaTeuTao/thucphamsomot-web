@@ -13,7 +13,7 @@ const aliases: Record<ExcelColumn, string[]> = {
   sku: ['ma hang', 'ma san pham', 'ma sp', 'sku', 'product code', 'item code', '商品编码', '商品编号', '货号', '编码'],
   name: ['ten hoac ma hang', 'ten hang', 'ten san pham', 'ten sp', 'san pham', 'mat hang', 'product', 'product name', 'item', 'item name', 'description', '品名', '商品名称', '产品名称', '商品', '名称'],
   quantity: ['so luong', 'sl', 'qty', 'quantity', 'order quantity', '数量', '订购数量', '采购数量'],
-  unit: ['don vi', 'dvt', 'unit', 'uom', 'unit of measure', '单位', '计量单位'],
+  unit: ['don vi', 'don vi tinh', 'dvt', 'unit', 'uom', 'unit of measure', '单位', '计量单位'],
   note: ['ghi chu', 'note', 'notes', 'remark', 'remarks', '备 注', '备注', '说明'],
 };
 
