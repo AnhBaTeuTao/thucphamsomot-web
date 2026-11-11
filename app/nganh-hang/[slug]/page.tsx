@@ -101,7 +101,7 @@ export default async function IndustryDetailPage({ params }: { params: Promise<{
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/bao-gia" className="btn-primary !px-8 !py-4 shadow-xl shadow-emerald-900/20">
-                Nhận Báo Giá <ArrowRight size={18} />
+                Gửi yêu cầu báo giá <ArrowRight size={18} />
               </Link>
             </div>
           </FadeInUp>
@@ -188,7 +188,7 @@ export default async function IndustryDetailPage({ params }: { params: Promise<{
         <section className="container-shell mb-20">
           <FadeInUp className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Câu hỏi thường gặp</h2>
+              <h2 className="section-title text-center" style={{ margin: "0 auto 16px" }}>Câu hỏi thường gặp</h2>
               <p className="text-gray-500">Những điều quý khách thường hỏi trước khi đặt chuyến hàng đầu tiên.</p>
             </div>
             <div className="space-y-4">
@@ -217,7 +217,7 @@ export default async function IndustryDetailPage({ params }: { params: Promise<{
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
           
           <div className="relative z-10 max-w-2xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="section-title-light text-center" style={{ margin: "0 auto 20px" }}>
               Gửi trọn an tâm trong từng bữa ăn
             </h2>
             <p className="text-emerald-100 text-lg mb-8">

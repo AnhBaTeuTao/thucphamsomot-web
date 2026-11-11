@@ -53,11 +53,13 @@
 
 .content-section h2,
 .faq-list h2 {
-  margin: 0 0 10px;
+  font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
+  margin: 0 0 16px;
   color: #133127;
-  font-size: 24px;
+  font-size: clamp(1.85rem, 4vw, 40px);
   font-weight: 900;
-  line-height: 1.3;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .content-section p {
@@ -500,11 +502,13 @@
 }
 
 .faq-list h2 {
-  margin: 16px 0 8px;
+  font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
+  margin: 16px 0 16px;
   color: #133127;
-  font-size: 24px;
+  font-size: clamp(1.85rem, 4vw, 40px);
   font-weight: 900;
-  line-height: 1.3;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .faq-list details {

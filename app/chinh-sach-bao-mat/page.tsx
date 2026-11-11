@@ -250,9 +250,9 @@ export default function PrivacyPolicyPage() {
               <div className="section-label" style={{ marginBottom: "14px" }}>Chính sách khác</div>
               <div style={{ display: "grid", gap: "8px" }}>
                 {[
-                  { label: "Điều khoản sử dụng", href: "/chinh-sach/dieu-khoan-su-dung" },
-                  { label: "Chính sách giao hàng", href: "/chinh-sach/chinh-sach-giao-hang" },
-                  { label: "Chính sách đổi trả", href: "/chinh-sach/chinh-sach-doi-tra" },
+                  { label: "Chính sách giao hàng", href: "/chinh-sach/giao-hang" },
+                  { label: "Chính sách đổi trả", href: "/chinh-sach/doi-tra" },
+                  { label: "Quy trình giao nhận ISO 22000", href: "/quy-trinh" },
                 ].map(({ label, href }) => (
                   <Link
                     key={href}

@@ -214,6 +214,10 @@ export function TrustPillars({ locale = "vi" }: { locale?: "vi" | "en" }) {
             grid-template-columns: 1fr; /* Mobile: 1 cột xếp chồng dọc */
             gap: 16px;
           }
+          .b2b-pillar-card p {
+            font-size: 15px !important;
+            line-height: 1.55 !important;
+          }
         }
       `}} />
     </section>

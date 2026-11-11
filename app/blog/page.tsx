@@ -37,7 +37,7 @@ export default async function BlogPage() {
               href="/bao-gia"
               className="inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 transition-colors shadow-sm"
             >
-              Nhận Báo Giá <ArrowRight size={18} className="ml-2" />
+              Gửi yêu cầu báo giá <ArrowRight size={18} className="ml-2" />
             </Link>
             <Link
               href="/san-pham"
@@ -122,7 +122,7 @@ export default async function BlogPage() {
         {list.length > 0 && (
           <div className="mt-16 border-t border-neutral-200 pt-16">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-neutral-900">Khám Phá Thêm</h2>
+              <h2 className="section-title" style={{ margin: 0 }}>Khám Phá Thêm</h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

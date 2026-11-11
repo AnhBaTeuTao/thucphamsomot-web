@@ -64,8 +64,8 @@ export default async function EnglishProductsPage() {
       {/* ── Danh mục ── */}
       <section className="product-category-band">
         <div className="product-category-band__intro">
-          <div className="eyebrow">Product Categories</div>
-          <h2>From broad groups to specific kitchen needs.</h2>
+          <div className="section-label">Product Categories</div>
+          <h2 className="section-title">From broad groups to specific kitchen needs.</h2>
           <p>
             If you don&apos;t have a fixed SKU list yet, you can start from these categories and add quantities, delivery schedule, and packaging requirements later.
           </p>
@@ -82,8 +82,8 @@ export default async function EnglishProductsPage() {
 
       <section className="product-category-band">
         <div className="product-category-band__intro">
-          <div className="eyebrow">Coverage Area</div>
-          <h2>Choose your location for delivery schedules and fast quotes.</h2>
+          <div className="section-label">Coverage Area</div>
+          <h2 className="section-title">Choose your location for delivery schedules and fast quotes.</h2>
           <p>Clients in different areas can find specific delivery schedules and request fast quotes based on their location.</p>
         </div>
         <div className="product-category-list">
@@ -98,8 +98,8 @@ export default async function EnglishProductsPage() {
 
       <section className="product-category-band">
         <div className="product-category-band__intro">
-          <div className="eyebrow">Recommended Reading</div>
-          <h2>A few guides to help you finalize your buying needs faster.</h2>
+          <div className="section-label">Recommended Reading</div>
+          <h2 className="section-title">A few guides to help you finalize your buying needs faster.</h2>
           <p>These articles help you prepare menus, quote information, and choose the right sources for B2B kitchens.</p>
         </div>
         <div className="product-grid" style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>
@@ -121,7 +121,7 @@ export default async function EnglishProductsPage() {
       <section className="product-cta">
         <div>
           <Boxes size={26} />
-          <h2>Need a quote for your specific menu?</h2>
+          <h2 className="section-title-light">Need a quote for your specific menu?</h2>
           <p>Send us your product groups, expected quantities, delivery area, and frequency. Our team will prepare a tailored proposal.</p>
         </div>
         <Link href="/en/bao-gia" className="btn-primary btn-on-dark">

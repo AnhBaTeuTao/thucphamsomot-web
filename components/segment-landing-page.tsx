@@ -59,7 +59,7 @@ export function SegmentLandingPage({ config }: { config: SegmentLandingConfig })
           <p className="local-hero__desc">{config.intro}</p>
           <div className="local-hero__actions">
             <Link href="/bao-gia" className="btn-primary">
-              Nhận báo giá <ArrowRight size={18} />
+              Gửi yêu cầu báo giá <ArrowRight size={18} />
             </Link>
             <a href={phoneHref} className="btn-secondary">
               <Phone size={16} /> Gọi {siteConfig.phone}
@@ -186,7 +186,7 @@ export function SegmentLandingPage({ config }: { config: SegmentLandingConfig })
         <p>{config.ctaText}</p>
         <div className="local-hero__actions">
           <Link href="/bao-gia" className="btn-primary">
-            Mở form báo giá <ArrowRight size={18} />
+            Gửi yêu cầu báo giá <ArrowRight size={18} />
           </Link>
           <a href={`https://zalo.me/${siteConfig.zalo}`} className="btn-secondary" target="_blank" rel="noreferrer">
             Nhắn Zalo

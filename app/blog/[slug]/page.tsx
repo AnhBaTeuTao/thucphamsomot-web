@@ -194,7 +194,7 @@ const categoryLinkBySlug: Record<string, { href: string; label: string; descript
 function getRelatedNewsLinks(slug: string) {
   const common = [
     { href: "/san-pham", label: "Xem sản phẩm", description: "Danh mục nhóm hàng và quy cách cụ thể." },
-    { href: "/bao-gia", label: "Nhận Báo Giá", description: "Gửi nhu cầu để nhận phản hồi nhanh chóng." },
+    { href: "/bao-gia", label: "Gửi yêu cầu báo giá", description: "Gửi nhu cầu để nhận phản hồi nhanh chóng." },
   ];
 
   const categoryLink = categoryLinkBySlug[slug];

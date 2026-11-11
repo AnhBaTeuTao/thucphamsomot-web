@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { PrintQuoteButton } from '@/components/print-quote-button';
 
 interface QuoteItem {
   id: string;
@@ -91,12 +92,7 @@ export default async function ViewQuotePage({ params }: { params: Promise<{ id: 
           ← Quay lại trang chủ
         </Link>
         <div className="flex items-center gap-3">
-          <button 
-            onClick={() => window.print()}
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors cursor-pointer"
-          >
-            🖨️ In báo giá / Tải PDF
-          </button>
+          <PrintQuoteButton />
         </div>
       </div>
 

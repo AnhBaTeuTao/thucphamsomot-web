@@ -19,7 +19,7 @@ const footerText = {
     mapLink: "Mở Google Maps",
     mapIframeTitle: "Bản đồ Thực Phẩm Số Một",
     quoteHref: "/bao-gia",
-    quoteLabel: "Mở form báo giá",
+    quoteLabel: "Gửi yêu cầu báo giá",
     adminLabel: "Quản trị nội dung",
     address: siteConfig.addressFull,
     customers: customerHighlights.slice(0, 5),

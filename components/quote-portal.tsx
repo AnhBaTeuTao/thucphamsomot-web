@@ -500,11 +500,11 @@ export function QuotePortal({ initialNotice = null, locale = "vi" }: QuotePortal
             <div className="quote-thank-you__promise-text">
               {locale === "en" ? (
                 <>
-                  <strong>B2B Service Promise:</strong> Our dedicated consultant will contact you at <strong>{submittedSummary.phone || siteConfig.phone}</strong> within <strong>15 minutes</strong> (during business hours) to provide a detailed quote and onboarding support.
+                  <strong>B2B Service Promise:</strong> Our dedicated consultant will contact you at <strong>{submittedSummary.phone || siteConfig.phone}</strong> within <strong>30 minutes</strong> (during business hours) to confirm requirements and complete your tailored quote within <strong>24 hours</strong>.
                 </>
               ) : (
                 <>
-                  <strong>Cam kết dịch vụ B2B:</strong> Chuyên viên tư vấn của Thực Phẩm Số Một sẽ chủ động liên hệ trực tiếp với anh/chị qua số điện thoại <strong>{submittedSummary.phone || siteConfig.phone}</strong> trong vòng <strong>15 phút</strong> (giờ hành chính) để báo giá chi tiết và hỗ trợ quy trình lên đơn hàng.
+                  <strong>Cam kết dịch vụ B2B:</strong> Chuyên viên tư vấn của Thực Phẩm Số Một sẽ chủ động liên hệ trực tiếp với anh/chị qua số điện thoại <strong>{submittedSummary.phone || siteConfig.phone}</strong> trong vòng <strong>30 phút</strong> (giờ hành chính) để xác nhận nhu cầu và hoàn thành gửi báo giá chi tiết trong vòng <strong>24 giờ</strong>.
                 </>
               )}
             </div>

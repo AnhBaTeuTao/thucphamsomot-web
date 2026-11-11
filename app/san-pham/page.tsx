@@ -42,7 +42,10 @@ export default async function SanPhamPage({ searchParams }: PageProps) {
         <div className="container-shell sp-hero__inner">
           <div className="sp-hero__copy">
             <div className="sp-hero__eyebrow"><BadgeCheck size={16} /> Nguồn hàng cho bếp chuyên nghiệp</div>
-            <h1>Danh mục thực phẩm<br /><span>được tuyển chọn mỗi ngày</span></h1>
+            <h1>
+              <span className="sp-hero__title-white">Danh mục thực phẩm</span>{" "}
+              <span className="sp-hero__title-orange">Được tuyển chọn mỗi ngày</span>
+            </h1>
             <p>
               Rau củ, thịt cá, hàng đông lạnh và gia vị được TPS1 kiểm soát nguồn gốc,
               quy cách và lịch giao theo nhu cầu riêng của từng bếp.
@@ -51,26 +54,26 @@ export default async function SanPhamPage({ searchParams }: PageProps) {
               <Link href="#danh-muc" className="sp-hero__primary">
                 Khám phá danh mục <ArrowRight size={18} />
               </Link>
-              <Link href="/bao-gia" className="sp-hero__secondary">Nhận báo giá B2B</Link>
+              <Link href="/bao-gia" className="sp-hero__secondary">Gửi yêu cầu báo giá</Link>
             </div>
           </div>
 
           <div className="sp-hero__proof" aria-label="Năng lực cung ứng TPS1">
             <div className="sp-hero__proof-main">
-              <ShieldCheck size={28} />
+              <ShieldCheck size={32} />
               <div><strong>ISO 22000 & HACCP</strong><span>Quy trình kiểm soát an toàn thực phẩm</span></div>
             </div>
             <div className="sp-hero__proof-grid">
-              <div><Building2 size={20} /><strong>109+</strong><span>Khách hàng B2B</span></div>
-              <div><Truck size={20} /><strong>4 vùng</strong><span>Phủ tuyến giao</span></div>
-              <div><Clock3 size={20} /><strong>Định kỳ</strong><span>Lịch giao linh hoạt</span></div>
-              <div><PackageCheck size={20} /><strong>Theo bếp</strong><span>Quy cách riêng</span></div>
+              <div><Building2 size={24} /><strong>109+</strong><span>Khách hàng B2B</span></div>
+              <div><Truck size={24} /><strong>4 vùng</strong><span>Phủ tuyến giao</span></div>
+              <div><Clock3 size={24} /><strong>Định kỳ</strong><span>Lịch giao linh hoạt</span></div>
+              <div><PackageCheck size={24} /><strong>Theo bếp</strong><span>Quy cách riêng</span></div>
             </div>
           </div>
         </div>
       </section>
 
-      <nav className="sku-group-links" aria-labelledby="sku-group-links-title">
+      <nav id="danh-muc" className="sku-group-links" aria-labelledby="sku-group-links-title">
         <h2 id="sku-group-links-title">Nhóm hàng</h2>
         <ul>
           {SKU_GROUPS.filter((group) => group.hasPage).map((group) => (
@@ -89,8 +92,8 @@ export default async function SanPhamPage({ searchParams }: PageProps) {
             <span className="sp-page__cta-icon"><PackageCheck size={24} /></span>
             <div>
               <span className="sp-page__cta-kicker">TƯ VẤN NGUỒN HÀNG B2B</span>
-              <h2>Cần danh mục và quy cách riêng cho bếp?</h2>
-              <p>Gửi nhu cầu, sản lượng và khu vực giao. Đội ngũ TPS1 sẽ chuẩn bị bảng giá phù hợp trong thời gian sớm nhất.</p>
+              <h2 className="section-title-light" style={{ margin: "8px 0 14px" }}>Cần danh mục và quy cách riêng cho bếp?</h2>
+              <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.78)", lineHeight: 1.65, margin: 0 }}>Gửi nhu cầu, sản lượng và khu vực giao. Đội ngũ TPS1 sẽ chuẩn bị bảng giá phù hợp trong thời gian sớm nhất.</p>
             </div>
           </div>
           <Link href="/bao-gia" className="sp-page__cta-button">

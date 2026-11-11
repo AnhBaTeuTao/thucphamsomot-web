@@ -55,7 +55,7 @@ export function ContentPage({
   relatedLinks = [],
   heroMedia,
   ctaHref = "/bao-gia",
-  ctaLabel = "Mở form báo giá",
+  ctaLabel = "Gửi yêu cầu báo giá",
   quoteItem,
   children,
 }: ContentPageProps) {

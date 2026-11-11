@@ -53,18 +53,29 @@ export default function ProcessPage() {
     <main className="b2b-process-page">
       {/* 1. HERO SECTION */}
       <section className="b2b-process-hero">
+        <Image
+          src="/images/about/hero_v2.jpg"
+          alt="Quy trình giao nhận B2B Thực Phẩm Số Một"
+          fill
+          className="object-cover b2b-about-hero__bg"
+          priority
+          sizes="100vw"
+        />
+        <div className="b2b-about-hero__overlay" />
         <div className="container-shell position-relative z-10 text-center">
-          <div className="section-label" style={{ color: "#4ade80", justifyContent: "center" }}>
-            Vận Hành Khép Kín
+          <div className="b2b-about-hero__content" style={{ margin: "0 auto" }}>
+            <div className="section-label" style={{ color: "#4ade80", justifyContent: "center" }}>
+              Vận Hành Khép Kín
+            </div>
+            <h1 className="b2b-process-hero__title">
+              Quy trình giao nhận<br />
+              <span style={{ color: "#4ade80" }}>chuẩn mực B2B</span>
+            </h1>
+            <p className="b2b-process-hero__desc">
+              Từ khâu kiểm duyệt đầu vào đến khi giao hàng tận bếp, mọi bước đi đều được 
+              kiểm soát nghiêm ngặt theo tiêu chuẩn ISO 22000 và HACCP.
+            </p>
           </div>
-          <h1 className="b2b-process-hero__title">
-            Quy trình giao nhận<br />
-            <span style={{ color: "#4ade80" }}>chuẩn mực B2B</span>
-          </h1>
-          <p className="b2b-process-hero__desc">
-            Từ khâu kiểm duyệt đầu vào đến khi giao hàng tận bếp, mọi bước đi đều được 
-            kiểm soát nghiêm ngặt theo tiêu chuẩn ISO 22000 và HACCP.
-          </p>
         </div>
       </section>
 
@@ -78,17 +89,21 @@ export default function ProcessPage() {
                 <div key={index} className={`b2b-timeline__item ${isEven ? 'is-left' : 'is-right'}`}>
                   {/* Cột Nội Dung */}
                   <div className="b2b-timeline__content-col">
-                    <div className="b2b-timeline__step-num">Bước 0{index + 1}</div>
+                    <div className="b2b-timeline__step-header">
+                      <div className="b2b-timeline__step-num">Bước 0{index + 1}</div>
+                      <div className="b2b-timeline__mobile-icon">
+                        <step.icon size={20} />
+                      </div>
+                    </div>
                     <h3 className="b2b-timeline__title">{step.title}</h3>
                     <p className="b2b-timeline__desc">{step.desc}</p>
-                    <div className="b2b-timeline__icon-wrap">
-                      <step.icon size={24} className="b2b-timeline__icon" />
-                    </div>
                   </div>
 
                   {/* Trục Giữa */}
                   <div className="b2b-timeline__center">
-                    <div className="b2b-timeline__dot"></div>
+                    <div className="b2b-timeline__dot">
+                      <step.icon size={24} className="b2b-timeline__icon" />
+                    </div>
                     {index !== PROCESS_STEPS.length - 1 && <div className="b2b-timeline__line"></div>}
                   </div>
 
@@ -118,7 +133,7 @@ export default function ProcessPage() {
             <div className="b2b-policy-header">
               <AlertTriangle size={32} className="b2b-policy-icon" />
               <div>
-                <h2 className="b2b-policy-title">Chính sách xử lý sự cố & Đổi trả</h2>
+                <h2 className="b2b-policy-title section-title" style={{ margin: "0 0 10px" }}>Chính sách xử lý sự cố & Đổi trả</h2>
                 <p className="b2b-policy-subtitle">
                   Tại TPS1, chúng tôi hiểu rằng &quot;Trong bếp ăn công nghiệp, trễ 1 phút là đói 1.000 người&quot;. 
                   Do đó, chính sách xử lý sự cố của chúng tôi được thiết kế để bảo vệ tuyệt đối kế hoạch sản xuất của bạn.
@@ -161,7 +176,7 @@ export default function ProcessPage() {
             Trải nghiệm chuỗi cung ứng thực phẩm chuẩn xác, minh bạch và an tâm tuyệt đối.
           </p>
           <Link href="/bao-gia" className="btn-hero-primary" style={{ display: "inline-flex" }}>
-            Yêu cầu báo giá <ArrowRight size={18} />
+            Gửi yêu cầu báo giá <ArrowRight size={18} />
           </Link>
         </div>
       </section>

@@ -225,7 +225,7 @@ export default function HomePage() {
               }
               .b2b-process-step p {
                 font-size: 15px !important;
-                line-height: 1.6 !important;
+                line-height: 1.55 !important;
               }
             }
           `}</style>

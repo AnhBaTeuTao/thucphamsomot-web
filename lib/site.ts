@@ -62,8 +62,8 @@ export const navItemsByLocale: Record<Locale, Array<{ label: string; href: strin
   en: [
     { label: "About", href: "/en/about" },
     { label: "Products", href: "/en/products" },
-    { label: "Delivery", href: "/en/delivery" },
-    { label: "Blog", href: "/en/blog" },
+    { label: "Delivery", href: "/quy-trinh" },
+    { label: "News", href: "/en/news" },
     { label: "Contact", href: "/en/contact" },
   ],
 };

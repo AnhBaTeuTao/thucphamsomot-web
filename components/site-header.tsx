@@ -123,15 +123,18 @@ export function SiteHeader() {
           </button>
 
           <nav className="site-nav site-nav--minimal" aria-label={isEnglish ? "Main navigation" : "Điều hướng chính"}>
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="site-nav__link"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`site-nav__link ${isActive ? "is-active" : ""}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="site-header__actions">
@@ -183,14 +186,55 @@ export function SiteHeader() {
                 className="btn-header-primary"
                 id="header-rfq-btn"
               >
-                {isEnglish ? "Request Quote" : "Yêu Cầu Báo Giá"}
+                {isEnglish ? "Request Quote" : "Gửi yêu cầu báo giá"}
               </Link>
             </div>
           </div>
         </div>
 
+        {/* Mobile quick categories navigation bar */}
+        <div className="site-header__mobile-subnav" aria-label={isEnglish ? "Categories" : "Danh mục"}>
+          <div className="container-shell site-header__mobile-subnav-inner">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`site-header__mobile-subnav-link ${isActive ? "is-active" : ""}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
         <div id="site-mobile-nav" className={`site-mobile-nav${menuOpen ? " is-open" : ""}`}>
           <div className="container-shell site-mobile-nav__panel">
+            {/* Language switch in mobile drawer */}
+            <div className="site-mobile-nav__lang">
+              <span className="site-mobile-nav__lang-label">{isEnglish ? "Language / Ngôn ngữ:" : "Ngôn ngữ hiển thị:"}</span>
+              <div className="site-mobile-nav__lang-options">
+                <Link
+                  href={swapLocalePath(pathname, "vi")}
+                  className={`site-mobile-nav__lang-btn ${!isEnglish ? "is-active" : ""}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Image src="/images/flag-vi.svg" alt="VI" width={18} height={13} />
+                  <span>Tiếng Việt</span>
+                </Link>
+                <Link
+                  href={swapLocalePath(pathname, "en")}
+                  className={`site-mobile-nav__lang-btn ${isEnglish ? "is-active" : ""}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Image src="/images/flag-en.svg" alt="EN" width={18} height={13} />
+                  <span>English</span>
+                </Link>
+              </div>
+            </div>
+
             <div className="site-mobile-nav__cta-group">
               <Link
                 href={orderAppUrl}
@@ -205,7 +249,7 @@ export function SiteHeader() {
                 className="btn-header-primary"
                 onClick={() => setMenuOpen(false)}
               >
-                {isEnglish ? "Request Quote" : "Yêu Cầu Báo Giá"}
+                {isEnglish ? "Request Quote" : "Gửi yêu cầu báo giá"}
               </Link>
             </div>
             {navItems.map((item) => (

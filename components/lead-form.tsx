@@ -58,8 +58,12 @@ export function LeadForm({ mode }: LeadFormProps) {
   return (
     <form onSubmit={onSubmit} className="lead-form">
       <div className="lead-form__header">
-        <div className="pill">Yêu cầu tư vấn</div>
-        <p>Để lại thông tin, đội ngũ sẽ phản hồi theo nhu cầu báo giá hoặc liên hệ của bạn.</p>
+        <div className="pill">{mode === "quote" ? "Yêu cầu báo giá" : "Liên hệ tư vấn"}</div>
+        <p>
+          {mode === "quote"
+            ? "Để lại thông tin nhu cầu, đội ngũ TPS1 sẽ gửi phương án báo giá phù hợp nhất trong vòng 24 giờ."
+            : "Để lại thông tin liên hệ, đội ngũ TPS1 sẽ phản hồi và tư vấn nhanh chóng cho Quý khách."}
+        </p>
       </div>
 
       <div className="lead-form__grid">
@@ -70,17 +74,21 @@ export function LeadForm({ mode }: LeadFormProps) {
       <Field label="Công ty" error={errors.company?.message} {...register("company")} />
 
       <div>
-        <label className="lead-form__label">Nhu cầu</label>
+        <label className="lead-form__label">{mode === "quote" ? "Nhu cầu" : "Nội dung liên hệ"}</label>
         <textarea
           {...register("message")}
           rows={5}
           className="lead-form__textarea"
-          placeholder="Mô tả loại hàng, số lượng, lịch giao, khu vực"
+          placeholder={
+            mode === "quote"
+              ? "Mô tả loại hàng, số lượng, lịch giao, khu vực"
+              : "Nội dung Quý khách cần liên hệ, tư vấn hoặc trao đổi hợp tác..."
+          }
         />
         {errors.message?.message ? <p className="lead-form__error">{errors.message.message}</p> : null}
       </div>
 
-      <button disabled={isSubmitting} className="btn-primary lead-form__button">
+      <button type="submit" disabled={isSubmitting} className="btn-primary lead-form__button">
         {isSubmitting ? "Đang gửi..." : mode === "quote" ? "Gửi yêu cầu báo giá" : "Gửi liên hệ"}
         <Send size={18} />
       </button>

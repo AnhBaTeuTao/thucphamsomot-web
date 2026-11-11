@@ -541,12 +541,12 @@ export function LeadCaptureSection({ locale = "vi" }: { locale?: "vi" | "en" }) 
           .b2b-lead-grid-container,
           .lead-grid {
             grid-template-columns: 1fr !important;
-            gap: 24px !important;
+            gap: 20px !important;
           }
           .b2b-lead-row-split,
           .b2b-lead-form__row-2col {
             grid-template-columns: 1fr !important;
-            gap: 14px !important;
+            gap: 16px !important;
           }
         }
       `}} />

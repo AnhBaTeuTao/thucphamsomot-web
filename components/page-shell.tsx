@@ -22,6 +22,7 @@ const pageVisuals: Record<string, string> = {
   "Sản phẩm": brandAssets.coverFood,
   "Danh mục": brandAssets.warehouseWide,
   "Ngành hàng": brandAssets.deliveryTruckReal,
+  "Mô hình bếp": brandAssets.deliveryTruckReal,
   "Dịch vụ": brandAssets.quality,
   "Kiến thức": brandAssets.coverFood,
   "Chính sách": brandAssets.quality,
@@ -40,7 +41,7 @@ const pageVisuals: Record<string, string> = {
 const shellText = {
   vi: {
     quoteHref: "/bao-gia",
-    quoteLabel: "Mở form báo giá",
+    quoteLabel: "Gửi yêu cầu báo giá",
     tagsLabel: "Điểm mạnh dịch vụ",
     tags: ["Rõ nguồn gốc", "Giao đúng giờ", "An toàn thực phẩm", "Báo giá riêng", "Đồng Nai, TP.HCM"],
     visualLabel: "Minh họa dịch vụ",

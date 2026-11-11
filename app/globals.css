@@ -7656,8 +7656,9 @@ a {
 
 @media (max-width: 760px) {
   .sp-hero__inner { display: block; padding-top: 50px; padding-bottom: 50px; }
-  .sp-hero__copy h1 { font-size: clamp(1.85rem, 8vw, 2.6rem); }
+  .sp-hero__copy h1 { font-size: clamp(1.85rem, 8vw, 2.6rem); line-height: 1.25 !important; }
   .sp-hero__title-white { white-space: normal; word-break: keep-all; }
+  .sp-hero__title-orange { margin-top: 4px !important; display: block !important; }
   .sp-hero__copy > p { font-size: 14px; }
   .sp-hero__proof { margin-top: 34px; padding: 20px; }
   .sp-hero__proof-grid > div { min-height: 108px; padding: 16px; }
@@ -9044,5 +9045,26 @@ a.sku-tab {
 @media (max-width: 768px) {
   .site-footer {
     padding-bottom: 80px !important; /* Tạo khoảng đệm an toàn để social-widget không che khuất chữ */
+  }
+
+  .home-local__card {
+    min-height: auto !important;
+    padding: 16px 20px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .home-local__card h3 {
+    margin: 0 !important;
+    font-size: 1.15rem !important;
+  }
+
+  .section-desc,
+  .home-local__card p,
+  .b2b-process-step p {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
   }
 }

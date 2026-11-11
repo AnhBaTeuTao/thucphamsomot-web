@@ -18,7 +18,7 @@ const UI = {
     contact: "Liên hệ",
     unit: "Đơn vị: ",
     reference: "/tham khảo",
-    addToCart: "Nhận báo giá",
+    addToCart: "Gửi yêu cầu báo giá",
     searchPlaceholder: "Tìm tên sản phẩm... (vd: cá basa, thịt vai, cải thảo)",
     loadingProducts: "Đang tải sản phẩm...",
     empty: "Không tìm thấy sản phẩm phù hợp.",
@@ -262,8 +262,13 @@ export function ProductsGrid({
     <section className="sku-section" id="danh-muc">
       <div className="sku-section__inner">
         <div className="sku-section__intro">
-          <div><span>CATALOG TPS1</span><h2>Chọn nhóm hàng phù hợp với bếp</h2></div>
-          <p>Danh mục dùng để tham khảo nguồn hàng. Giá chính thức được thiết lập theo sản lượng và bảng giá riêng của từng khách hàng.</p>
+          <div>
+            <div className="section-label">Catalog TPS1</div>
+            <h2 className="section-title">Chọn nhóm hàng phù hợp với bếp</h2>
+          </div>
+          <p className="section-desc" style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0, textWrap: "pretty" }}>
+            Danh mục dùng để tham khảo nguồn hàng. Giá chính thức được thiết lập theo sản lượng và bảng giá riêng của từng khách hàng.
+          </p>
         </div>
 
         <div className="sku-controls">

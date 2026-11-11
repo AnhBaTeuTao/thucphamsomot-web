@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { Send, Phone, MessageSquare, CheckCircle2, AlertCircle, Loader2, Sparkles, Building2, ShoppingBag } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 import {
@@ -179,8 +180,8 @@ export function QuickQuoteForm({
 
         <p className="quick-quote-desc text-center">
           Cảm ơn đại diện <strong>{submittedData.company}</strong>. Bộ phận kinh doanh TPS1 sẽ liên hệ tới số{" "}
-          <strong className="text-emerald-400">{submittedData.phone}</strong> trong vòng <strong>24 giờ</strong> để xác
-          nhận nhu cầu và gửi bảng giá chi tiết phù hợp.
+          <strong className="text-emerald-400">{submittedData.phone}</strong> trong vòng <strong>30 phút</strong> để xác
+          nhận nhu cầu và hoàn thành gửi bảng giá chi tiết trong vòng <strong>24 giờ</strong>.
         </p>
 
         <div className="quick-quote-success-actions">
@@ -207,9 +208,9 @@ export function QuickQuoteForm({
         <div className="quick-quote-extra-note">
           <p>
             Bạn có sẵn file dự toán hoặc danh sách chi tiết?{" "}
-            <a href="#rfq-form" className="text-emerald-400 underline font-medium">
+            <Link href="/bao-gia" className="text-emerald-400 underline font-medium">
               Gửi thêm file tại đây
-            </a>
+            </Link>
           </p>
           <button type="button" onClick={handleReset} className="quick-quote-reset-link">
             Gửi yêu cầu báo giá khác
@@ -229,7 +230,7 @@ export function QuickQuoteForm({
     >
       <div className="quick-quote-header">
         <div className="quick-quote-badge">
-          <span className="quick-quote-pulse-dot" /> Phản hồi trong 24 giờ
+          <span className="quick-quote-pulse-dot" /> Xác nhận trong 30 phút
         </div>
         <h3 id="quick-quote-title" className="quick-quote-title">
           Nhận báo giá thực phẩm trong 24h
@@ -307,7 +308,7 @@ export function QuickQuoteForm({
           type="submit"
           disabled={status === "submitting"}
           className="btn-quick-submit"
-          aria-label="Nhận báo giá trong 24h"
+          aria-label="Gửi yêu cầu báo giá"
         >
           {status === "submitting" ? (
             <>
@@ -315,7 +316,7 @@ export function QuickQuoteForm({
             </>
           ) : (
             <>
-              <Send size={16} /> Nhận báo giá trong 24h
+              <Send size={16} /> Gửi yêu cầu báo giá
             </>
           )}
         </button>

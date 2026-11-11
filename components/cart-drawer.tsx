@@ -26,7 +26,7 @@ const UI = {
     remove: "Xóa",
     items: "mặt hàng",
     note: "Mặt hàng đã chọn sẽ đi kèm trong yêu cầu báo giá.",
-    submit: "Mở form báo giá",
+    submit: "Gửi yêu cầu báo giá",
     productsLink: "/san-pham",
     quoteLink: "/bao-gia"
   },

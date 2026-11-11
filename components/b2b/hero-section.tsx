@@ -301,7 +301,7 @@ export function B2BHeroSection({ locale = "vi" }: { locale?: "vi" | "en" }) {
             </div>
 
             {/* RIGHT COLUMN: Lead Form */}
-            <div className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0 relative z-10">
+            <div id="rfq-form" className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0 relative z-10">
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 md:p-8 rounded-2xl shadow-2xl relative overflow-hidden">
                 {/* Glow effect behind form */}
                 <div className="absolute -inset-2 bg-gradient-to-r from-[#14b87a]/20 to-[#0f6f4b]/20 blur-xl -z-10 rounded-3xl" />
