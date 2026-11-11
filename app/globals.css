@@ -7485,7 +7485,7 @@ html, body {
   padding-bottom: clamp(64px, 7vw, 96px);
 }
 
-.sp-hero__copy { max-width: 680px; }
+.sp-hero__copy { max-width: 760px; }
 
 .sp-hero__eyebrow {
   display: inline-flex;
@@ -7500,24 +7500,29 @@ html, body {
 }
 
 .sp-hero__copy h1 {
-  max-width: 680px;
+  max-width: 760px;
   margin: 0;
-  font-size: clamp(2.35rem, 4.3vw, 3.85rem);
-  line-height: 1.14;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.2rem, 3.5vw, 3.35rem);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
   font-weight: 900;
+  text-wrap: balance;
 }
 
 .sp-hero__title-white {
-  display: inline-block;
-  white-space: nowrap;
+  display: block;
   color: #ffffff;
 }
 
 .sp-hero__title-orange {
-  display: inline-block;
+  display: block;
   color: #ffaf65;
   margin-top: 6px;
+}
+
+/* Thẻ xuống dòng chỉ kích hoạt trên mobile, ẩn hoàn toàn trên desktop */
+.sp-hero-mobile-br {
+  display: none;
 }
 
 .sp-hero__copy > p {
@@ -7702,17 +7707,19 @@ html, body {
 
 @media (max-width: 760px) {
   .sp-hero__inner { display: block; padding-top: 50px; padding-bottom: 50px; }
+  .sp-hero-mobile-br {
+    display: inline !important;
+  }
   .sp-hero__copy h1 {
-    font-size: clamp(2rem, 8vw, 2.6rem) !important;
+    font-size: clamp(1.85rem, 7.5vw, 2.4rem) !important;
     line-height: 1.25 !important;
-    text-wrap: balance !important;
   }
   .sp-hero__title-white {
-    display: inline-block;
+    display: block;
     color: #ffffff;
   }
   .sp-hero__title-orange {
-    display: inline-block;
+    display: block;
     color: #ffaf65;
     margin-top: 4px;
   }

@@ -44,7 +44,9 @@ export default async function SanPhamPage({ searchParams }: PageProps) {
             <div className="sp-hero__eyebrow"><BadgeCheck size={16} /> Nguồn hàng cho bếp chuyên nghiệp</div>
             <h1>
               <span className="sp-hero__title-white">Danh mục thực phẩm</span>{" "}
-              <span className="sp-hero__title-orange">cho nhà hàng và bếp ăn</span>
+              <span className="sp-hero__title-orange">
+                cho nhà hàng <br className="sp-hero-mobile-br" />và bếp&nbsp;ăn
+              </span>
             </h1>
             <p>
               TPS1 cung cấp rau củ, thịt cá, hàng đông lạnh và gia vị có nguồn gốc rõ ràng. Khách hàng chọn quy cách và lịch giao theo nhu cầu riêng của từng bếp.
