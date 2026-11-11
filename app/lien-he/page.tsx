@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 
 export const metadata = makeMetadata({
-  title: "Liên hệ và yêu cầu báo giá",
+  title: "Liên hệ tư vấn | Thực Phẩm Số Một (TPS1)",
   description:
-    "Hotline 089 890 2222, email contact@thucphamsomot.vn. Gửi danh sách hàng cần mua, TPS1 xác nhận trong 30 phút và gửi báo giá sỉ trong vòng 24 giờ.",
+    "Hotline 089 890 2222, email contact@thucphamsomot.vn. Kết nối trực tiếp với đội ngũ Thực Phẩm Số Một (TPS1) để nhận tư vấn giải pháp cung ứng thực phẩm và hợp tác cùng gian bếp của bạn.",
   path: "/lien-he",
 });
 
@@ -25,17 +25,17 @@ const contacts = [
 ];
 
 const commitments = [
-  { Icon: Clock, title: "Phản hồi trong 2 giờ", desc: "Đội ngũ kinh doanh tiếp nhận yêu cầu và gửi báo giá sơ bộ ngay trong ngày làm việc." },
+  { Icon: Clock, title: "Phản hồi trong 30 phút", desc: "Đội ngũ kinh doanh tiếp nhận thông tin và liên hệ lại trong vòng 30 phút để giải đáp mọi thắc mắc." },
   { Icon: Truck, title: "Giao hàng đúng lịch", desc: "Xe lạnh chuyên dụng hoạt động 24/7, giao hàng đúng nhịp theo lịch đã thống nhất với bếp." },
   { Icon: ShieldCheck, title: "Bảo hiểm 5 tỷ VNĐ", desc: "Mỗi lô hàng đều được bảo vệ bởi hợp đồng bảo hiểm trách nhiệm sản phẩm VietinBank." },
   { Icon: BadgeCheck, title: "ISO 22000 & HACCP", desc: "Nguồn gốc minh bạch, kiểm dịch mỗi ngày, đạt tiêu chuẩn quốc tế về an toàn thực phẩm." },
 ];
 
 const processSteps = [
-  { num: "01", label: "Gửi yêu cầu", desc: "Điền form hoặc gọi hotline" },
-  { num: "02", label: "Nhận báo giá", desc: "Trong 2 giờ làm việc" },
-  { num: "03", label: "Xác nhận đơn", desc: "Ký hợp đồng hoặc đặt hàng" },
-  { num: "04", label: "Giao hàng", desc: "Xe lạnh giao đúng lịch" },
+  { num: "01", label: "Gửi thông tin", desc: "Điền form hoặc gọi hotline" },
+  { num: "02", label: "Tiếp nhận & Tư vấn", desc: "Phản hồi trong 30 phút" },
+  { num: "03", label: "Lên phương án", desc: "Báo giá và lịch giao mẫu" },
+  { num: "04", label: "Hợp tác & Giao hàng", desc: "Ký kết và giao hàng định kỳ" },
 ];
 
 export default function ContactPage() {
@@ -48,17 +48,17 @@ export default function ContactPage() {
             Liên hệ
           </div>
           <h1 style={{ margin: "0 0 14px", color: "#fff", fontSize: "clamp(36px, 5vw, 60px)", fontWeight: 900, lineHeight: 1.08, maxWidth: "18ch" }}>
-            Gửi yêu cầu&nbsp;<span style={{ color: "#4ade80" }}>báo giá</span>
+            Liên hệ&nbsp;<span style={{ color: "#4ade80" }}>tư vấn</span>
           </h1>
           <p style={{ margin: 0, color: "rgba(255,255,255,0.72)", fontSize: "1.05rem", lineHeight: 1.8, maxWidth: "60ch" }}>
-            Để lại thông tin nhu cầu, nhóm hàng, số lượng dự kiến và khu vực giao để đội ngũ tư vấn phương án phù hợp nhất.
+            Kết nối trực tiếp với đội ngũ Thực Phẩm Số Một để được tư vấn giải pháp cung ứng thực phẩm, trao đổi hợp tác và nhận hỗ trợ nhanh chóng nhất.
           </p>
         </div>
       </section>
 
       {/* ── MAIN GRID ───────────────────────────────── */}
       <section className="container-shell section-pad">
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.15fr)", gap: "24px", alignItems: "start" }}>
+        <div className="contact-main-grid">
 
           {/* ── LEFT COLUMN ──────────────────────────── */}
           <div style={{ display: "grid", gap: "16px" }}>
@@ -127,7 +127,7 @@ export default function ContactPage() {
             {/* Quy trình 4 bước */}
             <div className="card" style={{ borderRadius: "24px", padding: "24px 28px" }}>
               <div className="section-label" style={{ marginBottom: "16px" }}>Quy trình làm việc</div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
+              <div className="contact-steps-grid">
                 {processSteps.map(({ num, label, desc }) => (
                   <div key={num} style={{ padding: "14px 16px", borderRadius: "16px", background: "rgba(15,111,75,0.05)", border: "1px solid rgba(15,111,75,0.1)" }}>
                     <div style={{ fontSize: "1.4rem", fontWeight: 900, color: "var(--accent)", lineHeight: 1, marginBottom: "6px" }}>{num}</div>
@@ -146,11 +146,11 @@ export default function ContactPage() {
         <div className="container-shell">
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <div className="section-label" style={{ justifyContent: "center", marginBottom: "12px" }}>Cam kết dịch vụ</div>
-            <h2 style={{ margin: 0, color: "#123127", fontSize: "clamp(26px, 3.5vw, 38px)", fontWeight: 900, lineHeight: 1.2 }}>
+            <h2 className="section-title" style={{ margin: 0 }}>
               Lý do hơn 109 doanh nghiệp tin tưởng TPS1
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "16px" }}>
+          <div className="contact-commitments-grid">
             {commitments.map(({ Icon, title, desc }) => (
               <div key={title} className="card" style={{ borderRadius: "20px", padding: "24px", display: "grid", gap: "12px" }}>
                 <div style={{ width: "48px", height: "48px", borderRadius: "14px", background: "linear-gradient(135deg, rgba(15,111,75,0.12), rgba(15,111,75,0.06))", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)" }}>
@@ -169,14 +169,14 @@ export default function ContactPage() {
       {/* ── BẢN ĐỒ + CTA ───────────────────────────── */}
       <section style={{ padding: "0 0 64px" }}>
         <div className="container-shell">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "20px", alignItems: "stretch" }}>
+          <div className="contact-bottom-grid">
             {/* CTA */}
             <div style={{ borderRadius: "24px", background: "linear-gradient(135deg, #0f6f4b 0%, #123127 100%)", padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "28px" }}>
               <div>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "6px 14px", borderRadius: "999px", background: "rgba(255,255,255,0.12)", color: "#4ade80", fontSize: "0.75rem", fontWeight: 900, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "20px" }}>
                   📞 Tư vấn trực tiếp
                 </div>
-                <h2 style={{ margin: "0 0 14px", color: "#fff", fontSize: "clamp(22px, 2.8vw, 32px)", fontWeight: 900, lineHeight: 1.25 }}>
+                <h2 className="section-title-light" style={{ margin: "0 0 14px" }}>
                   Cần tư vấn nhanh? Gọi ngay hotline!
                 </h2>
                 <p style={{ margin: 0, color: "rgba(255,255,255,0.72)", lineHeight: 1.75 }}>
@@ -188,7 +188,7 @@ export default function ContactPage() {
                   <Phone size={20} /> {siteConfig.phone}
                 </a>
                 <Link href="/bao-gia" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "14px 24px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)", color: "#fff", fontWeight: 700, fontSize: "0.95rem", textDecoration: "none" }}>
-                  Mở form báo giá chi tiết <ArrowRight size={16} />
+                  Gửi yêu cầu báo giá <ArrowRight size={16} />
                 </Link>
               </div>
             </div>

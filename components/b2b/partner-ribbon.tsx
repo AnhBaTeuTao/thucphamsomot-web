@@ -33,7 +33,13 @@ export function PartnerRibbon({ locale = "vi" }: { locale?: "vi" | "en" }) {
   return (
     <section className="b2b-partners" aria-label={t.ariaLabel}>
       <div className="container-shell">
-        <div className="b2b-partners__label">{t.label}</div>
+        <div className="b2b-partners__label" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "18px", marginBottom: "28px" }}>
+          <span className="b2b-partners__line b2b-partners__line--left" aria-hidden="true" />
+          <span className="b2b-partners__badge">
+            {t.label}
+          </span>
+          <span className="b2b-partners__line b2b-partners__line--right" aria-hidden="true" />
+        </div>
       </div>
       <div className="b2b-partners__track-wrap">
         <div className="b2b-partners__track">

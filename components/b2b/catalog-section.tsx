@@ -31,7 +31,7 @@ const texts = {
     btnLink: "/en/products",
     rfqTag: "B2B Policy: Contact for a quote — no public pricing displayed",
     rfqBtn: "View & Request Quote",
-    catLinkPrefix: "/en/category/",
+    catLinkPrefix: "/danh-muc/",
   }
 };
 
@@ -94,7 +94,7 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
             <h2 id="catalog-heading" className="section-title">
               {t.title}
             </h2>
-            <p className="section-desc" style={{ marginBottom: 0 }}>
+            <p className="section-desc" style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, marginBottom: 0, textWrap: "pretty" }}>
               {t.desc}
             </p>
           </div>
@@ -122,14 +122,23 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
         >
           {displayCats.map((baseCat, index) => {
             const bgImage = imageMap[baseCat.slug] || "/images/categories/rau-cu-qua.png";
-            // Index 0, 1: 6 cols (Row 1)
-            // Index 2, 3, 4: 4 cols (Row 2)
-            const colSpan = index < 2 ? "span 6 / span 6" : "span 4 / span 4";
-            const minHeight = index < 2 ? "340px" : "260px";
+            const isRow1 = index < 2;
+            const colSpan = isRow1 ? "span 6 / span 6" : "span 4 / span 4";
+            const minHeight = isRow1 ? "380px" : "260px";
 
             let title = baseCat.title;
             let description = baseCat.description;
             let highlights = baseCat.highlights ?? [];
+
+            if (locale === "vi" && isRow1) {
+              if (baseCat.slug === "rau-cu-qua") {
+                description = "Rau củ từ Đà Lạt, miền Tây và Bảo Lộc chọn lựa mỗi ngày, giữ trọn độ tươi trên suốt chặng đường về bếp, để đĩa rau trên bàn nhà hàng hay khay cơm trường học đều xanh mướt như vừa hái.";
+                highlights = ["Nguồn Đà Lạt & miền Tây", "Phân loại theo kích cỡ", "Giao đúng ca bếp"];
+              } else if (baseCat.slug === "thit-heo") {
+                description = "Từ bát canh sườn của quán cơm đến khay thịt kho của bếp công ty, thịt heo có mặt trong hầu hết thực đơn. TPS1 chia phần đúng quy cách và giữ lạnh suốt đường giao, để miếng thịt luôn tươi hồng, săn chắc.";
+                highlights = ["Cắt đúng quy cách bếp", "Kiểm tra kỹ khi nhập kho", "Giữ lạnh suốt đường giao"];
+              }
+            }
 
             if (locale === "en" && enCategoryOverrides[baseCat.slug]) {
               title = enCategoryOverrides[baseCat.slug].title;
@@ -137,6 +146,62 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
               highlights = enCategoryOverrides[baseCat.slug].highlights;
             }
 
+            // 3 ô dưới (Hải sản, Hàng đông lạnh, Gia vị): Trả về nguyên trạng như cũ
+            if (!isRow1) {
+              return (
+                <div
+                  key={baseCat.slug}
+                  className="b2b-category-card"
+                  style={{ gridColumn: colSpan, minHeight }}
+                >
+                  <Image
+                    src={bgImage}
+                    alt={title}
+                    fill
+                    className="b2b-category-card__img object-cover"
+                    sizes="33vw"
+                  />
+                  <div className="b2b-category-card__overlay" />
+                  <div className="b2b-category-card__content">
+                    <h3
+                      style={{
+                        fontSize: "1.05rem",
+                        fontWeight: 900,
+                        marginBottom: "12px",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {title}
+                    </h3>
+
+                    {highlights.slice(0, 2).length > 0 && (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "14px" }}>
+                        {highlights.slice(0, 2).map((h) => (
+                          <span
+                            key={h}
+                            style={{
+                              fontSize: "0.72rem",
+                              padding: "3px 9px",
+                              borderRadius: "999px",
+                              background: "rgba(255,255,255,0.14)",
+                              border: "1px solid rgba(255,255,255,0.18)",
+                            }}
+                          >
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <Link href={`${t.catLinkPrefix}${baseCat.slug}`} className="b2b-rfq-btn">
+                      {t.rfqBtn} <ArrowRight size={13} />
+                    </Link>
+                  </div>
+                </div>
+              );
+            }
+
+            // 2 ô trên (Rau củ quả & Thịt heo): Cân bằng tuyệt đối, không lệch, không thụt
             return (
               <div
                 key={baseCat.slug}
@@ -148,70 +213,104 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
                   alt={title}
                   fill
                   className="b2b-category-card__img object-cover"
-                  sizes={index < 2 ? "50vw" : "33vw"}
+                  sizes="50vw"
                 />
-                <div className="b2b-category-card__overlay" />
-                <div className="b2b-category-card__content">
-                  <span
-                    style={{
-                      fontSize: "0.72rem",
-                      fontWeight: 800,
-                      color: "rgba(255,255,255,0.5)",
-                      letterSpacing: "0.06em",
-                      display: "block",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    0{index + 1}
-                  </span>
-                  <h3
-                    style={{
-                      fontSize: index < 2 ? "1.5rem" : "1.05rem",
-                      fontWeight: 900,
-                      marginBottom: index < 2 ? "10px" : "12px",
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {title}
-                  </h3>
-
-                  {index < 2 && description && (
-                    <p
+                <div
+                  className="b2b-category-card__overlay"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(6, 20, 14, 0.82) 0%, rgba(6, 20, 14, 0.60) 45%, rgba(6, 20, 14, 0.90) 100%)",
+                  }}
+                />
+                <div
+                  className="b2b-category-card__content"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    padding: "28px 28px 24px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div style={{ width: "100%" }}>
+                    <h3
                       style={{
-                        fontSize: "0.88rem",
-                        color: "rgba(255,255,255,0.72)",
-                        marginBottom: "16px",
-                        lineHeight: 1.6,
-                        maxWidth: "320px",
+                        fontSize: "1.65rem",
+                        fontWeight: 900,
+                        color: "#ffffff",
+                        marginBottom: "12px",
+                        lineHeight: 1.25,
+                        textShadow: "0 2px 8px rgba(0, 0, 0, 0.6)",
+                        letterSpacing: "-0.015em",
                       }}
                     >
-                      {description}
-                    </p>
-                  )}
+                      {title}
+                    </h3>
 
-                  {/* Highlights */}
-                  {highlights.slice(0, index < 2 ? 3 : 2).length > 0 && (
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "14px" }}>
-                      {highlights.slice(0, index < 2 ? 3 : 2).map((h) => (
-                        <span
-                          key={h}
-                          style={{
-                            fontSize: "0.72rem",
-                            padding: "3px 9px",
-                            borderRadius: "999px",
-                            background: "rgba(255,255,255,0.14)",
-                            border: "1px solid rgba(255,255,255,0.18)",
-                          }}
-                        >
-                          {h}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                    {description && (
+                      <p
+                        style={{
+                          fontSize: "17.5px",
+                          color: "#f8fafc",
+                          marginBottom: "16px",
+                          lineHeight: 1.62,
+                          maxWidth: "520px",
+                          fontWeight: 450,
+                          textShadow: "0 1px 4px rgba(0, 0, 0, 0.7)",
+                          textWrap: "pretty",
+                          minHeight: "86px",
+                        }}
+                      >
+                        {description}
+                      </p>
+                    )}
 
-                  {/* RFQ Button */}
-                  <Link href={`${t.catLinkPrefix}${baseCat.slug}`} className="b2b-rfq-btn">
-                    {t.rfqBtn} <ArrowRight size={13} />
+                    {highlights.length > 0 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "8px",
+                          marginBottom: "14px",
+                          minHeight: "32px",
+                          alignItems: "center",
+                        }}
+                      >
+                        {highlights.slice(0, 3).map((h) => (
+                          <span
+                            key={h}
+                            style={{
+                              fontSize: "0.8rem",
+                              fontWeight: 600,
+                              color: "#ffffff",
+                              padding: "4px 11px",
+                              borderRadius: "999px",
+                              background: "rgba(255, 255, 255, 0.18)",
+                              border: "1px solid rgba(255, 255, 255, 0.28)",
+                              backdropFilter: "blur(6px)",
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                            }}
+                          >
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <Link
+                    href={`${t.catLinkPrefix}${baseCat.slug}`}
+                    className="b2b-rfq-btn"
+                    style={{
+                      fontSize: "0.85rem",
+                      padding: "9px 16px",
+                      borderRadius: "10px",
+                      marginTop: "auto",
+                    }}
+                  >
+                    {t.rfqBtn} <ArrowRight size={14} />
                   </Link>
                 </div>
               </div>
@@ -219,12 +318,14 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
           })}
         </div>
 
-        {/* Mobile grid 2-col */}
+        {/* Mobile grid 1-col (Zero-clipping on mobile viewports) */}
         <style dangerouslySetInnerHTML={{__html: `
           @media (max-width: 768px) {
-            #catalog-bento { grid-template-columns: 1fr 1fr !important; }
-            #catalog-bento > *:first-child { grid-column: span 2 !important; min-height: 280px !important; }
-            #catalog-bento > * { grid-column: span 1 !important; min-height: 180px !important; }
+            #catalog-bento { grid-template-columns: 1fr !important; gap: 16px !important; }
+            #catalog-bento > * { grid-column: span 1 !important; min-height: 240px !important; }
+            .b2b-category-card__content { padding: 22px 20px !important; }
+            .b2b-category-card__content p { min-height: auto !important; font-size: 15px !important; line-height: 1.55 !important; }
+            .b2b-category-card__content h3 { font-size: 1.35rem !important; }
           }
         `}} />
       </div>

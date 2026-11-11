@@ -327,15 +327,7 @@ export function LeadCaptureSection({ locale = "vi" }: { locale?: "vi" | "en" }) 
   return (
     <section className="b2b-lead-section" id="rfq-form" aria-labelledby="lead-heading">
       <div className="container-shell">
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "64px",
-            alignItems: "start",
-          }}
-          className="lead-grid"
-        >
+        <div className="lead-grid">
           {/* Left: Copy */}
           <div>
             <div className="section-label" style={{ color: "#4ade80" }}>
@@ -428,7 +420,7 @@ export function LeadCaptureSection({ locale = "vi" }: { locale?: "vi" | "en" }) 
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+              <div className="b2b-lead-form__row-2col">
                 <div className="b2b-lead-form__field">
                   <label htmlFor="lead-phone">{t.phoneLabel}</label>
                   <input

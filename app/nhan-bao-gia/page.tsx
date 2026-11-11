@@ -115,7 +115,7 @@ export default function NhanBaoGiaPage() {
               </div>
 
               {/* Right Column: Quick Quote Form */}
-              <div className="b2b-hero__form-wrap">
+              <div id="quick-quote" className="b2b-hero__form-wrap">
                 <QuickQuoteForm variant="hero" sourceContext="google_ads_landing" />
               </div>
             </div>
@@ -142,7 +142,7 @@ export default function NhanBaoGiaPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
               gap: 28,
             }}
           >
@@ -199,7 +199,7 @@ export default function NhanBaoGiaPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
               gap: 20,
             }}
           >
@@ -240,7 +240,7 @@ export default function NhanBaoGiaPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
               gap: 24,
             }}
           >
@@ -297,7 +297,7 @@ export default function NhanBaoGiaPage() {
             <div style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#4ade80", fontSize: "0.85rem", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>
               <Sparkles size={16} /> Liên hệ nhanh với TPS1
             </div>
-            <h2 style={{ fontSize: "clamp(1.7rem, 3.5vw, 2.4rem)", fontWeight: 850, margin: "0 0 16px" }}>
+            <h2 className="section-title-light" style={{ margin: "0 0 16px" }}>
               Cần bảng giá thực phẩm ngay trong ngày?
             </h2>
             <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.76)", lineHeight: 1.6, margin: "0 0 28px" }}>
@@ -309,7 +309,7 @@ export default function NhanBaoGiaPage() {
                 className="btn-hero-primary"
                 style={{ fontSize: "0.95rem", padding: "14px 28px" }}
               >
-                Điền form báo giá nhanh <ArrowRight size={17} />
+                Gửi yêu cầu báo giá <ArrowRight size={17} />
               </a>
               <a
                 href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
