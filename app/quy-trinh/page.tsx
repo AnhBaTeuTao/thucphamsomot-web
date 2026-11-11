@@ -134,8 +134,7 @@ export default function ProcessPage() {
               <AlertTriangle size={32} className="b2b-policy-icon" />
               <div>
                 <h2 className="b2b-policy-title section-title" style={{ margin: "0 0 10px" }}>
-                  <span className="phrase">Chính sách xử lý sự cố</span>{" "}
-                  <span className="phrase">&amp; Đổi&nbsp;trả</span>
+                  Chính sách xử lý sự cố &amp; Đổi&nbsp;trả
                 </h2>
                 <p className="b2b-policy-subtitle">
                   Tại TPS1, chúng tôi hiểu rằng &quot;Trong bếp ăn công nghiệp, trễ 1 phút là đói 1.000 người&quot;. 
@@ -175,8 +174,7 @@ export default function ProcessPage() {
       <section className="b2b-cta-band">
         <div className="container-shell position-relative z-10" style={{ textAlign: "center" }}>
           <h2 className="section-title-light">
-            <span className="phrase">Kết nối với hệ thống vận hành</span>{" "}
-            <span className="phrase">của&nbsp;TPS1</span>
+            Kết nối với hệ thống vận hành của&nbsp;TPS1
           </h2>
           <p className="section-desc" style={{ color: "rgba(255,255,255,0.7)", margin: "0 auto 32px" }}>
             Trải nghiệm chuỗi cung ứng thực phẩm chuẩn xác, minh bạch và an tâm tuyệt đối.

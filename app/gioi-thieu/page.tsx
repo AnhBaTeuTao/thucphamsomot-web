@@ -47,8 +47,7 @@ export default function GioiThieuPage() {
             <div className="b2b-about-story__text">
               <div className="section-label">Câu chuyện TPS1</div>
               <h2 className="section-title" style={{ marginBottom: "24px" }}>
-                <span className="phrase">Phía sau mỗi bữa ăn ngon</span>{" "}
-                <span className="phrase">là một gian bếp được chuẩn bị chu&nbsp;đáo</span>
+                Phía sau mỗi bữa ăn ngon là một gian bếp được chuẩn bị chu&nbsp;đáo
               </h2>
               <p className="section-desc" style={{ marginBottom: "20px" }}>
                 Người đứng bếp, dù ở nhà hàng hay bếp ăn công ty, đều cần nguyên liệu tươi, đúng quy cách và về đến nơi đúng giờ. Chỉ một chuyến hàng đến trễ cũng đủ khiến cả một ca nấu bị xáo trộn.
@@ -90,8 +89,7 @@ export default function GioiThieuPage() {
           <div style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto 56px" }}>
             <div className="section-label">Chứng nhận & bảo hiểm</div>
             <h2 className="section-title">
-              <span className="phrase">Chứng nhận đầy đủ,</span>{" "}
-              <span className="phrase">trách nhiệm rõ&nbsp;ràng</span>
+              Chứng nhận đầy đủ, trách nhiệm rõ&nbsp;ràng
             </h2>
             <p className="section-desc" style={{ margin: "0 auto" }}>
               TPS1 sở hữu giấy chứng nhận cơ sở đủ điều kiện an toàn thực phẩm, ISO 22000:2018, HACCP và hợp đồng bảo hiểm trách nhiệm sản phẩm với tổng hạn mức 5 tỷ đồng. Toàn bộ hồ sơ sẵn sàng được cung cấp khi quý doanh nghiệp, nhà trường cần thẩm định nhà cung cấp.
@@ -204,8 +202,7 @@ export default function GioiThieuPage() {
             <div className="b2b-about-scale__header">
               <div className="section-label">TPS1 qua những con số</div>
               <h2 className="section-title">
-                <span className="phrase">Năng lực đáp ứng</span>{" "}
-                <span className="phrase">quy&nbsp;mô công&nbsp;nghiệp</span>
+                Năng lực đáp ứng quy&nbsp;mô công&nbsp;nghiệp
               </h2>
             </div>
             
@@ -235,8 +232,7 @@ export default function GioiThieuPage() {
       <section className="b2b-cta-band">
         <div className="container-shell position-relative z-10" style={{ textAlign: "center" }}>
           <h2 className="section-title-light">
-            <span className="phrase">Gửi trọn an tâm</span>{" "}
-            <span className="phrase">trong từng bữa&nbsp;ăn</span>
+            Gửi trọn an tâm trong từng bữa&nbsp;ăn
           </h2>
           <p className="section-desc" style={{ color: "rgba(255,255,255,0.7)", margin: "0 auto 32px" }}>
             Quý khách chỉ cần gửi danh sách hàng và số lượng dự kiến, TPS1 sẽ gửi báo giá sỉ trong vòng 24 giờ.

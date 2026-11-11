@@ -87,8 +87,7 @@ export default function HomePage() {
           <div style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto 40px" }}>
             <div className="section-label">Ngành hàng phục vụ</div>
             <h2 id="industries-heading" className="section-title">
-              <span className="phrase">Mỗi gian bếp một nhịp riêng,</span>{" "}
-              <span className="phrase">TPS1 theo kịp từng&nbsp;nhịp.</span>
+              Mỗi gian bếp một nhịp riêng, TPS1 theo kịp từng&nbsp;nhịp.
             </h2>
             <p className="section-desc" style={{ margin: "0 auto", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
               Nhà hàng cần hàng chuẩn món, bếp công ty cần đúng ca, trường học cần đủ hồ sơ. Chúng tôi chuẩn bị nguồn hàng theo đúng nhịp ấy.
@@ -123,9 +122,7 @@ export default function HomePage() {
           <div style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto 40px" }}>
             <div className="section-label">Khu vực phục vụ</div>
             <h2 id="areas-heading" className="section-title">
-              <span className="phrase">Xe lạnh TPS1 có mặt khắp</span>{" "}
-              <span className="phrase">Đồng&nbsp;Nai, TP.HCM</span>{" "}
-              <span className="phrase">và các tỉnh lân&nbsp;cận.</span>
+              Xe lạnh TPS1 có mặt khắp Đồng&nbsp;Nai, TP.HCM và các tỉnh lân&nbsp;cận.
             </h2>
             <p className="section-desc" style={{ margin: "0 auto", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
               Các tuyến giao cố định phủ Đồng Nai (gồm cả khu vực Bình Phước cũ), TP.HCM, Bình Dương và Bà Rịa - Vũng Tàu, đưa hàng đến đúng khung giờ mỗi gian bếp cần.
@@ -150,8 +147,7 @@ export default function HomePage() {
           <div style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto 56px" }}>
             <div className="section-label">Quy trình làm việc</div>
             <h2 id="process-heading" className="section-title">
-              <span className="phrase">Ba bước để gian bếp</span>{" "}
-              <span className="phrase">có hàng tươi mỗi&nbsp;ngày</span>
+              Ba bước để gian bếp có hàng tươi mỗi&nbsp;ngày
             </h2>
             <p className="section-desc" style={{ margin: "0 auto", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
               Quý khách chỉ cần gửi danh sách hàng, phần còn lại TPS1 lo trọn.
@@ -252,8 +248,7 @@ export default function HomePage() {
               Sẵn sàng hợp tác
             </div>
             <h2 className="section-title-light b2b-cta-title" style={{ maxWidth: "640px", margin: 0 }}>
-              <span className="phrase">Hãy để bữa ăn ngày&nbsp;mai</span>{" "}
-              <span className="phrase">bắt đầu từ chuyến hàng tươi hôm&nbsp;nay.</span>
+              Hãy để bữa ăn ngày mai <br className="b2b-cta-br" />bắt đầu từ chuyến hàng tươi hôm&nbsp;nay.
             </h2>
             <p style={{ color: "rgba(255,255,255,0.62)", fontSize: "1rem", lineHeight: 1.7, maxWidth: "480px", margin: 0 }}>
               Gửi danh sách hàng cần mua, TPS1 xác nhận trong 30 phút và gửi báo giá trong vòng 24 giờ.

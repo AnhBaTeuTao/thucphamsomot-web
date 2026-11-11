@@ -74,8 +74,7 @@ export default function NhanBaoGiaPage() {
                 </div>
 
                 <h1 className="b2b-hero__title" style={{ marginLeft: 0, textAlign: "left", fontSize: "clamp(2rem, 4.5vw, 3.4rem)" }}>
-                  <span className="phrase">Nguồn thực phẩm ổn định</span>{" "}
-                  <span className="phrase">cho <span style={{ color: "#4ade80" }}>bếp ăn chuyên&nbsp;nghiệp.</span></span>
+                  Nguồn thực phẩm ổn định cho <span style={{ color: "#4ade80" }}>bếp ăn chuyên&nbsp;nghiệp.</span>
                 </h1>
 
                 <p className="b2b-hero__sub" style={{ marginLeft: 0, textAlign: "left", maxWidth: 640 }}>
@@ -133,8 +132,7 @@ export default function NhanBaoGiaPage() {
           <div style={{ textAlign: "center", maxWidth: 660, margin: "0 auto 44px" }}>
             <div className="section-label" style={{ color: "#0f6f4b" }}>Ưu thế vượt trội</div>
             <h2 className="section-title" style={{ color: "#133127" }}>
-              <span className="phrase">Giải pháp cung ứng thực phẩm</span>{" "}
-              <span className="phrase">an tâm tuyệt đối cho quản lý&nbsp;bếp</span>
+              Giải pháp cung ứng thực phẩm an tâm tuyệt đối cho quản lý&nbsp;bếp
             </h2>
             <p className="section-desc" style={{ margin: "0 auto" }}>
               Chúng tôi hiểu rằng mỗi bữa ăn là uy tín của quý công ty. TPS1 cam kết chất lượng đồng đều và trách nhiệm cao nhất.

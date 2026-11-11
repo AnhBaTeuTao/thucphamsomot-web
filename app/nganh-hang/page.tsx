@@ -100,8 +100,8 @@ export default function NganhHangPage() {
       eyebrow="Ngành hàng"
       title={
         <>
-          <span className="phrase">Mỗi gian bếp</span>{" "}
-          <span className="phrase">một nhịp riêng</span>
+          <span style={{ display: "block" }}>Mỗi gian bếp</span>
+          <span style={{ display: "block" }}>một nhịp riêng</span>
         </>
       }
       description="Nhà hàng cần hàng chuẩn món, quán ăn cần lượng vừa đủ mỗi sáng, bếp công ty cần đúng ca, trường học cần đủ hồ sơ. TPS1 chuẩn bị nguồn hàng theo đúng nhịp của từng gian bếp."
