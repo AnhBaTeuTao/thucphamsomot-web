@@ -29,3 +29,5 @@ snap_*.png
 .temp/
 .vercel
 .env*
+
+*.tsbuildinfo

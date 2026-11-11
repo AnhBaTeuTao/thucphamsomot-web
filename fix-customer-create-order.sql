@@ -13,7 +13,18 @@ create table if not exists public.customer_contract_prices (
   primary key (customer_id, product_id)
 );
 
--- Bước 3: Cập nhật lại hàm RPC customer_create_order
+alter table public.customer_contract_prices enable row level security;
+drop policy if exists select_contract_prices_all on public.customer_contract_prices;
+create policy select_contract_prices_all on public.customer_contract_prices for select using (true);
+grant select on public.customer_contract_prices to anon, authenticated, service_role;
+
+-- Bước 3: Xóa các phiên bản cũ để tránh lỗi quá tải hàm không phân giải được (ambiguous overload)
+drop function if exists public.customer_create_order(uuid, text, jsonb, text, text, text, text, text, text, text);
+drop function if exists public.customer_create_order(uuid, text, jsonb, text, text, text, text, text, text, text, text);
+drop function if exists public.customer_create_order(uuid, text, jsonb, text, text, text, text, text, text, text, text, text);
+drop function if exists public.customer_create_order(uuid, text, jsonb, text, text, text, text, text, text, text, text, text, uuid);
+
+-- Cập nhật lại hàm RPC customer_create_order
 create or replace function public.customer_create_order(
   p_session_token uuid,
   p_source text,
@@ -236,3 +247,7 @@ begin
   return next v_order;
 end;
 $$;
+
+-- Bước 4: Phân quyền thực thi RPC cho frontend và backend
+revoke all on function public.customer_create_order(uuid, text, jsonb, text, text, text, text, text, text, text, text, text, uuid) from public;
+grant execute on function public.customer_create_order(uuid, text, jsonb, text, text, text, text, text, text, text, text, text, uuid) to anon, authenticated, service_role;
