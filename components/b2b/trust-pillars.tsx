@@ -107,12 +107,13 @@ export function TrustPillars({ locale = "vi" }: { locale?: "vi" | "en" }) {
   return (
     <section className="b2b-pillars" aria-labelledby="pillars-heading">
       <div className="container-shell">
-        <div className="mb-12">
+        {/* Header căn giữa đồng bộ chuẩn Design System */}
+        <div style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto 48px" }}>
           <div className="section-label">{t.label}</div>
           <h2 id="pillars-heading" className="section-title">
             {t.title}
           </h2>
-          <p className="section-desc" style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
+          <p className="section-desc" style={{ margin: "0 auto", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
             {t.desc}
           </p>
         </div>

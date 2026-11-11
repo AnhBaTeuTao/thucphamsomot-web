@@ -78,37 +78,23 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
   return (
     <section className="b2b-catalog" aria-labelledby="catalog-heading">
       <div className="container-shell">
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "16px",
-            marginBottom: "36px",
-          }}
-        >
-          <div>
-            <div className="section-label">{t.label}</div>
-            <h2 id="catalog-heading" className="section-title">
-              {t.title}
-            </h2>
-            <p className="section-desc" style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, marginBottom: 0, textWrap: "pretty" }}>
-              {t.desc}
-            </p>
-          </div>
-          <Link href={t.btnLink} className="btn-header-internal">
-            {t.btnAll} <ArrowRight size={15} />
-          </Link>
-        </div>
+        {/* Header căn giữa đồng bộ */}
+        <div style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 36px" }}>
+          <div className="section-label">{t.label}</div>
+          <h2 id="catalog-heading" className="section-title">
+            {t.title}
+          </h2>
+          <p className="section-desc" style={{ margin: "0 auto 20px", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
+            {t.desc}
+          </p>
 
-        {/* RFQ notice badge */}
-        <div style={{ marginBottom: "24px" }}>
-          <span className="b2b-catalog__rfq-tag">
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#c7372f", display: "inline-block" }} />
-            {t.rfqTag}
-          </span>
+          {/* RFQ notice badge căn giữa thanh thoát */}
+          <div>
+            <span className="b2b-catalog__rfq-tag">
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#c7372f", display: "inline-block" }} />
+              {t.rfqTag}
+            </span>
+          </div>
         </div>
 
         {/* Bento grid */}
@@ -316,6 +302,13 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
               </div>
             );
           })}
+        </div>
+
+        {/* Nút xem danh mục căn giữa đối xứng ở chân khối bento */}
+        <div style={{ textAlign: "center", marginTop: "36px" }}>
+          <Link href={t.btnLink} className="btn-secondary" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            {t.btnAll} <ArrowRight size={16} />
+          </Link>
         </div>
 
         <style dangerouslySetInnerHTML={{__html: `
