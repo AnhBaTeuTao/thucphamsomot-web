@@ -1575,6 +1575,22 @@ a {
 .b2b-cta-band { background: linear-gradient(105deg, #081a10 0%, #0c2a18 50%, #071009 100%); padding: 80px 0; position: relative; overflow: hidden; }
 .b2b-cta-band::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 50%, rgba(15,111,75,0.18) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(20,184,122,0.12) 0%, transparent 50%); pointer-events: none; }
 
+/* Semantic phrase boundary protection: ngăn trình duyệt bẻ gãy từ trong cụm */
+.phrase,
+.text-phrase {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Kích hoạt tự động cân bằng dòng cho toàn bộ tiêu đề */
+.section-title,
+.section-title-light,
+.page-hero__title,
+.b2b-about-hero__title,
+.b2b-process-hero__title {
+  text-wrap: balance;
+}
+
 /* SECTION LABELS */
 .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
 .section-label::before { content: ''; display: block; width: 20px; height: 2px; background: var(--accent); border-radius: 1px; }
@@ -1976,6 +1992,22 @@ a {
 /* CTA BAND */
 .b2b-cta-band { background: linear-gradient(105deg, #081a10 0%, #0c2a18 50%, #071009 100%); padding: 80px 0; position: relative; overflow: hidden; }
 .b2b-cta-band::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 50%, rgba(15,111,75,0.18) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(20,184,122,0.12) 0%, transparent 50%); pointer-events: none; }
+
+/* Semantic phrase boundary protection: ngăn trình duyệt bẻ gãy từ trong cụm */
+.phrase,
+.text-phrase {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Kích hoạt tự động cân bằng dòng cho toàn bộ tiêu đề */
+.section-title,
+.section-title-light,
+.page-hero__title,
+.b2b-about-hero__title,
+.b2b-process-hero__title {
+  text-wrap: balance;
+}
 
 /* SECTION LABELS */
 .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }

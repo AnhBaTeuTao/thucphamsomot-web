@@ -157,7 +157,8 @@ export default function EnglishHomePage() {
               Ready to partner
             </div>
             <h2 className="section-title-light b2b-cta-title" style={{ maxWidth: "640px", margin: 0 }}>
-              Get a food supply quote <br className="b2b-cta-br" />for your kitchen today.
+              <span className="phrase">Get a food supply quote</span>{" "}
+              <span className="phrase">for your kitchen today.</span>
             </h2>
             <p style={{ color: "rgba(255,255,255,0.62)", fontSize: "1rem", lineHeight: 1.7, maxWidth: "480px", margin: 0 }}>
               Response within 24 hours. No commitment required.

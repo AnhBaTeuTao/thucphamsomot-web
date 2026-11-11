@@ -3,7 +3,12 @@ import { ShieldCheck, Truck, ClipboardList, Building2, Award, Zap } from "lucide
 const texts = {
   vi: {
     label: "Cam kết dịch vụ",
-    title: "Vì sao nhiều gian bếp chọn TPS1?",
+    title: (
+      <>
+        <span className="phrase">Vì sao nhiều gian bếp</span>{" "}
+        <span className="phrase">chọn&nbsp;TPS1?</span>
+      </>
+    ),
     desc: "Mỗi cam kết dưới đây được giữ bằng việc làm mỗi ngày, từ chuyến hàng sáng sớm đến tờ hóa đơn cuối tháng.",
     pillars: [
       {

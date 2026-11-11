@@ -133,7 +133,10 @@ export default function ProcessPage() {
             <div className="b2b-policy-header">
               <AlertTriangle size={32} className="b2b-policy-icon" />
               <div>
-                <h2 className="b2b-policy-title section-title" style={{ margin: "0 0 10px" }}>Chính sách xử lý sự cố & Đổi trả</h2>
+                <h2 className="b2b-policy-title section-title" style={{ margin: "0 0 10px" }}>
+                  <span className="phrase">Chính sách xử lý sự cố</span>{" "}
+                  <span className="phrase">&amp; Đổi&nbsp;trả</span>
+                </h2>
                 <p className="b2b-policy-subtitle">
                   Tại TPS1, chúng tôi hiểu rằng &quot;Trong bếp ăn công nghiệp, trễ 1 phút là đói 1.000 người&quot;. 
                   Do đó, chính sách xử lý sự cố của chúng tôi được thiết kế để bảo vệ tuyệt đối kế hoạch sản xuất của bạn.
@@ -171,7 +174,10 @@ export default function ProcessPage() {
       {/* 4. CTA */}
       <section className="b2b-cta-band">
         <div className="container-shell position-relative z-10" style={{ textAlign: "center" }}>
-          <h2 className="section-title-light">Kết nối với hệ thống vận hành của TPS1</h2>
+          <h2 className="section-title-light">
+            <span className="phrase">Kết nối với hệ thống vận hành</span>{" "}
+            <span className="phrase">của&nbsp;TPS1</span>
+          </h2>
           <p className="section-desc" style={{ color: "rgba(255,255,255,0.7)", margin: "0 auto 32px" }}>
             Trải nghiệm chuỗi cung ứng thực phẩm chuẩn xác, minh bạch và an tâm tuyệt đối.
           </p>

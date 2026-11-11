@@ -7,7 +7,7 @@ import { brandAssets } from "@/lib/brand";
 
 type PageShellProps = {
   eyebrow: string;
-  title: string;
+  title: React.ReactNode; // Cho phép truyền JSX span phrase
   description?: string;
   compact?: boolean;
   // Compact pages have no hero; render the title as a visually hidden H1
@@ -86,7 +86,7 @@ export function PageShell({ eyebrow, title, description, compact = false, hidden
     return (
       <main className="page-shell">
         <section className="container-shell section-pad">
-          {hiddenTitle ? <h1 className="sr-only">{title}</h1> : null}
+          {hiddenTitle ? <h1 className="sr-only">{typeof title === "string" ? title : null}</h1> : null}
           {children}
         </section>
       </main>

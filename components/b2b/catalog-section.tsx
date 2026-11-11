@@ -15,7 +15,12 @@ const imageMap: Record<string, string> = {
 const texts = {
   vi: {
     label: "Danh mục sản phẩm",
-    title: <>Đủ đầy nguyên liệu cho mọi thực đơn.</>,
+    title: (
+      <>
+        <span className="phrase">Đủ đầy nguyên liệu</span>{" "}
+        <span className="phrase">cho mọi thực&nbsp;đơn.</span>
+      </>
+    ),
     desc: "Giá được báo riêng cho từng khách hàng theo sản lượng thực tế, vì vậy danh mục không niêm yết giá.",
     btnAll: "Xem toàn bộ danh mục",
     btnLink: "/san-pham",
