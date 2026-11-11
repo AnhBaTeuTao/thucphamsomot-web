@@ -60,63 +60,23 @@ export default function EnglishHomePage() {
             </p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "24px",
-              position: "relative",
-            }}
-          >
+          <div className="b2b-process-grid">
             {/* Connector line */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                top: "32px",
-                left: "16.5%",
-                right: "16.5%",
-                height: "2px",
-                background: "transparent",
-                borderTop: "2px dashed rgba(15,111,75,0.3)",
-                zIndex: 0,
-              }}
-            />
+            <div className="process-connector-line" aria-hidden="true" />
             {/* Animated glowing dot */}
-            <div
-              aria-hidden="true"
-              className="process-dot-anim"
-              style={{
-                position: "absolute",
-                top: "30px",
-                left: "16.5%",
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                background: "#14b87a",
-                boxShadow: "0 0 10px #14b87a, 0 0 20px #14b87a",
-                zIndex: 1,
-              }}
-            />
+            <div aria-hidden="true" className="process-dot-anim" />
             {processSteps.map((step) => (
-              <div key={step.num} className="b2b-process-step" style={{ position: "relative" }}>
+              <div key={step.num} className="b2b-process-step">
                 <div className="b2b-process-step__num">{step.num}</div>
-                <h3 style={{ fontSize: "1.05rem", fontWeight: 800, marginBottom: "10px", color: "#133127" }}>
+                <h3 className="b2b-process-step__title">
                   {step.title}
                 </h3>
-                <p style={{ fontSize: "0.9rem", color: "#59665f", lineHeight: 1.7, margin: 0 }}>
+                <p className="b2b-process-step__desc">
                   {step.desc}
                 </p>
               </div>
             ))}
           </div>
-
-          {/* Mobile: 1-col */}
-          <style>{`
-            @media (max-width: 640px) {
-              #process-heading ~ div { grid-template-columns: 1fr !important; }
-            }
-          `}</style>
         </div>
       </section>
 
@@ -146,10 +106,10 @@ export default function EnglishHomePage() {
               Just send your list — TPS1 handles the rest.
             </p>
             <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
-              <Link href="#rfq-form" className="btn-hero-primary" style={{ fontSize: "1rem" }}>
+              <Link href="/en/bao-gia" className="btn-hero-primary" style={{ fontSize: "1rem" }}>
                 Send quote request <ArrowRight size={18} />
               </Link>
-              <Link href="/gioi-thieu" className="btn-hero-secondary">
+              <Link href="/ho-so-nang-luc" className="btn-hero-secondary">
                 Download company profile
               </Link>
             </div>

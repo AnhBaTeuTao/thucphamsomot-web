@@ -89,16 +89,20 @@ export default function HomePage() {
             <h2 id="industries-heading" className="section-title">
               Mỗi gian bếp một nhịp riêng, TPS1 theo kịp từng nhịp.
             </h2>
-            <p className="section-desc" style={{ margin: "0 auto" }}>
+            <p className="section-desc" style={{ margin: "0 auto", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
               Nhà hàng cần hàng chuẩn món, bếp công ty cần đúng ca, trường học cần đủ hồ sơ. Chúng tôi chuẩn bị nguồn hàng theo đúng nhịp ấy.
             </p>
           </div>
           <div className="home-local__grid">
             {industryHighlights.map((item) => (
-              <Link key={item.href} href={item.href} className="home-local__card">
-                <h3>{item.label}</h3>
-                <p>{item.description}</p>
-                <span className="home-local__link">
+              <Link key={item.href} href={item.href} className="home-local__card" style={{ padding: "28px 26px" }}>
+                <h3 style={{ fontSize: "1.45rem", fontWeight: 850, color: "#133127", margin: "0 0 10px 0", lineHeight: 1.3, letterSpacing: "-0.015em" }}>
+                  {item.label}
+                </h3>
+                <p style={{ fontSize: "18px", color: "#334155", lineHeight: 1.65, margin: 0, fontWeight: 450, textWrap: "pretty" }}>
+                  {item.description}
+                </p>
+                <span className="home-local__link" style={{ fontWeight: 700, fontSize: "0.95rem" }}>
                   Xem trang <ArrowRight size={16} />
                 </span>
               </Link>
@@ -120,7 +124,7 @@ export default function HomePage() {
             <h2 id="areas-heading" className="section-title">
               Xe lạnh TPS1 có mặt khắp Đồng Nai, TP.HCM và các tỉnh lân cận.
             </h2>
-            <p className="section-desc" style={{ margin: "0 auto" }}>
+            <p className="section-desc" style={{ margin: "0 auto", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
               Các tuyến giao cố định phủ Đồng Nai (gồm cả khu vực Bình Phước cũ), TP.HCM, Bình Dương và Bà Rịa - Vũng Tàu, đưa hàng đến đúng khung giờ mỗi gian bếp cần.
             </p>
           </div>
@@ -145,68 +149,28 @@ export default function HomePage() {
             <h2 id="process-heading" className="section-title">
               Ba bước để gian bếp có hàng tươi mỗi ngày
             </h2>
-            <p className="section-desc" style={{ margin: "0 auto" }}>
+            <p className="section-desc" style={{ margin: "0 auto", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
               Quý khách chỉ cần gửi danh sách hàng, phần còn lại TPS1 lo trọn.
             </p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "24px",
-              position: "relative",
-            }}
-          >
+          <div className="b2b-process-grid">
             {/* Connector line */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                top: "32px",
-                left: "16.5%",
-                right: "16.5%",
-                height: "2px",
-                background: "transparent",
-                borderTop: "2px dashed rgba(15,111,75,0.3)",
-                zIndex: 0,
-              }}
-            />
+            <div className="process-connector-line" aria-hidden="true" />
             {/* Animated glowing dot */}
-            <div
-              aria-hidden="true"
-              className="process-dot-anim"
-              style={{
-                position: "absolute",
-                top: "30px",
-                left: "16.5%",
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                background: "#14b87a",
-                boxShadow: "0 0 10px #14b87a, 0 0 20px #14b87a",
-                zIndex: 1,
-              }}
-            />
+            <div aria-hidden="true" className="process-dot-anim" />
             {processSteps.map((step) => (
-              <div key={step.num} className="b2b-process-step" style={{ position: "relative" }}>
+              <div key={step.num} className="b2b-process-step">
                 <div className="b2b-process-step__num">{step.num}</div>
-                <h3 style={{ fontSize: "1.05rem", fontWeight: 800, marginBottom: "10px", color: "#133127" }}>
+                <h3 className="b2b-process-step__title">
                   {step.title}
                 </h3>
-                <p style={{ fontSize: "0.9rem", color: "#59665f", lineHeight: 1.7, margin: 0 }}>
+                <p className="b2b-process-step__desc">
                   {step.desc}
                 </p>
               </div>
             ))}
           </div>
-
-          {/* Mobile: 1-col */}
-          <style>{`
-            @media (max-width: 640px) {
-              #process-heading ~ div { grid-template-columns: 1fr !important; }
-            }
-          `}</style>
         </div>
       </section>
 
@@ -233,10 +197,10 @@ export default function HomePage() {
               Báo giá hoàn toàn không kèm ràng buộc.
             </p>
             <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
-              <Link href="#rfq-form" className="btn-hero-primary" style={{ fontSize: "1rem" }}>
+              <Link href="/bao-gia" className="btn-hero-primary" style={{ fontSize: "1rem" }}>
                 Gửi yêu cầu báo giá <ArrowRight size={18} />
               </Link>
-              <Link href="/gioi-thieu" className="btn-hero-secondary">
+              <Link href="/ho-so-nang-luc" className="btn-hero-secondary">
                 Tải hồ sơ năng lực
               </Link>
             </div>
