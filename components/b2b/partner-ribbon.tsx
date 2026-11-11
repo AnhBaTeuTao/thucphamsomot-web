@@ -40,7 +40,7 @@ export function PartnerRibbon({ locale = "vi" }: { locale?: "vi" | "en" }) {
               <>
                 <span className="b2b-partners__badge-desktop">{t.label}</span>
                 <span className="b2b-partners__badge-mobile">
-                  Nhãn hàng &amp; Đối tác<br />thương mại tin&nbsp;dùng
+                  Nhãn hàng &amp; Đối tác <br />thương mại tin&nbsp;dùng
                 </span>
               </>
             ) : (
