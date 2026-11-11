@@ -9068,3 +9068,16 @@ a.sku-tab {
     line-height: 1.55 !important;
   }
 }
+
+@media (max-width: 640px) {
+  .b2b-cta-band .section-title-light {
+    /* Hạ nhẹ font từ 1.85rem xuống 1.55rem trên mobile để dòng 1 chỉ còn ~285px, lọt trọn vẹn trong màn hình 360px */
+    font-size: clamp(1.45rem, 6.5vw, 1.75rem) !important;
+    line-height: 1.3 !important;
+    text-wrap: balance !important;
+  }
+  /* Trên màn hình siêu nhỏ (< 380px như Galaxy A55), ẩn thẻ br để chữ tự cân bằng dòng tự nhiên */
+  .b2b-cta-br {
+    display: none;
+  }
+}

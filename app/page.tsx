@@ -247,8 +247,8 @@ export default function HomePage() {
             <div className="section-label" style={{ color: "#4ade80" }}>
               Sẵn sàng hợp tác
             </div>
-            <h2 className="section-title-light" style={{ maxWidth: "640px", margin: 0 }}>
-              Hãy để bữa ăn ngày mai<br />bắt đầu từ chuyến hàng tươi hôm nay.
+            <h2 className="section-title-light b2b-cta-title" style={{ maxWidth: "640px", margin: 0 }}>
+              Hãy để bữa ăn ngày&nbsp;mai<br className="b2b-cta-br" />bắt đầu từ chuyến hàng tươi hôm nay.
             </h2>
             <p style={{ color: "rgba(255,255,255,0.62)", fontSize: "1rem", lineHeight: 1.7, maxWidth: "480px", margin: 0 }}>
               Gửi danh sách hàng cần mua, TPS1 xác nhận trong 30 phút và gửi báo giá trong vòng 24 giờ.
