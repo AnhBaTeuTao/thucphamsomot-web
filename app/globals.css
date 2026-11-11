@@ -9047,20 +9047,6 @@ a.sku-tab {
     padding-bottom: 80px !important; /* Tạo khoảng đệm an toàn để social-widget không che khuất chữ */
   }
 
-  .home-local__card {
-    min-height: auto !important;
-    padding: 16px 20px !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-  }
-
-  .home-local__card h3 {
-    margin: 0 !important;
-    font-size: 1.15rem !important;
-  }
-
   .section-desc,
   .home-local__card p,
   .b2b-process-step p {
