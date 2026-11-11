@@ -205,19 +205,19 @@ export default function GioiThieuPage() {
             <div className="b2b-about-scale__stats">
               <div className="b2b-scale-stat">
                 <div className="b2b-scale-stat__num">109+</div>
-                <div className="b2b-scale-stat__label">Doanh nghiệp và bếp ăn tin chọn</div>
+                <div className="b2b-scale-stat__label">Doanh nghiệp và bếp ăn tin&nbsp;chọn</div>
               </div>
               <div className="b2b-scale-stat">
                 <div className="b2b-scale-stat__num">5.000+</div>
-                <div className="b2b-scale-stat__label">Mã sản phẩm trong danh mục</div>
+                <div className="b2b-scale-stat__label">Mã sản phẩm trong danh&nbsp;mục</div>
               </div>
               <div className="b2b-scale-stat">
                 <div className="b2b-scale-stat__num">24/7</div>
-                <div className="b2b-scale-stat__label">Đội xe lạnh sẵn sàng giao hàng</div>
+                <div className="b2b-scale-stat__label">Đội xe lạnh sẵn sàng giao&nbsp;hàng</div>
               </div>
               <div className="b2b-scale-stat">
                 <div className="b2b-scale-stat__num">5 tỷ</div>
-                <div className="b2b-scale-stat__label">Bảo hiểm trách nhiệm sản phẩm</div>
+                <div className="b2b-scale-stat__label">Bảo hiểm trách nhiệm sản&nbsp;phẩm</div>
               </div>
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function GioiThieuPage() {
           <p className="section-desc" style={{ color: "rgba(255,255,255,0.7)", margin: "0 auto 32px" }}>
             Quý khách chỉ cần gửi danh sách hàng và số lượng dự kiến, TPS1 sẽ gửi báo giá sỉ trong vòng 24 giờ.
           </p>
-          <Link href="/lien-he" className="btn-hero-primary" style={{ display: "inline-flex" }}>
+          <Link href="/bao-gia" className="btn-hero-primary" style={{ display: "inline-flex" }}>
             Gửi yêu cầu báo giá <ArrowRight size={18} />
           </Link>
         </div>

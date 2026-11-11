@@ -88,10 +88,10 @@ const INDUSTRIES = [
 ];
 
 const STATS = [
-  { value: "109+", label: "Doanh nghiệp và bếp ăn đang hợp tác" },
-  { value: "5.000+", label: "Mã sản phẩm trong danh mục" },
-  { value: "99,8%", label: "Đơn hàng giao đúng hẹn" },
-  { value: "Từ 2017", label: "Phục vụ Đồng Nai, TP.HCM và tỉnh lân cận" },
+  { value: "109+", label: "Doanh nghiệp và bếp ăn đang hợp\u00a0tác" },
+  { value: "5.000+", label: "Mã sản phẩm trong danh\u00a0mục" },
+  { value: "99,8%", label: "Đơn hàng giao đúng\u00a0hẹn" },
+  { value: "Từ 2017", label: "Phục vụ Đồng Nai, TP.HCM và tỉnh lân\u00a0cận" },
 ];
 
 export default function NganhHangPage() {
