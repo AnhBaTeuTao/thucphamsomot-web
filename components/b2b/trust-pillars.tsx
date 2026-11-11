@@ -118,11 +118,8 @@ export function TrustPillars({ locale = "vi" }: { locale?: "vi" | "en" }) {
         </div>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
-            gap: "24px",
-          }}
+          className="b2b-pillars-grid"
+          id="b2b-pillars-grid"
         >
           {t.pillars.map((p) => {
             const Icon = p.icon;
@@ -198,6 +195,27 @@ export function TrustPillars({ locale = "vi" }: { locale?: "vi" | "en" }) {
           })}
         </div>
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        .b2b-pillars-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr)); /* Desktop: Cố định chuẩn 3 cột x 2 dòng */
+          gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+          .b2b-pillars-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)); /* Tablet: 2 cột x 3 dòng */
+            gap: 20px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .b2b-pillars-grid {
+            grid-template-columns: 1fr; /* Mobile: 1 cột xếp chồng dọc */
+            gap: 16px;
+          }
+        }
+      `}} />
     </section>
   );
 }
