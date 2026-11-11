@@ -747,14 +747,22 @@
     width: 100%;
   }
 
-  .page-hero__visual,
+  .page-hero__visual {
+    min-height: 320px !important; /* Đủ chiều cao để không bao giờ bị cắt cụt badge phía trên */
+  }
+
   .knowledge-hero__image-frame,
   .knowledge-feature-card__media,
   .content-section__media {
     min-height: 220px;
   }
 
-  .page-hero__visual-copy,
+  .page-hero__visual-copy {
+    right: 14px;
+    left: 14px;
+    bottom: 14px;
+  }
+
   .knowledge-hero__image-copy {
     right: 12px;
     left: 12px;

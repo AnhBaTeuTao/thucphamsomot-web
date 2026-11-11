@@ -11,37 +11,67 @@ export const metadata = makeMetadata({
 
 const PROCESS_STEPS = [
   {
-    title: "Tiếp Nhận & Lên Kế Hoạch",
+    title: (
+      <>
+        Tiếp Nhận<br />và Lên Kế Hoạch
+      </>
+    ),
+    rawTitle: "Tiếp Nhận và Lên Kế Hoạch",
     desc: "Nhận PO (đơn đặt hàng) từ đối tác qua hệ thống Cổng Đối Tác VIP. Bộ phận điều phối lên kế hoạch thu mua và phân bổ nhân sự sản xuất, đảm bảo khớp với lịch giao nhận của từng nhà máy.",
     icon: FileText,
     image: "/images/process/step1.jpg",
   },
   {
-    title: "Thu Mua & Kiểm Dịch Đầu Vào",
+    title: (
+      <>
+        Thu Mua<br />và Kiểm Dịch Đầu Vào
+      </>
+    ),
+    rawTitle: "Thu Mua và Kiểm Dịch Đầu Vào",
     desc: "Nguồn hàng từ các nông trại chuẩn VietGAP được vận chuyển về kho trong đêm. Đội ngũ QA/QC tiến hành kiểm tra giấy chứng nhận thú y, test nhanh dư lượng bảo vệ thực vật trước khi nhập kho.",
     icon: ShieldCheck,
     image: "/images/process/step%202.png",
   },
   {
-    title: "Sơ Chế & Đóng Gói",
+    title: (
+      <>
+        Sơ Chế<br />và Đóng Gói
+      </>
+    ),
+    rawTitle: "Sơ Chế và Đóng Gói",
     desc: "Thực hiện sơ chế (làm sạch, cắt thái) theo yêu cầu định lượng riêng của từng bếp. Sản phẩm được hút chân không và dán tem nhãn truy xuất nguồn gốc rõ ràng trong phòng lạnh đạt chuẩn ISO 22000.",
     icon: CheckCircle2,
     image: "/images/process/step3.png",
   },
   {
-    title: "Lưu Trữ Kho Lạnh",
+    title: (
+      <>
+        Lưu Trữ<br />Kho Lạnh
+      </>
+    ),
+    rawTitle: "Lưu Trữ Kho Lạnh",
     desc: "Hàng hoá thành phẩm được chuyển ngay vào kho mát / kho đông theo đúng dải nhiệt độ tiêu chuẩn để bảo toàn dinh dưỡng và độ tươi ngon. Phân loại theo mã lộ trình giao hàng.",
     icon: Box,
     image: "/images/process/step4.png",
   },
   {
-    title: "Vận Chuyển Xe Lạnh",
+    title: (
+      <>
+        Vận Chuyển<br />Xe Lạnh
+      </>
+    ),
+    rawTitle: "Vận Chuyển Xe Lạnh",
     desc: "Xuất kho lên đội xe tải đông lạnh chuyên dụng. Hệ thống GPS và cảm biến nhiệt độ theo dõi liên tục suốt hành trình, đảm bảo nhiệt độ luôn ở mức tối ưu từ kho đến tận cửa bếp.",
     icon: Truck,
     image: "/images/process/step5.png",
   },
   {
-    title: "Bàn Giao & Kiểm Tra",
+    title: (
+      <>
+        Bàn Giao<br />và Kiểm Tra
+      </>
+    ),
+    rawTitle: "Bàn Giao và Kiểm Tra",
     desc: "Nhân viên TPS1 giao hàng tận nơi. Quản lý bếp tiến hành cân đối soát, kiểm tra độ tươi và nhiệt độ lõi sản phẩm. Ký nhận hoàn tất quy trình qua ứng dụng di động.",
     icon: Users,
     image: "/images/process/step6.png",
@@ -112,7 +142,7 @@ export default function ProcessPage() {
                     <div className="b2b-timeline__image-wrap">
                       <Image
                         src={step.image}
-                        alt={step.title}
+                        alt={step.rawTitle}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -134,7 +164,7 @@ export default function ProcessPage() {
               <AlertTriangle size={32} className="b2b-policy-icon" />
               <div>
                 <h2 className="b2b-policy-title section-title" style={{ margin: "0 0 10px" }}>
-                  Chính sách xử lý sự cố &amp; Đổi&nbsp;trả
+                  Chính sách xử lý sự cố và Đổi&nbsp;trả
                 </h2>
                 <p className="b2b-policy-subtitle">
                   Tại TPS1, chúng tôi hiểu rằng &quot;Trong bếp ăn công nghiệp, trễ 1 phút là đói 1.000 người&quot;. 

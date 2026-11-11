@@ -87,7 +87,7 @@ export default function GioiThieuPage() {
       <section className="b2b-about-certs">
         <div className="container-shell">
           <div style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto 56px" }}>
-            <div className="section-label">Chứng nhận & bảo hiểm</div>
+            <div className="section-label">Chứng nhận và bảo hiểm</div>
             <h2 className="section-title">
               Chứng nhận đầy đủ, trách nhiệm rõ&nbsp;ràng
             </h2>

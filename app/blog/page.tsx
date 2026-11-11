@@ -24,7 +24,7 @@ export default async function BlogPage() {
       <div className="bg-white border-b border-neutral-200 pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium text-brand-700 bg-brand-50 mb-6 border border-brand-200">
-            Blog & Hữu ích
+            Blog và Cẩm nang hữu ích
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight mb-6">
             Góc chia sẻ cho bếp ăn, nhà máy <br className="hidden md:block" /> và đội đặt hàng.
