@@ -318,14 +318,36 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
           })}
         </div>
 
-        {/* Mobile grid 1-col (Zero-clipping on mobile viewports) */}
         <style dangerouslySetInnerHTML={{__html: `
           @media (max-width: 768px) {
-            #catalog-bento { grid-template-columns: 1fr !important; gap: 16px !important; }
-            #catalog-bento > * { grid-column: span 1 !important; min-height: 240px !important; }
-            .b2b-category-card__content { padding: 22px 20px !important; }
-            .b2b-category-card__content p { min-height: auto !important; font-size: 15px !important; line-height: 1.55 !important; }
-            .b2b-category-card__content h3 { font-size: 1.35rem !important; }
+            #catalog-bento {
+              grid-template-columns: 1fr !important;
+              gap: 16px !important;
+            }
+            #catalog-bento > * {
+              grid-column: span 1 !important;
+            }
+            /* 2 Thẻ trên cùng (Rau củ quả & Thịt heo) có mô tả dài + 3 tags + nút CTA: CẦN ĐỦ CHIỀU CAO ĐỂ KHÔNG BỊ CẮT CHỮ */
+            #catalog-bento > div:nth-child(-n+2) {
+              min-height: 460px !important;
+            }
+            /* 3 Thẻ hàng dưới (Hải sản, Hàng đông lạnh, Gia vị) */
+            #catalog-bento > div:nth-child(n+3) {
+              min-height: 260px !important;
+            }
+            .b2b-category-card__content {
+              padding: 22px 20px 20px !important;
+            }
+            .b2b-category-card__content h3 {
+              font-size: 1.35rem !important;
+              margin-bottom: 8px !important;
+            }
+            .b2b-category-card__content p {
+              min-height: auto !important;
+              font-size: 14.5px !important;
+              line-height: 1.55 !important;
+              margin-bottom: 12px !important;
+            }
           }
         `}} />
       </div>

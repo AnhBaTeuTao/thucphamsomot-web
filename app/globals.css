@@ -8965,3 +8965,9 @@ a.sku-tab {
 .category-catalog .sku-pagination {
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .site-footer {
+    padding-bottom: 80px !important; /* Tạo khoảng đệm an toàn để social-widget không che khuất chữ */
+  }
+}

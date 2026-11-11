@@ -41,6 +41,25 @@ export function PartnerRibbon({ locale = "vi" }: { locale?: "vi" | "en" }) {
           <span className="b2b-partners__line b2b-partners__line--right" aria-hidden="true" />
         </div>
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        @media (max-width: 640px) {
+          .b2b-partners__badge {
+            font-size: 0.85rem !important;
+            white-space: normal !important;
+            text-align: center !important;
+            padding: 6px 14px !important;
+            letter-spacing: 0.02em !important;
+          }
+          .b2b-partners__line {
+            display: none !important;
+          }
+          .b2b-partners__label {
+            gap: 0 !important;
+            margin-bottom: 20px !important;
+            padding: 0 8px !important;
+          }
+        }
+      `}} />
       <div className="b2b-partners__track-wrap">
         <div className="b2b-partners__track">
           {displayLogos.map((filename, i) => (

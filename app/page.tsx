@@ -154,23 +154,81 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="b2b-process-grid">
+          <div className="b2b-process-steps-grid">
             {/* Connector line */}
-            <div className="process-connector-line" aria-hidden="true" />
+            <div
+              className="process-connector-line"
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                top: "68px",
+                left: "16.5%",
+                right: "16.5%",
+                height: "2px",
+                background: "transparent",
+                borderTop: "2px dashed rgba(15,111,75,0.35)",
+                zIndex: 0,
+              }}
+            />
             {/* Animated glowing dot */}
-            <div aria-hidden="true" className="process-dot-anim" />
+            <div
+              aria-hidden="true"
+              className="process-dot-anim"
+              style={{
+                position: "absolute",
+                top: "64px",
+                left: "16.5%",
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: "#14b87a",
+                boxShadow: "0 0 10px #14b87a, 0 0 20px #14b87a",
+                zIndex: 1,
+              }}
+            />
             {processSteps.map((step) => (
-              <div key={step.num} className="b2b-process-step">
+              <div key={step.num} className="b2b-process-step" style={{ position: "relative" }}>
                 <div className="b2b-process-step__num">{step.num}</div>
-                <h3 className="b2b-process-step__title">
+                <h3 style={{ fontSize: "1.35rem", fontWeight: 850, marginBottom: "14px", color: "#133127", lineHeight: 1.35, letterSpacing: "-0.01em" }}>
                   {step.title}
                 </h3>
-                <p className="b2b-process-step__desc">
+                <p style={{ fontSize: "18px", color: "#334155", lineHeight: 1.65, margin: 0, fontWeight: 450, textWrap: "pretty" }}>
                   {step.desc}
                 </p>
               </div>
             ))}
           </div>
+
+          {/* Mobile: 1-col */}
+          <style>{`
+            .b2b-process-steps-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 24px;
+              position: relative;
+            }
+            @media (max-width: 768px) {
+              .b2b-process-steps-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+              }
+              .process-connector-line,
+              .process-dot-anim {
+                display: none !important;
+              }
+              .b2b-process-step {
+                padding: 24px 20px !important;
+              }
+              .b2b-process-step h3 {
+                font-size: 1.25rem !important;
+                margin-bottom: 10px !important;
+              }
+              .b2b-process-step p {
+                font-size: 15px !important;
+                line-height: 1.6 !important;
+              }
+            }
+          `}</style>
         </div>
       </section>
 

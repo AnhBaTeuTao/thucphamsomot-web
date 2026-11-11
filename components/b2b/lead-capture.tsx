@@ -327,7 +327,7 @@ export function LeadCaptureSection({ locale = "vi" }: { locale?: "vi" | "en" }) 
   return (
     <section className="b2b-lead-section" id="rfq-form" aria-labelledby="lead-heading">
       <div className="container-shell">
-        <div className="lead-grid">
+        <div className="b2b-lead-grid-container lead-grid">
           {/* Left: Copy */}
           <div>
             <div className="section-label" style={{ color: "#4ade80" }}>
@@ -420,7 +420,7 @@ export function LeadCaptureSection({ locale = "vi" }: { locale?: "vi" | "en" }) 
                 />
               </div>
 
-              <div className="b2b-lead-form__row-2col">
+              <div className="b2b-lead-row-split b2b-lead-form__row-2col">
                 <div className="b2b-lead-form__field">
                   <label htmlFor="lead-phone">{t.phoneLabel}</label>
                   <input
@@ -538,7 +538,16 @@ export function LeadCaptureSection({ locale = "vi" }: { locale?: "vi" | "en" }) 
 
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 768px) {
-          .lead-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .b2b-lead-grid-container,
+          .lead-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+          .b2b-lead-row-split,
+          .b2b-lead-form__row-2col {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+          }
         }
       `}} />
     </section>
