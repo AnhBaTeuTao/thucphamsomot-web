@@ -892,3 +892,70 @@
 
 /* Text-only content sections (no media column), e.g. related links on local pages. */
 .content-section.content-section--plain { display: block; }
+
+@media (max-width: 1100px) {
+  .page-hero__tags span,
+  .page-hero__panel-badge,
+  .content-detail__media-copy span,
+  .content-section__eyebrow {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .page-hero__title,
+  .content-detail__title,
+  .content-section h2,
+  .faq-list h2 {
+    text-wrap: balance;
+  }
+
+  .page-hero__description,
+  .content-detail__description,
+  .content-section p,
+  .content-section li,
+  .faq-list p,
+  .faq-list summary {
+    font-size: 15.5px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .page-hero__panel-stats span,
+  .content-detail__chip,
+  .page-hero__panel-card span,
+  .content-detail__aside-card span {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .page-hero__actions .btn-primary,
+  .page-hero__actions .btn-secondary,
+  .content-detail__actions a,
+  .content-detail__footer a {
+    min-height: 48px;
+    font-size: 15.5px;
+    text-wrap: balance;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-detail {
+    border-radius: 20px;
+  }
+
+  .page-hero__copy,
+  .page-hero__visual {
+    border-radius: 22px;
+  }
+
+  .content-detail__chips,
+  .content-detail__hero--aside-only .content-detail__aside {
+    grid-template-columns: 1fr;
+  }
+
+  .content-section h2,
+  .faq-list h2 {
+    font-size: clamp(1.45rem, 5.5vw, 1.85rem);
+    line-height: 1.25;
+  }
+}

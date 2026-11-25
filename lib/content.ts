@@ -301,6 +301,34 @@ export const categories: ContentItem[] = [
       { href: "/danh-muc/gia-vi", label: "Xem thêm: Gia vị", description: "Gia vị chay đi kèm để hoàn thiện thực đơn." },
     ],
   },
+  {
+    slug: "thiet-bi-bep",
+    metaDescription: "Dao bếp inox, nồi chảo công nghiệp, thớt kháng khuẩn, khay GN và dụng cụ sơ chế bếp ăn tại Đồng Nai, TP.HCM. Đặt chung đơn nguyên liệu, đầy đủ hóa đơn VAT.",
+    title: "Dụng cụ bếp",
+    description:
+      "Dao bếp inox 304, thớt kháng khuẩn, nồi chảo công nghiệp và vật tư tiêu hao cho bếp ăn tập thể, nhà hàng, trường học; đặt chung một đơn cùng nguyên liệu thực phẩm.",
+    highlights: ["Inox 304 chuẩn bếp công nghiệp", "Đặt chung đơn với thực phẩm tươi", "Đầy đủ hóa đơn VAT theo đơn"],
+    sections: [
+      {
+        heading: "Đồng bộ dụng cụ sơ chế và nấu nướng",
+        body:
+          "Từ dao thái lọc, thớt màu phân khu chống nhiễm chéo đến nồi nước dùng dung tích lớn, khay GN và chảo bếp Á, TPS1 cung cấp vật tư bền bỉ phù hợp cường độ vận hành bếp công nghiệp.",
+        items: ["Dao bếp, thớt kháng khuẩn HDPE & gỗ nghiến", "Nồi nấu, chảo thép carbon, khay inox GN", "Vá, muôi, kẹp gắp, rổ lưới và cân điện tử"],
+      },
+      {
+        heading: "Gộp đơn vật tư cùng tuyến giao thực phẩm",
+        body:
+          "Bếp không cần tách nhiều đầu mối mua sắm lẻ. Vật tư tiêu hao và dụng cụ bếp được giao cùng chuyến xe định kỳ với nguyên liệu, giúp bộ phận thu mua kiểm soát chứng từ gọn nhẹ.",
+        items: ["Một đầu mối đặt hàng và đối chiếu", "Giao tận bếp theo ca làm việc", "Xuất hóa đơn VAT đầy đủ"],
+      },
+    ],
+    faqs: sharedFaqs,
+    relatedLinks: [
+      { href: "/danh-muc/gia-vi", label: "Xem thêm: Gia vị", description: "Gia vị và vật tư bếp đặt chung tuyến giao định kỳ." },
+      { href: "/danh-muc/do-kho", label: "Xem thêm: Đồ khô", description: "Gạo, đậu và hàng khô cho kho bếp công nghiệp." },
+      { href: "/san-pham", label: "Xem toàn bộ danh mục", description: "Tìm kiếm và lọc nhanh hơn 3.000 mã sản phẩm TPS1." },
+    ],
+  },
 ];
 
 export const industries: ContentItem[] = [

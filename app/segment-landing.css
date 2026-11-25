@@ -217,3 +217,48 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+@media (max-width: 1100px) {
+  .segment-breadcrumb {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .segment-breadcrumb a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+
+  .segment-block > h2,
+  .segment-cta h2,
+  .local-bento h2 {
+    text-wrap: balance;
+  }
+
+  .segment-lead,
+  .segment-card p,
+  .segment-steps p,
+  .segment-cta p {
+    font-size: 15.5px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .segment-chips li {
+    font-size: 14.5px;
+  }
+
+  .segment-cta a,
+  .segment-links a {
+    min-height: 48px;
+    font-size: 15px;
+    text-wrap: balance;
+  }
+}
+
+@media (max-width: 640px) {
+  .segment-links {
+    grid-template-columns: 1fr;
+  }
+}

@@ -16,6 +16,8 @@ import { FloatingCart } from "@/components/floating-cart";
 import { MetaPixel } from "@/components/meta-pixel";
 import { CustomerSessionProvider } from "@/lib/customer-session-context";
 import { GoogleAdsTag } from "@/components/google-ads-tag";
+import { MajorPageTransition } from "@/components/b2b/major-page-transition";
+import { CategoryTransitionProvider } from "@/components/b2b/category-transition-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -52,22 +54,30 @@ export const metadata: Metadata = {
   },
 };
 
+const EXTENSION_ATTR_CLEANUP_SCRIPT = `(function(){var A=["bis_skin_checked","bis_register","bis_size","bis_id"],S="[bis_skin_checked],[bis_register],[bis_size],[bis_id]";function clean(r){if(!r||r.nodeType!==1)return;for(var i=0;i<A.length;i++){if(r.hasAttribute(A[i]))r.removeAttribute(A[i]);}var els=r.querySelectorAll(S);for(var j=0;j<els.length;j++){var el=els[j];for(var k=0;k<A.length;k++){if(el.hasAttribute(A[k]))el.removeAttribute(A[k]);}}}clean(document.documentElement);if(typeof MutationObserver==="undefined")return;var obs=new MutationObserver(function(list){for(var i=0;i<list.length;i++){var m=list[i];if(m.type==="attributes"){var t=m.target;if(t&&t.nodeType===1&&m.attributeName&&t.hasAttribute(m.attributeName))t.removeAttribute(m.attributeName);}else if(m.type==="childList"){for(var j=0;j<m.addedNodes.length;j++){if(m.addedNodes[j].nodeType===1)clean(m.addedNodes[j]);}}}});obs.observe(document.documentElement,{attributes:true,childList:true,subtree:true,attributeFilter:A});var done=function(){setTimeout(function(){obs.disconnect();},4000);};if(document.readyState==="complete")done();else window.addEventListener("load",done,{once:true});})();`;
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="vi">
+    <html lang="vi" suppressHydrationWarning>
       <head>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: EXTENSION_ATTR_CLEANUP_SCRIPT }}
+        />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         {/* Site images are resized by wsrv.nl (lib/image-loader.ts); the hero image is the LCP. */}
         <link rel="preconnect" href="https://wsrv.nl" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <GoogleAdsTag />
         <MetaPixel />
         <CustomerSessionProvider>
           <CartProvider>
             <SeoJsonLd />
-            <SiteHeader />
-            {children}
+            <CategoryTransitionProvider>
+              <SiteHeader />
+              <MajorPageTransition>{children}</MajorPageTransition>
+            </CategoryTransitionProvider>
             <CompanyProfileWidget />
             <SocialWidget />
             <SiteFooter />

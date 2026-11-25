@@ -1,7 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { categories } from "@/lib/content";
+import { SKU_GROUPS } from "@/lib/sku-catalog";
+import { useSmoothTilt } from "@/components/b2b/use-smooth-tilt";
+import { ScrollReveal } from "@/components/b2b/scroll-reveal";
+import { CategoryLink } from "@/components/b2b/category-link";
 
 const imageMap: Record<string, string> = {
   "rau-cu-qua": "/images/categories/rau-cu-qua.png",
@@ -9,65 +15,216 @@ const imageMap: Record<string, string> = {
   "hai-san": "/images/tps1-meat-seafood.png",
   "hang-dong-lanh": "/images/categories/dong-lanh.png",
   "gia-vi": "/images/categories/gia-vi.png",
-  "thuc-pham-chay": "/images/categories/chay.png",
+};
+
+// Ultra-light WebP circular thumbnails for all 10 quick-access sourcing groups
+const quickThumbMap: Record<string, string> = {
+  "rau-cu-qua": "/images/intro/medal-produce.webp",
+  "thit-heo": "/images/intro/medal-meat.webp",
+  "thit-bo": "/images/intro/wall-meat.webp",
+  "gia-cam": "/images/intro/wall-canteen.webp",
+  "hai-san": "/images/intro/medal-seafood.webp",
+  "hang-dong-lanh": "/images/intro/medal-frozen.webp",
+  "gia-vi": "/images/intro/medal-spices.webp",
+  "do-kho": "/images/intro/wall-spices.webp",
+  "thuc-pham-chay": "/images/intro/medal-vegan.webp",
+  "thiet-bi-bep": "/images/intro/wall-loading.webp",
 };
 
 const texts = {
   vi: {
     label: "Danh mục sản phẩm",
-    title: <>Đủ đầy nguyên liệu cho mọi thực&nbsp;đơn.</>,
-    desc: "Giá được báo riêng cho từng khách hàng theo sản lượng thực tế, vì vậy danh mục không niêm yết giá.",
+    title: "Danh mục thực\u00A0phẩm sỉ cho bếp\u00A0ăn: rau củ, thịt cá, đông\u00A0lạnh, đồ\u00A0khô & gia\u00A0vị",
+    desc: "Danh mục giúp khách hàng chọn nhóm hàng cần mua. TPS1 báo giá riêng theo số lượng đặt hàng thực\u00A0tế.",
     btnAll: "Xem toàn bộ danh mục",
     btnLink: "/san-pham",
-    rfqTag: "Giá sỉ được báo riêng theo sản lượng của từng gian bếp",
-    rfqBtn: "Xem & Yêu cầu báo giá",
+    rfqTag: "Báo giá riêng theo số lượng đặt hàng",
+    rfqBtn: "Xem và yêu cầu báo giá",
+    quickHeading: "Truy cập nhanh toàn bộ 10 nhóm nguồn hàng TPS1",
+    quickCountLabel: "10 nhóm nguồn hàng",
     catLinkPrefix: "/danh-muc/",
   },
   en: {
-    label: "B2B Catalog",
-    title: <>Fulfilling all your <br />kitchen ingredient needs.</>,
-    desc: "No public pricing — every order gets a custom quote based on actual volume.",
-    btnAll: "View full catalog",
+    label: "Product Catalog",
+    title: "Fresh, complete ingredients for every kitchen menu",
+    desc: "Each kitchen has distinct preparation specs and order volume. TPS1 tailors wholesale quotes to your actual consumption.",
+    btnAll: "Explore all 5,000+ products",
     btnLink: "/en/products",
-    rfqTag: "B2B Policy: Contact for a quote — no public pricing displayed",
-    rfqBtn: "View & Request Quote",
+    rfqTag: "B2B Pricing: Custom contract quotes — no flat public pricing",
+    rfqBtn: "View category and quote",
+    quickHeading: "Quick access to all 10 TPS1 sourcing groups",
+    quickCountLabel: "10 product groups",
     catLinkPrefix: "/danh-muc/",
-  }
+  },
 };
 
-const enCategoryOverrides: Record<string, { title: string; description: string; highlights: string[] }> = {
+const viCategoryCopy: Record<
+  string,
+  { title: string; specBadge: string; description: string; highlights: string[] }
+> = {
   "rau-cu-qua": {
-    title: "Vegetables & Fruits",
-    description: "Fresh vegetables for canteens, schools, hospitals, restaurants, and industrial catering.",
-    highlights: ["Dalat & West sources", "VietGAP available", "Scheduled delivery"]
+    title: "Rau củ quả",
+    specBadge: "Báo giá riêng theo số lượng đặt hàng",
+    description:
+      "TPS1 cung cấp rau củ từ Đà Lạt, miền Tây và Bảo Lộc, lựa chọn theo ngày và giao theo lịch của bếp. Hàng được phân loại theo kích cỡ, độ chín để phù hợp với nhu cầu chế biến.",
+    highlights: [
+      "Nguồn rau từ Đà Lạt, miền Tây, Bảo Lộc",
+      "Phân loại theo kích cỡ và độ chín",
+      "Giao đúng giờ bếp cần",
+    ],
   },
   "thit-heo": {
-    title: "Pork",
-    description: "Pork cut to kitchen specifications for canteens, schools, hospitals, and industrial catering.",
-    highlights: ["Custom cuts", "Checked on arrival", "Cold-chain delivery"]
+    title: "Thịt heo",
+    specBadge: "Báo giá riêng theo số lượng đặt hàng",
+    description:
+      "TPS1 cung cấp thịt heo cho nhà hàng, quán ăn và bếp ăn tập thể. Thịt được chia phần theo quy cách đặt hàng, kiểm tra khi nhập kho và giữ lạnh trong quá trình giao.",
+    highlights: [
+      "Cắt đúng quy cách của bếp",
+      "Kiểm tra kỹ khi nhập kho",
+      "Giữ lạnh suốt đường giao",
+    ],
+  },
+  "hai-san": {
+    title: "Hải sản",
+    specBadge: "Báo giá riêng theo số lượng đặt hàng",
+    description: "",
+    highlights: ["Hải sản về kho mỗi ngày", "Đủ hàng tươi và đông lạnh"],
+  },
+  "hang-dong-lanh": {
+    title: "Hàng đông lạnh",
+    specBadge: "Báo giá riêng theo số lượng đặt hàng",
+    description: "",
+    highlights: ["Bảo quản trong kho lạnh riêng", "Thịt bò, gà, cá và hải sản"],
+  },
+  "gia-vi": {
+    title: "Gia vị",
+    specBadge: "Báo giá riêng theo số lượng đặt hàng",
+    description: "",
+    highlights: ["Gia vị Việt, Hoa, Hàn, Âu", "Gia vị chay mặn đầy đủ"],
+  },
+};
+
+const enCategoryOverrides: Record<
+  string,
+  { title: string; specBadge: string; description: string; highlights: string[] }
+> = {
+  "rau-cu-qua": {
+    title: "Vegetables & Fruits",
+    specBadge: "1,200+ SKUs · Selected every morning",
+    description:
+      "Daily-selected produce from Dalat and the Mekong Delta, graded and delivered ahead of prep time.",
+    highlights: ["Dalat & Mekong sources", "Graded sizing", "Shift-timed delivery"],
+  },
+  "thit-heo": {
+    title: "Fresh Pork",
+    specBadge: "Kitchen-portioned cuts · Chilled 0°C – 4°C",
+    description:
+      "Pork cuts portioned to exact kitchen specs with strict veterinary checks and continuous cold chain.",
+    highlights: ["Custom kitchen cuts", "Checked on arrival", "Cold-chain delivery"],
   },
   "hai-san": {
     title: "Seafood",
-    description: "Fish, shrimp, squid, and seafood for canteens, hospitals, restaurants, and industrial catering.",
-    highlights: ["Daily fresh seafood", "Fresh and frozen", "Custom specs"]
+    specBadge: "Live & Flash-frozen · Shift delivery",
+    description:
+      "Fresh and frozen fish, shrimp, and squid sourced daily and portioned to menu requirements.",
+    highlights: ["Daily fresh catch", "Fresh and frozen"],
   },
   "hang-dong-lanh": {
     title: "Frozen Foods",
-    description: "Frozen foods for kitchens aiming to optimize inventory, maintain quality, and plan ingredients proactively.",
-    highlights: ["Cold storage", "Beef, chicken, fish", "For large kitchens"]
+    specBadge: "-18°C Cold storage · Stable supply",
+    description:
+      "Frozen beef, poultry, and seafood stored at dedicated cold-warehouse temperatures for stable inventory.",
+    highlights: ["Dedicated cold storage", "Proactive planning"],
   },
   "gia-vi": {
     title: "Seasonings & Spices",
-    description: "Asian & Western spices, vegetarian seasonings, and kitchen supplies for professional canteens and restaurants.",
-    highlights: ["Chinese cuisine", "Korean cuisine", "Western cuisine", "Full catalog"]
+    specBadge: "800+ Spices & dry goods · Wholesale packs",
+    description:
+      "Asian, Western, and vegetarian seasonings plus cooking oils in wholesale catering sizes.",
+    highlights: ["Asian, Western & Vegan", "Wholesale packaging"],
   },
-  "thuc-pham-chay": {
-    title: "Vegetarian Foods",
-    description: "Vegetarian foods and spices for restaurants, canteens, schools, events, and flexible menus.",
-    highlights: ["Specialized distributor", "Flexible vegan menus", "Suitable for all"]
-  }
 };
 
+function TiltSpotlightCard({
+  isRow1,
+  bgImage,
+  specBadge,
+  title,
+  description,
+  highlights,
+  targetHref,
+  rfqBtn,
+  index,
+}: {
+  isRow1: boolean;
+  bgImage: string;
+  specBadge: string;
+  title: string;
+  description: string;
+  highlights: string[];
+  targetHref: string;
+  rfqBtn: string;
+  index: number;
+}) {
+  const { ref, onMouseMove, onMouseLeave } = useSmoothTilt<HTMLDivElement>({
+    maxTilt: 4.2,
+    damping: 0.12,
+  });
+
+  return (
+      <ScrollReveal
+        delay={index * 50}
+        className={`b2b-category-card-wrap tps1-mosaic-slot--${index} ${isRow1 ? "b2b-category-card--featured" : "b2b-category-card--compact"}`}
+      >
+      <div
+        ref={ref}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
+        className={`b2b-category-card ${isRow1 ? "b2b-category-card--featured" : "b2b-category-card--compact"}`}
+      >
+        <Image
+          src={bgImage}
+          alt={title}
+          fill
+          className="b2b-category-card__img object-cover"
+          sizes={isRow1 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
+        />
+        <div className="b2b-category-card__overlay" />
+        <div className="b2b-category-card__spotlight" aria-hidden="true" />
+        <div className="b2b-category-card__content">
+          {specBadge && (
+            <div className="b2b-category-card__spec-badge">
+              <span className="b2b-category-card__spec-dot" aria-hidden="true" />
+              <span>{specBadge}</span>
+            </div>
+          )}
+
+          <div className="b2b-category-card__bottom">
+            <div className="b2b-category-card__top">
+              <h3>{title}</h3>
+              {description && <p>{description}</p>}
+
+              {highlights.length > 0 && (
+                <div className="b2b-category-card__tags">
+                  {highlights.slice(0, isRow1 ? 3 : 2).map((h) => (
+                    <span key={h} className="b2b-category-card__tag">
+                      {h}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <CategoryLink href={targetHref} className="b2b-rfq-btn">
+              <span>{rfqBtn}</span>
+              <ArrowRight size={15} />
+            </CategoryLink>
+          </div>
+        </div>
+      </div>
+    </ScrollReveal>
+  );
+}
 
 export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
   const displayCats = ["rau-cu-qua", "thit-heo", "hai-san", "hang-dong-lanh", "gia-vi"]
@@ -78,271 +235,127 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
   return (
     <section className="b2b-catalog" aria-labelledby="catalog-heading">
       <div className="container-shell">
-        {/* Header căn giữa đồng bộ */}
-        <div style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 36px" }}>
-          <div className="section-label">{t.label}</div>
-          <h2 id="catalog-heading" className="section-title">
-            {t.title}
-          </h2>
-          <p className="section-desc" style={{ margin: "0 auto 20px", color: "#374151", fontSize: "18px", lineHeight: 1.7, textWrap: "pretty" }}>
-            {t.desc}
-          </p>
-
-          {/* RFQ notice badge căn giữa thanh thoát */}
-          <div>
-            <span className="b2b-catalog__rfq-tag">
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#c7372f", display: "inline-block" }} />
-              {t.rfqTag}
-            </span>
+        <ScrollReveal className="b2b-catalog-header">
+          <div className="b2b-catalog-header-copy">
+            <div className="b2b-catalog-header__kicker">
+              <div className="section-label">{t.label}</div>
+              <div className="b2b-catalog__rfq-tag">
+                <span className="b2b-catalog__rfq-dot" aria-hidden="true" />
+                <span>{t.rfqTag}</span>
+              </div>
+            </div>
+            <h2 id="catalog-heading" className="b2b-catalog-header__title">
+              {locale === "vi" ? (
+                <>
+                  Danh mục thực{"\u00A0"}phẩm sỉ cho bếp{"\u00A0"}ăn:{" "}
+                  <br className="b2b-catalog-header__br" />
+                  rau củ, thịt cá, đông{"\u00A0"}lạnh, đồ{"\u00A0"}khô &amp; gia{"\u00A0"}vị
+                </>
+              ) : (
+                t.title
+              )}
+            </h2>
+            <p className="b2b-catalog-header__desc">{t.desc}</p>
           </div>
-        </div>
 
-        {/* Bento grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(12, 1fr)",
-            gap: "16px",
-          }}
-          id="catalog-bento"
-        >
+          <Link href={t.btnLink} className="btn-secondary b2b-catalog__all-btn">
+            <span>{t.btnAll}</span>
+            <ArrowRight size={16} />
+          </Link>
+        </ScrollReveal>
+
+        <div id="catalog-bento" className="b2b-catalog-bento">
           {displayCats.map((baseCat, index) => {
             const bgImage = imageMap[baseCat.slug] || "/images/categories/rau-cu-qua.png";
             const isRow1 = index < 2;
-            const colSpan = isRow1 ? "span 6 / span 6" : "span 4 / span 4";
-            const minHeight = isRow1 ? "380px" : "260px";
 
             let title = baseCat.title;
-            let description = baseCat.description;
+            let specBadge = "";
+            let description = baseCat.description || "";
             let highlights = baseCat.highlights ?? [];
 
-            if (locale === "vi" && isRow1) {
-              if (baseCat.slug === "rau-cu-qua") {
-                description = "Rau củ từ Đà Lạt, miền Tây và Bảo Lộc chọn lựa mỗi ngày, giữ trọn độ tươi trên suốt chặng đường về bếp, để đĩa rau trên bàn nhà hàng hay khay cơm trường học đều xanh mướt như vừa hái.";
-                highlights = ["Nguồn Đà Lạt & miền Tây", "Phân loại theo kích cỡ", "Giao đúng ca bếp"];
-              } else if (baseCat.slug === "thit-heo") {
-                description = "Từ bát canh sườn của quán cơm đến khay thịt kho của bếp công ty, thịt heo có mặt trong hầu hết thực đơn. TPS1 chia phần đúng quy cách và giữ lạnh suốt đường giao, để miếng thịt luôn tươi hồng, săn chắc.";
-                highlights = ["Cắt đúng quy cách bếp", "Kiểm tra kỹ khi nhập kho", "Giữ lạnh suốt đường giao"];
-              }
+            if (locale === "vi" && viCategoryCopy[baseCat.slug]) {
+              title = viCategoryCopy[baseCat.slug].title;
+              specBadge = viCategoryCopy[baseCat.slug].specBadge;
+              description = viCategoryCopy[baseCat.slug].description;
+              highlights = viCategoryCopy[baseCat.slug].highlights;
             }
 
             if (locale === "en" && enCategoryOverrides[baseCat.slug]) {
               title = enCategoryOverrides[baseCat.slug].title;
+              specBadge = enCategoryOverrides[baseCat.slug].specBadge;
               description = enCategoryOverrides[baseCat.slug].description;
               highlights = enCategoryOverrides[baseCat.slug].highlights;
             }
 
-            // 3 ô dưới (Hải sản, Hàng đông lạnh, Gia vị): Trả về nguyên trạng như cũ
-            if (!isRow1) {
-              return (
-                <div
-                  key={baseCat.slug}
-                  className="b2b-category-card"
-                  style={{ gridColumn: colSpan, minHeight }}
-                >
-                  <Image
-                    src={bgImage}
-                    alt={title}
-                    fill
-                    className="b2b-category-card__img object-cover"
-                    sizes="33vw"
-                  />
-                  <div className="b2b-category-card__overlay" />
-                  <div className="b2b-category-card__content">
-                    <h3
-                      style={{
-                        fontSize: "1.05rem",
-                        fontWeight: 900,
-                        marginBottom: "12px",
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {title}
-                    </h3>
+            const targetHref =
+              locale === "en"
+                ? `/en/products?category=${baseCat.slug}#danh-muc`
+                : `${t.catLinkPrefix}${baseCat.slug}`;
 
-                    {highlights.slice(0, 2).length > 0 && (
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "14px" }}>
-                        {highlights.slice(0, 2).map((h) => (
-                          <span
-                            key={h}
-                            style={{
-                              fontSize: "0.72rem",
-                              padding: "3px 9px",
-                              borderRadius: "999px",
-                              background: "rgba(255,255,255,0.14)",
-                              border: "1px solid rgba(255,255,255,0.18)",
-                            }}
-                          >
-                            {h}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    <Link href={`${t.catLinkPrefix}${baseCat.slug}`} className="b2b-rfq-btn">
-                      {t.rfqBtn} <ArrowRight size={13} />
-                    </Link>
-                  </div>
-                </div>
-              );
-            }
-
-            // 2 ô trên (Rau củ quả & Thịt heo): Cân bằng tuyệt đối, không lệch, không thụt
             return (
-              <div
+              <TiltSpotlightCard
                 key={baseCat.slug}
-                className="b2b-category-card"
-                style={{ gridColumn: colSpan, minHeight }}
-              >
-                <Image
-                  src={bgImage}
-                  alt={title}
-                  fill
-                  className="b2b-category-card__img object-cover"
-                  sizes="50vw"
-                />
-                <div
-                  className="b2b-category-card__overlay"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(6, 20, 14, 0.82) 0%, rgba(6, 20, 14, 0.60) 45%, rgba(6, 20, 14, 0.90) 100%)",
-                  }}
-                />
-                <div
-                  className="b2b-category-card__content"
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    padding: "28px 28px 24px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <div style={{ width: "100%" }}>
-                    <h3
-                      style={{
-                        fontSize: "1.65rem",
-                        fontWeight: 900,
-                        color: "#ffffff",
-                        marginBottom: "12px",
-                        lineHeight: 1.25,
-                        textShadow: "0 2px 8px rgba(0, 0, 0, 0.6)",
-                        letterSpacing: "-0.015em",
-                      }}
-                    >
-                      {title}
-                    </h3>
-
-                    {description && (
-                      <p
-                        style={{
-                          fontSize: "17.5px",
-                          color: "#f8fafc",
-                          marginBottom: "16px",
-                          lineHeight: 1.62,
-                          maxWidth: "520px",
-                          fontWeight: 450,
-                          textShadow: "0 1px 4px rgba(0, 0, 0, 0.7)",
-                          textWrap: "pretty",
-                          minHeight: "86px",
-                        }}
-                      >
-                        {description}
-                      </p>
-                    )}
-
-                    {highlights.length > 0 && (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: "8px",
-                          marginBottom: "14px",
-                          minHeight: "32px",
-                          alignItems: "center",
-                        }}
-                      >
-                        {highlights.slice(0, 3).map((h) => (
-                          <span
-                            key={h}
-                            style={{
-                              fontSize: "0.8rem",
-                              fontWeight: 600,
-                              color: "#ffffff",
-                              padding: "4px 11px",
-                              borderRadius: "999px",
-                              background: "rgba(255, 255, 255, 0.18)",
-                              border: "1px solid rgba(255, 255, 255, 0.28)",
-                              backdropFilter: "blur(6px)",
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                            }}
-                          >
-                            {h}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <Link
-                    href={`${t.catLinkPrefix}${baseCat.slug}`}
-                    className="b2b-rfq-btn"
-                    style={{
-                      fontSize: "0.85rem",
-                      padding: "9px 16px",
-                      borderRadius: "10px",
-                      marginTop: "auto",
-                    }}
-                  >
-                    {t.rfqBtn} <ArrowRight size={14} />
-                  </Link>
-                </div>
-              </div>
+                index={index}
+                isRow1={isRow1}
+                bgImage={bgImage}
+                specBadge={specBadge}
+                title={title}
+                description={description}
+                highlights={highlights}
+                targetHref={targetHref}
+                rfqBtn={t.rfqBtn}
+              />
             );
           })}
         </div>
 
-        {/* Nút xem danh mục căn giữa đối xứng ở chân khối bento */}
-        <div style={{ textAlign: "center", marginTop: "36px" }}>
-          <Link href={t.btnLink} className="btn-secondary" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-            {t.btnAll} <ArrowRight size={16} />
-          </Link>
-        </div>
+        {/* Dải truy cập nhanh đầy đủ 10 nhóm nguồn hàng TPS1 kèm ảnh tròn WebP 40x40 */}
+        <ScrollReveal className="b2b-catalog-quick">
+          <div className="b2b-catalog-quick__head">
+            <p className="b2b-catalog-quick__heading">{t.quickHeading}</p>
+            <span className="b2b-catalog-quick__count">{t.quickCountLabel}</span>
+          </div>
+          <div className="b2b-catalog-quick__grid">
+            {SKU_GROUPS.map((group) => {
+              const href =
+                locale === "en"
+                  ? `/en/products?category=${group.slug}#danh-muc`
+                  : group.hasPage
+                    ? `/danh-muc/${group.slug}`
+                    : `/san-pham?category=${group.slug}#danh-muc`;
+              const thumbSrc = quickThumbMap[group.slug] || "/images/intro/medal-produce.webp";
+              const groupLabel = locale === "en" ? group.labelEn : group.label;
 
-        <style dangerouslySetInnerHTML={{__html: `
-          @media (max-width: 768px) {
-            #catalog-bento {
-              grid-template-columns: 1fr !important;
-              gap: 16px !important;
-            }
-            #catalog-bento > * {
-              grid-column: span 1 !important;
-            }
-            /* 2 Thẻ trên cùng (Rau củ quả & Thịt heo) có mô tả dài + 3 tags + nút CTA: CẦN ĐỦ CHIỀU CAO ĐỂ KHÔNG BỊ CẮT CHỮ */
-            #catalog-bento > div:nth-child(-n+2) {
-              min-height: 460px !important;
-            }
-            /* 3 Thẻ hàng dưới (Hải sản, Hàng đông lạnh, Gia vị) */
-            #catalog-bento > div:nth-child(n+3) {
-              min-height: 260px !important;
-            }
-            .b2b-category-card__content {
-              padding: 22px 20px 20px !important;
-            }
-            .b2b-category-card__content h3 {
-              font-size: 1.35rem !important;
-              margin-bottom: 8px !important;
-            }
-            .b2b-category-card__content p {
-              min-height: auto !important;
-              font-size: 14.5px !important;
-              line-height: 1.55 !important;
-              margin-bottom: 12px !important;
-            }
-          }
-        `}} />
+              return (
+                <div key={group.slug}>
+                  <CategoryLink
+                    href={href}
+                    categorySlug={group.slug}
+                    isEnglish={locale === "en"}
+                    dispatchSelectEvent={!group.hasPage || locale === "en"}
+                    className="b2b-catalog-quick__item"
+                  >
+                    <span className="b2b-catalog-quick__thumb" aria-hidden="true">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={thumbSrc}
+                        alt=""
+                        width={40}
+                        height={40}
+                        loading="lazy"
+                        decoding="async"
+                        className="b2b-catalog-quick__thumb-img"
+                      />
+                    </span>
+                    <span className="b2b-catalog-quick__label">{groupLabel}</span>
+                    <ArrowRight size={15} className="b2b-catalog-quick__arrow" aria-hidden="true" />
+                  </CategoryLink>
+                </div>
+              );
+            })}
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

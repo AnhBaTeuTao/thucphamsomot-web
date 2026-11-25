@@ -6,6 +6,7 @@ import type { ContentSection, FaqItem } from "@/lib/content";
 import { siteConfig } from "@/lib/site";
 import { brandAssets } from "@/lib/brand";
 import { FaqJsonLd } from "@/components/faq-json-ld";
+import { CategoryLink } from "@/components/b2b/category-link";
 
 type ContentPageProps = {
   title: string;
@@ -121,7 +122,7 @@ export function ContentPage({
                   alt={section.heading}
                   fill
                   sizes="(max-width: 768px) 100vw, 34vw"
-                  priority={index < 2}
+                  loading="lazy"
                   className="content-section__image"
                 />
               </div>
@@ -160,15 +161,27 @@ export function ContentPage({
             <div className="content-section__eyebrow">Bài liên quan</div>
             <h2>Xem tiếp nội dung phù hợp.</h2>
             <div className="home-local__grid" style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))", marginTop: 14 }}>
-              {relatedLinks.map((item) => (
-                <Link key={item.href} href={item.href} className="home-local__card" style={{ minHeight: 0 }}>
-                  <h3>{item.label}</h3>
-                  <p>{item.description}</p>
-                  <span className="home-local__link">
-                    Xem trang <ArrowRight size={16} />
-                  </span>
-                </Link>
-              ))}
+              {relatedLinks.map((item) => {
+                const isCategoryLink = item.href.startsWith("/danh-muc/");
+                const cardBody = (
+                  <>
+                    <h3>{item.label}</h3>
+                    <p>{item.description}</p>
+                    <span className="home-local__link">
+                      Xem trang <ArrowRight size={16} />
+                    </span>
+                  </>
+                );
+                return isCategoryLink ? (
+                  <CategoryLink key={item.href} href={item.href} className="home-local__card" style={{ minHeight: 0 }}>
+                    {cardBody}
+                  </CategoryLink>
+                ) : (
+                  <Link key={item.href} href={item.href} className="home-local__card" style={{ minHeight: 0 }}>
+                    {cardBody}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
