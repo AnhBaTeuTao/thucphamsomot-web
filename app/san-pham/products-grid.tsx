@@ -199,7 +199,7 @@ const SpProductCard = memo(function SpProductCard({
           alt={`${product.name} - ${product.categoryLabel} sỉ TPS1`}
           fill
           loading="lazy"
-          sizes="(max-width: 480px) 100vw, (max-width: 720px) 50vw, (max-width: 960px) 33vw, (max-width: 1200px) 25vw, 20vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 960px) 33vw, (max-width: 1200px) 25vw, 20vw"
           className="sp-card__img"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "/images/tps1-cover-food.jpg";
