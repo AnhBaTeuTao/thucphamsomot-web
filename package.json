@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/dev-server.mjs",
-    "build": "next build",
+    "build": "rm -rf .next/cache && next build",
     "start": "next start",
     "lint": "eslint .",
     "test:catalog-cache": "node --experimental-strip-types --no-warnings --test tests/customer-catalog-cache.test.mjs",
