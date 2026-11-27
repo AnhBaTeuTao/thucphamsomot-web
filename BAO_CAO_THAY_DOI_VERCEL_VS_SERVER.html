@@ -518,7 +518,7 @@
 
     <!-- TOC -->
     <nav class="toc-card" aria-label="Mục lục đối chiếu code">
-      <h2>📌 Mục Lục 18 Điểm Thay Đổi Code Chính (Đã Cập Nhật &amp; Bổ Sung Đầy Đủ)</h2>
+      <h2>📌 Mục Lục 19 Điểm Thay Đổi Code Chính (Đã Cập Nhật &amp; Bổ Sung Đầy Đủ)</h2>
       <div class="toc-grid">
         <a class="toc-link" href="#diff-1"><span class="toc-link__num">01</span> package.json — Sửa lệnh Build xóa Cache CSS trên Vercel</a>
         <a class="toc-link" href="#diff-2"><span class="toc-link__num">02</span> app/layout.tsx — Bọc Provider Chuyển Cảnh &amp; Dọn Attribute</a>
@@ -538,6 +538,7 @@
         <a class="toc-link" href="#diff-16"><span class="toc-link__num">16</span> [MỚI] globals.css (Section 23) — Cân Bằng Ngang Hàng (Row Alignment) Cho 11 Lưới Card</a>
         <a class="toc-link" href="#diff-17"><span class="toc-link__num">17</span> [MỚI] globals.css (Section 24) — Kiến Trúc Chống Giật Chuột (Zero-Jitter Hover Bridge)</a>
         <a class="toc-link" href="#diff-18"><span class="toc-link__num">18</span> [MỚI] app/en/* — Đồng Bộ 100% Giao Diện &amp; Nội Dung Bản Tiếng Anh Giống Bản Tiếng Việt</a>
+        <a class="toc-link" href="#diff-19"><span class="toc-link__num">19</span> [MỚI] lib/fx-preference.ts &amp; Header — Nút Bật/Tắt Hiệu Ứng (Chế Độ Máy Yếu)</a>
       </div>
     </nav>
 
@@ -1530,6 +1531,59 @@ h1, h2, h3, h4,
     </section>
 
     <!-- ===================================================================
+         DIFF 19: VISUAL EFFECTS TOGGLE BUTTON (LOW-SPEC / FAST MODE)
+         =================================================================== -->
+    <section class="module-section" id="diff-19">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 19 [MỚI]</span>
+          <h2>Nút Bật/Tắt Hiệu Ứng Chuyển Cảnh &amp; Chế Độ Máy Yếu (<code>lib/fx-preference.ts</code>, <code>components/site-header.tsx</code> &amp; <code>app/globals.css</code> Section 25)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--add">FILE MỚI</span> <code>lib/fx-preference.ts</code> (52 dòng): Quản lý trạng thái bật/tắt hiệu ứng lưu bền vững trong <code>localStorage</code> với khóa <code>"tps1-fx-disabled"</code> (<code>"1"</code> = tắt hiệu ứng), đồng bộ class <code>tps1-fx-disabled</code> trên <code>&lt;html&gt;</code> và phát sự kiện <code>"tps1-fx-change"</code> toàn trang.</li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>app/layout.tsx</code> (dòng 57): Nhúng đoạn kiểm tra đồng bộ <code>localStorage.getItem("tps1-fx-disabled") === "1"</code> ngay trong inline script của <code>&lt;head&gt;</code> để gán class <code>tps1-fx-disabled</code> trước khi trình duyệt vẽ frame đầu tiên (không bao giờ nháy màn hình Intro khi F5 nếu khách đã tắt hiệu ứng).</li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>components/site-header.tsx</code> (dòng 167–192, 705–733, 804–823): Thêm nút <code>.tps1-fx-toggle</code> song ngữ (Tiếng Việt: <strong>"Hiệu ứng: Bật / Hiệu ứng: Tắt"</strong> · Tiếng Anh: <strong>"FX: On / FX: Off"</strong>) ngay trên thanh Header Desktop (cạnh nút chọn ngôn ngữ) và trong Mobile Drawer.</li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>components/b2b/home-intro-loader.tsx</code>, <code>components/b2b/major-page-transition.tsx</code> &amp; <code>components/b2b/category-transition-provider.tsx</code>: Khi <code>isTps1FxDisabled() === true</code>, bỏ qua hoàn toàn Intro mở màn, bỏ qua việc nạp/bake 27 ảnh Canvas thực phẩm và tắt cả chuyển trang lớn lẫn chuyển cảnh danh mục 3D để chuyển trang tức thì 0ms.</li>
+          <li><span class="action-tag action-tag--edit">SỬA CSS</span> <code>app/globals.css</code> tại <strong>Section 25 (dòng 20753 – 20863)</strong>: Định kiểu nút <code>.tps1-fx-toggle</code> và tắt toàn bộ animation/transition/transform khi <code>html.tps1-fx-disabled</code> được kích hoạt.</li>
+        </ul>
+      </div>
+
+      <div class="code-box code-box--full">
+        <div class="code-box__header">
+          <span>📄 ĐOẠN CODE TRỌNG TÂM TRONG lib/fx-preference.ts &amp; app/globals.css (Section 25)</span>
+          <span>Lưu trạng thái localStorage + Tắt tức thì Intro, Canvas Packing, 3D Cutout &amp; CSS Animation</span>
+        </div>
+        <pre><code>// 1. lib/fx-preference.ts:
+export const TPS1_FX_STORAGE_KEY = "tps1-fx-disabled";
+export const TPS1_FX_CHANGE_EVENT = "tps1-fx-change";
+
+export function isTps1FxDisabled(): boolean {
+  if (typeof window === "undefined") return false;
+  if (document.documentElement.classList.contains("tps1-fx-disabled")) return true;
+  try { return window.localStorage.getItem(TPS1_FX_STORAGE_KEY) === "1"; } catch { return false; }
+}
+
+/* 2. app/globals.css (Section 25): */
+html.tps1-fx-disabled .tps1-intro,
+html.tps1-fx-disabled .tps1-mpt,
+html.tps1-fx-disabled .tps1-cat-transition {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.tps1-fx-disabled *, html.tps1-fx-disabled *::before, html.tps1-fx-disabled *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ===================================================================
          PHỤ LỤC: BẢNG TỔNG HỢP TOÀN BỘ FILE CODE THAY ĐỔI
          =================================================================== -->
     <section class="module-section" id="diff-summary">
@@ -1642,6 +1696,12 @@ h1, h2, h3, h4,
               <td>Menu 6 mục song ngữ VI/EN, chuyển đổi ngôn ngữ 1-1 (<code>swapLocalePath</code>), chống nhảy scroll <code>y=0</code> trên Mobile, Mobile 2-Tap Catalog.</td>
             </tr>
             <tr>
+              <td><code>lib/fx-preference.ts</code> &amp; <code>components/site-header.tsx</code></td>
+              <td><span class="action-tag action-tag--add">Mới &amp; Sửa</span></td>
+              <td>Dòng 1–52 &amp; 705–823</td>
+              <td>Nút Bật/Tắt Hiệu Ứng (<code>.tps1-fx-toggle</code>) trên Header Desktop &amp; Mobile Drawer; lưu <code>localStorage("tps1-fx-disabled")</code>, tắt toàn bộ Intro, chuyển trang Canvas, chuyển cảnh 3D và animation CSS cho máy yếu.</td>
+            </tr>
+            <tr>
               <td><code>app/globals.css</code></td>
               <td><span class="action-tag action-tag--edit">Sửa</span></td>
               <td>
@@ -1649,9 +1709,10 @@ h1, h2, h3, h4,
                 Dòng 13286–17610 (TrustPillars &amp; /san-pham)<br />
                 Dòng 19576–20155 (Section 22: Typography &amp; Fix dấu <code>font-weight: 700</code>)<br />
                 Dòng 20158–20335 (Section 23: Cân bằng ngang hàng 11 lưới Card)<br />
-                Dòng 20337–20465 (Section 24: Chống giật chuột <code>:hover::after</code>)
+                Dòng 20337–20751 (Section 24: Chống giật chuột <code>:hover::after</code>)<br />
+                Dòng 20753–20863 (Section 25: Nút Bật/Tắt Hiệu ứng &amp; Chế độ máy yếu)
               </td>
-              <td>Toàn bộ kiến trúc CSS cho hoạt ảnh 60fps, chuẩn hóa chữ Tiếng Việt không lỗi dấu, highlight <code>.tps1-key-hl</code> không thụt dòng, cân bằng tiêu đề ngang hàng và triệt tiêu lỗi giật hover.</td>
+              <td>Toàn bộ kiến trúc CSS cho hoạt ảnh 60fps, chuẩn hóa chữ Tiếng Việt không lỗi dấu, highlight <code>.tps1-key-hl</code> không thụt dòng, cân bằng tiêu đề ngang hàng, chống giật hover và chế độ tắt hiệu ứng cho máy yếu.</td>
             </tr>
           </tbody>
         </table>

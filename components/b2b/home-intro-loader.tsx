@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { isTps1FxDisabled, TPS1_FX_CHANGE_EVENT } from "@/lib/fx-preference";
 
 const LOGO_SRC = "/images/tps1-logo-transparent.png";
 const LOGO_NATURAL_W = 1024;
@@ -383,8 +384,10 @@ export function HomeIntroLoader() {
     const params = new URLSearchParams(window.location.search);
     const forceIntro = params.get("intro") === "1";
 
-    if (hasPlayedInSpaSession && !forceIntro) {
+    if (isTps1FxDisabled() || (hasPlayedInSpaSession && !forceIntro)) {
+      hasPlayedInSpaSession = true;
       cleanupDom();
+      setPhaseSync("done");
       if (!finishedDispatchedRef.current) {
         finishedDispatchedRef.current = true;
         dispatchIntroFinished();
@@ -483,16 +486,24 @@ export function HomeIntroLoader() {
       if (!rootRef.current) return;
       rootRef.current.classList.toggle("tps1-intro--paused", document.hidden);
     };
+    const handleFxChange = (e: Event) => {
+      const detail = (e as CustomEvent<{ disabled: boolean }>).detail;
+      if (detail?.disabled) {
+        finishImmediately();
+      }
+    };
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("orientationchange", handleResize);
     window.addEventListener("keydown", handleKeyDown);
     document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener(TPS1_FX_CHANGE_EVENT, handleFxChange);
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleResize);
       window.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener(TPS1_FX_CHANGE_EVENT, handleFxChange);
     };
   }, [phase, triggerSkip]);
 

@@ -18,6 +18,7 @@ import {
   suppressMajorPageTransition,
   type CategoryCutoutAsset,
 } from "@/lib/category-transition-config";
+import { isTps1FxDisabled, TPS1_FX_CHANGE_EVENT } from "@/lib/fx-preference";
 import {
   advanceTransitionPhase,
   cancelReadyWaiter,
@@ -940,10 +941,12 @@ export function CategoryTransitionProvider({ children }: { children: ReactNode }
   const preloadCategory = useCallback(
     (slug: string, href?: string) => {
       if (typeof window === "undefined") return;
-      const cfg = getCategoryTransitionConfig(slug);
-      if (cfg) {
-        for (const c of cfg.cutouts) {
-          void decodeCutoutAsset(c.src, decodedCacheRef.current);
+      if (!isTps1FxDisabled()) {
+        const cfg = getCategoryTransitionConfig(slug);
+        if (cfg) {
+          for (const c of cfg.cutouts) {
+            void decodeCutoutAsset(c.src, decodedCacheRef.current);
+          }
         }
       }
       if (href && !prefetchedHrefsRef.current.has(href)) {
@@ -1435,6 +1438,7 @@ export function CategoryTransitionProvider({ children }: { children: ReactNode }
   const triggerCategoryTransition = useCallback(
     (params: CategoryTransitionTrigger) => {
       if (typeof window === "undefined") return false;
+      if (isTps1FxDisabled()) return false;
 
       const config = getCategoryTransitionConfig(params.slug);
       if (!config) return false;

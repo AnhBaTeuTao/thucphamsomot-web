@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Leaf } from "lucide-react";
 import { brandAssets } from "@/lib/brand";
 import { isMajorPageTransitionSuppressed } from "@/lib/category-transition-config";
+import { isTps1FxDisabled, TPS1_FX_CHANGE_EVENT } from "@/lib/fx-preference";
 import {
   FOOD_CUTOUT_POOL,
   computeTightPackedFoodLayout,
@@ -127,6 +128,7 @@ export function normalizeMajorPath(rawHref: string): string {
 
 export function dispatchMajorPageTransition(rawHref: string, currentPathname: string) {
   if (typeof window === "undefined") return;
+  if (isTps1FxDisabled()) return;
   const target = normalizeMajorPath(rawHref);
   const current = normalizeMajorPath(currentPathname);
   if (target === current) return;
@@ -174,6 +176,7 @@ export function MajorPageTransition({ children }: { children: ReactNode }) {
     let timerId = 0;
     const startPreload = () => {
       window.clearTimeout(timerId);
+      if (isTps1FxDisabled()) return;
       preloadAllFoodCutouts();
     };
 
@@ -201,6 +204,7 @@ export function MajorPageTransition({ children }: { children: ReactNode }) {
 
   const runTransition = useCallback(
     (rawHref: string) => {
+      if (isTps1FxDisabled()) return;
       const cleanPath = normalizeMajorPath(rawHref);
       if (isMajorPageTransitionSuppressed(cleanPath)) return;
       const meta = MAJOR_NAV_PAGES[cleanPath];
@@ -360,7 +364,18 @@ export function MajorPageTransition({ children }: { children: ReactNode }) {
   }, [pathname, runTransition]);
 
   useEffect(() => {
-    return () => clearTimers();
+    const handleFxChange = (e: Event) => {
+      const detail = (e as CustomEvent<{ disabled: boolean }>).detail;
+      if (detail?.disabled) {
+        clearTimers();
+        setTransition(null);
+      }
+    };
+    window.addEventListener(TPS1_FX_CHANGE_EVENT, handleFxChange);
+    return () => {
+      window.removeEventListener(TPS1_FX_CHANGE_EVENT, handleFxChange);
+      clearTimers();
+    };
   }, [clearTimers]);
 
   return (
