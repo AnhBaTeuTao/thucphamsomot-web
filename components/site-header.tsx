@@ -818,26 +818,6 @@ function SiteHeaderChrome({ pathname }: { pathname: string }) {
               {isEnglish ? "Request Quote" : "Gửi yêu cầu báo giá"}
             </Link>
           </div>
-          <div className="site-mobile-nav__fx-row">
-            <button
-              type="button"
-              className={`tps1-fx-toggle tps1-fx-toggle--mobile${fxDisabled ? " is-off" : " is-on"}`}
-              onClick={toggleFxMode}
-              aria-pressed={!fxDisabled}
-            >
-              <span className="tps1-fx-toggle__dot" aria-hidden="true" />
-              <Sparkles size={15} className="tps1-fx-toggle__icon" aria-hidden="true" />
-              <span className="tps1-fx-toggle__label">
-                {isEnglish
-                  ? fxDisabled
-                    ? "Visual Effects: OFF (Fast / Low-Spec Mode)"
-                    : "Visual Effects: ON (Tap to turn off for low-end devices)"
-                  : fxDisabled
-                    ? "Hiệu ứng chuyển cảnh: ĐANG TẮT (Chế độ máy yếu / lướt nhanh)"
-                    : "Hiệu ứng chuyển cảnh: ĐANG BẬT (Chạm để tắt nếu máy yếu)"}
-              </span>
-            </button>
-          </div>
           {navItems.map((item) => {
             const isActive = isNavItemActive(pathname, item.href);
 
