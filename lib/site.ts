@@ -60,10 +60,11 @@ export const navItemsByLocale: Record<Locale, Array<{ label: string; href: strin
     { label: "Liên Hệ", href: "/lien-he" },
   ],
   en: [
-    { label: "About", href: "/en/about" },
-    { label: "Products", href: "/en/products" },
-    { label: "Delivery", href: "/quy-trinh" },
-    { label: "News", href: "/en/news" },
+    { label: "About Us", href: "/en/about" },
+    { label: "Product Catalog", href: "/en/products" },
+    { label: "Industries", href: "/en/ingredients" },
+    { label: "Delivery Process", href: "/en/delivery" },
+    { label: "Blog", href: "/en/news" },
     { label: "Contact", href: "/en/contact" },
   ],
 };

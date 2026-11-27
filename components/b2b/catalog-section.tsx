@@ -34,8 +34,8 @@ const quickThumbMap: Record<string, string> = {
 const texts = {
   vi: {
     label: "Danh mục sản phẩm",
-    title: "Danh mục thực\u00A0phẩm sỉ cho bếp\u00A0ăn: rau củ, thịt cá, đông\u00A0lạnh, đồ\u00A0khô & gia\u00A0vị",
-    desc: "Danh mục giúp khách hàng chọn nhóm hàng cần mua. TPS1 báo giá riêng theo số lượng đặt hàng thực\u00A0tế.",
+    title: "Danh mục thực phẩm sỉ cho bếp ăn: rau củ, thịt cá, đông lạnh, đồ khô & gia vị",
+    desc: "Danh mục giúp khách hàng chọn nhóm hàng cần mua. TPS1 báo giá riêng theo số lượng đặt hàng thực tế.",
     btnAll: "Xem toàn bộ danh mục",
     btnLink: "/san-pham",
     rfqTag: "Báo giá riêng theo số lượng đặt hàng",
@@ -45,16 +45,16 @@ const texts = {
     catLinkPrefix: "/danh-muc/",
   },
   en: {
-    label: "Product Catalog",
-    title: "Fresh, complete ingredients for every kitchen menu",
-    desc: "Each kitchen has distinct preparation specs and order volume. TPS1 tailors wholesale quotes to your actual consumption.",
-    btnAll: "Explore all 5,000+ products",
+    label: "Product catalog",
+    title: "Wholesale food catalog for kitchens: produce, meat, seafood, frozen goods, dry goods & seasonings",
+    desc: "Browse product groups to build your buying list. TPS1 provides custom wholesale quotes based on your actual order volume.",
+    btnAll: "View full product catalog",
     btnLink: "/en/products",
-    rfqTag: "B2B Pricing: Custom contract quotes — no flat public pricing",
-    rfqBtn: "View category and quote",
+    rfqTag: "Custom quotes based on order volume",
+    rfqBtn: "View and request quote",
     quickHeading: "Quick access to all 10 TPS1 sourcing groups",
-    quickCountLabel: "10 product groups",
-    catLinkPrefix: "/danh-muc/",
+    quickCountLabel: "10 sourcing groups",
+    catLinkPrefix: "/en/products?category=",
   },
 };
 
@@ -109,39 +109,44 @@ const enCategoryOverrides: Record<
   { title: string; specBadge: string; description: string; highlights: string[] }
 > = {
   "rau-cu-qua": {
-    title: "Vegetables & Fruits",
-    specBadge: "1,200+ SKUs · Selected every morning",
+    title: "Vegetables & fruits",
+    specBadge: "Custom quotes based on order volume",
     description:
-      "Daily-selected produce from Dalat and the Mekong Delta, graded and delivered ahead of prep time.",
-    highlights: ["Dalat & Mekong sources", "Graded sizing", "Shift-timed delivery"],
+      "TPS1 supplies fresh produce from Da Lat, the Mekong Delta, and Bao Loc, selected daily and delivered according to your kitchen's schedule. Produce is graded by size and ripeness to match your cooking requirements.",
+    highlights: [
+      "Sourced from Da Lat, Mekong Delta, Bao Loc",
+      "Graded by size and ripeness",
+      "Delivered right when your kitchen needs",
+    ],
   },
   "thit-heo": {
-    title: "Fresh Pork",
-    specBadge: "Kitchen-portioned cuts · Chilled 0°C – 4°C",
+    title: "Fresh pork",
+    specBadge: "Custom quotes based on order volume",
     description:
-      "Pork cuts portioned to exact kitchen specs with strict veterinary checks and continuous cold chain.",
-    highlights: ["Custom kitchen cuts", "Checked on arrival", "Cold-chain delivery"],
+      "TPS1 supplies fresh pork for restaurants, eateries, and collective canteens. Meat is portioned to your order specifications, inspected upon warehouse arrival, and kept chilled throughout delivery.",
+    highlights: [
+      "Cut to your kitchen specifications",
+      "Inspected upon warehouse arrival",
+      "Chilled throughout delivery",
+    ],
   },
   "hai-san": {
     title: "Seafood",
-    specBadge: "Live & Flash-frozen · Shift delivery",
-    description:
-      "Fresh and frozen fish, shrimp, and squid sourced daily and portioned to menu requirements.",
-    highlights: ["Daily fresh catch", "Fresh and frozen"],
+    specBadge: "Custom quotes based on order volume",
+    description: "",
+    highlights: ["Daily seafood arrivals at our warehouse", "Full range of fresh and frozen items"],
   },
   "hang-dong-lanh": {
-    title: "Frozen Foods",
-    specBadge: "-18°C Cold storage · Stable supply",
-    description:
-      "Frozen beef, poultry, and seafood stored at dedicated cold-warehouse temperatures for stable inventory.",
-    highlights: ["Dedicated cold storage", "Proactive planning"],
+    title: "Frozen goods",
+    specBadge: "Custom quotes based on order volume",
+    description: "",
+    highlights: ["Stored in dedicated cold rooms", "Beef, poultry, fish, and seafood"],
   },
   "gia-vi": {
-    title: "Seasonings & Spices",
-    specBadge: "800+ Spices & dry goods · Wholesale packs",
-    description:
-      "Asian, Western, and vegetarian seasonings plus cooking oils in wholesale catering sizes.",
-    highlights: ["Asian, Western & Vegan", "Wholesale packaging"],
+    title: "Seasonings & spices",
+    specBadge: "Custom quotes based on order volume",
+    description: "",
+    highlights: ["Vietnamese, Chinese, Korean & Western spices", "Full savory and vegetarian seasonings"],
   },
 };
 
@@ -172,16 +177,19 @@ function TiltSpotlightCard({
   });
 
   return (
-      <ScrollReveal
-        delay={index * 50}
-        className={`b2b-category-card-wrap tps1-mosaic-slot--${index} ${isRow1 ? "b2b-category-card--featured" : "b2b-category-card--compact"}`}
-      >
+    <ScrollReveal
+      delay={index * 50}
+      className={`b2b-category-card-wrap tps1-mosaic-slot--${index} ${isRow1 ? "b2b-category-card--featured" : "b2b-category-card--compact"}`}
+    >
       <div
-        ref={ref}
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
-        className={`b2b-category-card ${isRow1 ? "b2b-category-card--featured" : "b2b-category-card--compact"}`}
+        className="b2b-category-card-hitbox"
       >
+        <div
+          ref={ref}
+          className={`b2b-category-card ${isRow1 ? "b2b-category-card--featured" : "b2b-category-card--compact"}`}
+        >
         <Image
           src={bgImage}
           alt={title}
@@ -221,6 +229,7 @@ function TiltSpotlightCard({
             </CategoryLink>
           </div>
         </div>
+        </div>
       </div>
     </ScrollReveal>
   );
@@ -247,9 +256,9 @@ export function B2BCatalog({ locale = "vi" }: { locale?: "vi" | "en" }) {
             <h2 id="catalog-heading" className="b2b-catalog-header__title">
               {locale === "vi" ? (
                 <>
-                  Danh mục thực{"\u00A0"}phẩm sỉ cho bếp{"\u00A0"}ăn:{" "}
+                  Danh mục thực phẩm sỉ cho bếp ăn:{" "}
                   <br className="b2b-catalog-header__br" />
-                  rau củ, thịt cá, đông{"\u00A0"}lạnh, đồ{"\u00A0"}khô &amp; gia{"\u00A0"}vị
+                  rau củ, thịt cá, đông lạnh, đồ khô &amp; gia vị
                 </>
               ) : (
                 t.title

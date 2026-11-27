@@ -27,15 +27,15 @@ const contacts = [
 const commitments = [
   { Icon: Clock, title: "Phản hồi trong 30 phút", desc: "Đội ngũ kinh doanh tiếp nhận thông tin và liên hệ lại trong vòng 30 phút để giải đáp mọi thắc mắc." },
   { Icon: Truck, title: "Giao hàng đúng lịch", desc: "Xe lạnh chuyên dụng hoạt động 24/7, giao hàng đúng nhịp theo lịch đã thống nhất với bếp." },
-  { Icon: ShieldCheck, title: "Bảo hiểm 5 tỷ VNĐ", desc: "Mỗi lô hàng đều được bảo vệ bởi hợp đồng bảo hiểm trách nhiệm sản phẩm VietinBank." },
+  { Icon: ShieldCheck, title: "Bảo hiểm 5 tỷ đồng", desc: "Mỗi lô hàng đều được bảo vệ bởi hợp đồng bảo hiểm trách nhiệm sản phẩm VietinBank." },
   { Icon: BadgeCheck, title: "ISO 22000 & HACCP", desc: "Nguồn gốc minh bạch, kiểm dịch mỗi ngày, đạt tiêu chuẩn quốc tế về an toàn thực phẩm." },
 ];
 
 const processSteps = [
   { num: "01", label: "Gửi thông tin", desc: "Điền form hoặc gọi hotline" },
-  { num: "02", label: "Tiếp nhận & Tư vấn", desc: "Phản hồi trong 30 phút" },
+  { num: "02", label: "Tiếp nhận & tư vấn", desc: "Phản hồi trong 30 phút" },
   { num: "03", label: "Lên phương án", desc: "Báo giá và lịch giao mẫu" },
-  { num: "04", label: "Hợp tác & Giao hàng", desc: "Ký kết và giao hàng định kỳ" },
+  { num: "04", label: "Hợp tác & giao hàng", desc: "Ký kết và giao hàng định kỳ" },
 ];
 
 export default function ContactPage() {
@@ -47,11 +47,12 @@ export default function ContactPage() {
           <div className="eyebrow" style={{ background: "rgba(255,255,255,0.12)", borderColor: "rgba(255,255,255,0.2)", color: "#fff", marginBottom: "18px" }}>
             Liên hệ
           </div>
-          <h1 style={{ margin: "0 0 14px", color: "#fff", fontSize: "clamp(36px, 5vw, 60px)", fontWeight: 900, lineHeight: 1.08, maxWidth: "18ch" }}>
-            Liên hệ&nbsp;<span style={{ color: "#4ade80" }}>tư vấn</span>
+          <h1 style={{ margin: "0 0 14px", color: "#fff", fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 900, lineHeight: 1.32, maxWidth: "18ch" }}>
+            Liên hệ <span style={{ color: "#4ade80" }}>tư vấn</span>
           </h1>
-          <p style={{ margin: 0, color: "rgba(255,255,255,0.72)", fontSize: "1.05rem", lineHeight: 1.8, maxWidth: "60ch" }}>
-            Kết nối trực tiếp với đội ngũ Thực Phẩm Số Một để được tư vấn giải pháp cung ứng thực phẩm, trao đổi hợp tác và nhận hỗ trợ nhanh chóng nhất.
+          <p style={{ margin: 0, color: "rgba(255,255,255,0.86)", fontSize: "1.08rem", lineHeight: 1.75, maxWidth: "60ch" }}>
+            Kết nối trực tiếp với đội ngũ Thực Phẩm Số Một để được{" "}
+            <strong className="b2b-hero__sub-hl">tư vấn giải pháp cung ứng thực phẩm, trao đổi hợp tác</strong> và nhận hỗ trợ nhanh chóng nhất.
           </p>
         </div>
       </section>

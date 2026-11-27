@@ -2,7 +2,7 @@
 // Shared by the /api/sku-products route (client search) and server-rendered
 // catalog pages, so Google sees product names in the initial HTML.
 
-export const SKU_PAGE_SIZE = 24;
+export const SKU_PAGE_SIZE = 20;
 
 export type SkuGroup = {
   slug: string;

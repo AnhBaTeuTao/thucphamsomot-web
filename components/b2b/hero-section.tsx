@@ -188,46 +188,53 @@ function AnimatedHeroStat({ stat }: { stat: HeroStatDef }) {
 const texts = {
   vi: {
     heroStats: [
-      { value: "24\u00A0giờ", label: "Thời gian gửi báo\u00A0giá", targetNum: 24, suffix: "\u00A0giờ" },
-      { value: "2\u00A0giờ làm\u00A0việc", label: "Thời gian xác nhận yêu\u00A0cầu", targetNum: 2, suffix: "\u00A0giờ làm\u00A0việc" },
-      { value: "109+", label: "Doanh nghiệp và bếp\u00A0ăn đang hợp\u00A0tác", targetNum: 109, suffix: "+" },
-      { value: "99,8%", label: "Tỷ lệ đơn hàng giao đúng\u00A0hẹn", targetNum: 99.8, decimals: 1, decimalSep: ",", suffix: "%" },
+      { value: "24 giờ", label: "Thời gian gửi báo giá", targetNum: 24, suffix: " giờ" },
+      { value: "2 giờ làm việc", label: "Thời gian xác nhận yêu cầu", targetNum: 2, suffix: " giờ làm việc" },
+      { value: "109+", label: "Doanh nghiệp và bếp ăn đang hợp tác", targetNum: 109, suffix: "+" },
+      { value: "99,8%", label: "Tỷ lệ đơn hàng giao đúng hẹn", targetNum: 99.8, decimals: 1, decimalSep: ",", suffix: "%" },
     ] as HeroStatDef[],
     heroPills: [
-      "Cung cấp hồ sơ an toàn thực\u00A0phẩm khi\u00A0cần",
-      "Giá sỉ tính theo sản lượng đặt\u00A0hàng",
-      "Giao hàng theo ngày, theo tuần hoặc theo\u00A0ca",
+      "Cung cấp hồ sơ an toàn thực phẩm khi cần",
+      "Giá sỉ tính theo sản lượng đặt hàng",
+      "Giao hàng theo ngày, theo tuần hoặc theo ca",
     ],
     certText: "Đạt chứng nhận ISO 22000 & HACCP",
     title: (
       <>
-        Nhà cung cấp thực{"\u00A0"}phẩm{" "}
+        Nhà cung cấp thực phẩm{" "}
         <br className="tps1-br-md" />
-        cho <span className="b2b-hero__highlight">bếp{"\u00A0"}ăn công{"\u00A0"}nghiệp,</span>{" "}
+        cho <span className="b2b-hero__highlight">bếp ăn công nghiệp,</span>{" "}
         <br className="tps1-br-md" />
-        <span className="b2b-hero__highlight">trường{"\u00A0"}học</span> tại Đồng{"\u00A0"}Nai
+        <span className="b2b-hero__highlight">trường học</span> tại Đồng Nai
       </>
     ),
-    slogan: "Gửi trọn an tâm trong từng bữa\u00A0ăn",
-    sub: "TPS1 cung cấp hơn 5.000\u00A0mặt\u00A0hàng thực\u00A0phẩm cho bếp\u00A0ăn công\u00A0nghiệp, trường\u00A0học, bệnh\u00A0viện và nhà\u00A0hàng tại Đồng\u00A0Nai, Bình\u00A0Dương, TP.HCM và Bà\u00A0Rịa\u00A0–\u00A0Vũng\u00A0Tàu. Rau củ, thịt cá tươi sống, hàng đông\u00A0lạnh, đồ\u00A0khô, gia\u00A0vị đều đặt được từ một đầu mối, có chứng từ nguồn gốc đầy đủ và giao tận bếp đúng\u00A0lịch.",
-    formRibbon: "XÁC NHẬN TRONG 2\u00A0GIỜ LÀM\u00A0VIỆC",
+    slogan: "Gửi trọn an tâm trong từng bữa ăn",
+    sub: (
+      <>
+        TPS1 cung cấp <strong className="b2b-hero__sub-hl">hơn 5.000 mặt hàng thực phẩm</strong> cho bếp ăn công nghiệp, trường học, bệnh viện và nhà hàng tại Đồng Nai, Bình Dương, TP.HCM và Bà Rịa – Vũng Tàu. Rau củ, thịt cá tươi sống, hàng đông lạnh, đồ khô, gia vị đều đặt được từ{" "}
+        <strong className="b2b-hero__sub-hl">một đầu mối</strong>, có{" "}
+        <strong className="b2b-hero__sub-hl">chứng từ nguồn gốc đầy đủ</strong> và{" "}
+        <strong className="b2b-hero__sub-hl">giao tận bếp đúng lịch</strong>.
+      </>
+    ),
+    formRibbon: "XÁC NHẬN TRONG 2 GIỜ LÀM VIỆC",
     formSuccessTitle: "Đã nhận yêu cầu!",
     formSuccessDesc: (name: string) => (
       <>
         TPS1 đã ghi nhận yêu cầu của <strong>{name || "quý khách"}</strong>.
         <br />
-        TPS1 sẽ xác nhận yêu cầu trong <strong>2{"\u00A0"}giờ làm{"\u00A0"}việc</strong> và hoàn thành báo giá trong{" "}
-        <strong>24{"\u00A0"}giờ</strong>.
+        TPS1 sẽ xác nhận yêu cầu trong <strong>2 giờ làm việc</strong> và hoàn thành báo giá trong{" "}
+        <strong>24 giờ</strong>.
       </>
     ),
     formCommitmentTitle: "Cam kết dịch vụ TPS1",
     formCommitment1: "Báo giá minh bạch: Giá được tính theo số lượng đặt hàng, không có phí ẩn.",
     formCommitment2: "Hồ sơ rõ ràng: Cung cấp chứng từ và hồ sơ ATTP theo yêu cầu.",
     formNewRequest: "← Gửi yêu cầu khác",
-    formTitle: "Gửi nhu cầu, nhận báo giá trong 24\u00A0giờ",
-    formDesc: "Tải lên danh sách hàng cần mua, hoặc điền vài thông tin ngắn bên\u00A0dưới.",
+    formTitle: "Gửi nhu cầu, nhận báo giá trong 24 giờ",
+    formDesc: "Tải lên danh sách hàng cần mua, hoặc điền vài thông tin ngắn bên dưới.",
     uploadPlaceholder: "Kéo thả hoặc tải lên danh sách hàng (Excel/PDF)",
-    uploadSub: "Xác nhận trong 2\u00A0giờ làm\u00A0việc · Hoàn thành báo giá trong 24\u00A0giờ",
+    uploadSub: "Xác nhận trong 2 giờ làm việc · Hoàn thành báo giá trong 24 giờ",
     companyLabel: "Tên công ty hoặc cơ sở bếp *",
     companyPlaceholder: "Ví dụ: Công ty TNHH ABC",
     phoneLabel: "SĐT hoặc Zalo liên hệ *",
@@ -244,30 +251,39 @@ const texts = {
     submitBtn: "Gửi yêu cầu báo giá",
     submitSubmitting: "Đang gửi yêu cầu...",
     disclaimer:
-      "* TPS1 dùng thông tin này để liên hệ tư vấn và báo giá. Không dùng cho mục đích\u00A0khác.",
+      "* TPS1 dùng thông tin này để liên hệ tư vấn và báo giá. Không dùng cho mục đích khác.",
   },
   en: {
     heroStats: [
-      { value: "24h", label: "Detailed quote turnaround", targetNum: 24, suffix: "h" },
-      { value: "2 working hours", label: "Order request confirmation", targetNum: 2, suffix: " working hours" },
-      { value: "109+", label: "Partner companies and kitchens", targetNum: 109, suffix: "+" },
-      { value: "99.8%", label: "On-schedule deliveries", targetNum: 99.8, decimals: 1, decimalSep: ".", suffix: "%" },
+      { value: "24 hours", label: "Quote turnaround time", targetNum: 24, suffix: " hours" },
+      { value: "2 working hrs", label: "Request confirmation time", targetNum: 2, suffix: " working hrs" },
+      { value: "109+", label: "Partner businesses and kitchens", targetNum: 109, suffix: "+" },
+      { value: "99.8%", label: "On-schedule delivery rate", targetNum: 99.8, decimals: 1, decimalSep: ".", suffix: "%" },
     ] as HeroStatDef[],
     heroPills: [
-      "Food safety records supplied on request",
-      "Wholesale pricing scaled by volume",
+      "Full food-safety records provided on request",
+      "Wholesale pricing scaled by order volume",
       "Daily, weekly, or shift-based delivery",
     ],
     certText: "ISO 22000 & HACCP Certified",
     title: (
       <>
-        Your reliable<br />
-        B2B food supply <span>partner</span><br />
-        in Dong Nai
+        B2B food supplier{" "}
+        <br className="tps1-br-md" />
+        for <span className="b2b-hero__highlight">industrial canteens,</span>{" "}
+        <br className="tps1-br-md" />
+        <span className="b2b-hero__highlight">schools</span> in Dong Nai
       </>
     ),
     slogan: "Delivering peace of mind in every meal",
-    sub: "Serving restaurants, company canteens, factories, schools, and hospitals across Dong Nai, Ho Chi Minh City, and neighboring provinces with 5,000+ traceable items.",
+    sub: (
+      <>
+        TPS1 supplies <strong className="b2b-hero__sub-hl">over 5,000 food products</strong> to industrial canteens, schools, hospitals, and restaurants across Dong Nai, Binh Duong, Ho Chi Minh City, and Ba Ria – Vung Tau. Fresh produce, meat, seafood, frozen goods, dry goods, and seasonings can all be ordered from{" "}
+        <strong className="b2b-hero__sub-hl">a single supplier</strong>, with{" "}
+        <strong className="b2b-hero__sub-hl">complete origin documentation</strong> and{" "}
+        <strong className="b2b-hero__sub-hl">on-schedule kitchen delivery</strong>.
+      </>
+    ),
     formRibbon: "CONFIRMED WITHIN 2 WORKING HOURS",
     formSuccessTitle: "Request Received!",
     formSuccessDesc: (name: string) => (

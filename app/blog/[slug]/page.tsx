@@ -38,7 +38,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50 pb-20">
+    <main className="blog-page min-h-screen pb-20">
       <BreadcrumbJsonLd
         items={[
           { name: "Trang chủ", item: "/" },
@@ -57,36 +57,36 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       />
       
       {/* Hero Section */}
-      <section className="bg-white border-b border-neutral-200 pt-16 pb-12">
+      <section className="blog-detail-hero pt-14 pb-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/blog" className="inline-flex items-center text-sm font-medium text-brand-600 hover:text-brand-800 transition-colors mb-8">
+          <Link href="/blog" className="blog-back-link mb-7">
             <ArrowLeft size={16} className="mr-1.5" />
             Quay lại Blog
           </Link>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-500 mb-6">
-            <span className="inline-flex items-center rounded-md bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700 border border-brand-200">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-[#2c463a] font-medium mb-6">
+            <span className="blog-header__badge" style={{ marginBottom: 0 }}>
               <Tag size={12} className="mr-1.5" />
               {article.category}
             </span>
             <span className="flex items-center">
-              <CalendarDays size={14} className="mr-1.5 opacity-70" />
+              <CalendarDays size={14} className="mr-1.5 text-[#0f6f4b]" />
               {formatBlogDate(article.publishedAt)}
             </span>
             <span className="flex items-center">
-              <Clock3 size={14} className="mr-1.5 opacity-70" />
+              <Clock3 size={14} className="mr-1.5 text-[#0f6f4b]" />
               {article.readingTime}
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight mb-6">
+          <h1 className="blog-detail-title text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
             {article.title}
           </h1>
-          <p className="text-lg md:text-xl text-neutral-600 leading-relaxed mb-10">
+          <p className="blog-detail-lead text-lg md:text-xl leading-relaxed mb-10">
             {article.excerpt}
           </p>
 
-          <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-lg border border-neutral-200">
+          <div className="blog-detail-cover relative aspect-[16/9] w-full">
             <Image 
               src={article.coverImage} 
               alt={article.title} 
@@ -100,34 +100,34 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       </section>
 
       {/* Article Body */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8 md:p-12">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        <div className="blog-detail-card p-7 sm:p-10 md:p-12">
           {/* Prose */}
-          <div 
+          <div
             className="blog-content"
-            dangerouslySetInnerHTML={{ __html: article.contentHtml || "" }} 
+            dangerouslySetInnerHTML={{ __html: article.contentHtml || "" }}
           />
         </div>
-        
+
         {/* Related / Next Steps */}
-        <section className="mt-16 bg-brand-50 rounded-2xl p-8 border border-brand-100">
+        <section className="blog-related-box mt-14 p-7 sm:p-9">
           <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-neutral-900 mb-3">Hỗ Trợ & Báo Giá</h2>
-            <p className="text-neutral-600 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-black text-[#0f241c] mb-3">Hỗ Trợ & Báo Giá</h2>
+            <p className="text-[#1c352a] font-medium max-w-2xl mx-auto">
               Các liên kết dưới đây giúp bạn nhanh chóng tìm hiểu sản phẩm và nhận báo giá phù hợp nhất cho bếp ăn, nhà máy của mình.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {getRelatedNewsLinks(article.slug).map((item) => (
-              <Link 
-                key={item.href} 
-                href={item.href} 
-                className="group bg-white p-6 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md hover:border-brand-300 transition-all"
+              <Link
+                key={item.href}
+                href={item.href}
+                className="blog-related-card group"
               >
-                <h3 className="text-lg font-bold text-brand-700 mb-2 group-hover:text-brand-800">{item.label}</h3>
-                <p className="text-sm text-neutral-600 mb-4">{item.description}</p>
-                <span className="inline-flex items-center text-sm font-semibold text-brand-600 group-hover:text-brand-800">
-                  Xem trang <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
+                <h3 className="blog-related-card__title text-lg mb-2">{item.label}</h3>
+                <p className="blog-related-card__desc text-sm mb-4">{item.description}</p>
+                <span className="blog-related-card__cta inline-flex items-center text-sm font-extrabold">
+                  Xem trang <ArrowRight size={16} className="ml-1.5 transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
             ))}

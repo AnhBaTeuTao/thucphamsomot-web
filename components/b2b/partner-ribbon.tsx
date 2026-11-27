@@ -1,15 +1,14 @@
 import fs from "fs";
 import path from "path";
-import Image from "next/image";
 import { ScrollReveal } from "@/components/b2b/scroll-reveal";
 
 const texts = {
   vi: {
-    ariaLabel: "Nhãn hàng & Đối tác thương mại tin dùng",
-    label: "Nhãn hàng & Đối tác thương mại tin dùng",
+    ariaLabel: "Nhãn hàng và đối tác thương mại tin dùng",
+    label: "Nhãn hàng & đối tác thương mại tin dùng",
     markers: [
-      "5.000+ Mã hàng chính ngạch",
-      "100% Rõ nguồn gốc xuất xứ",
+      "5.000+ mã hàng chính ngạch",
+      "100% rõ nguồn gốc xuất xứ",
       "Cung ứng sỉ ổn định mỗi ngày",
     ],
     altPrefix: "Đối tác",
@@ -30,7 +29,10 @@ export function PartnerRibbon({ locale = "vi" }: { locale?: "vi" | "en" }) {
   let logos: string[] = [];
   try {
     const logosDir = path.join(process.cwd(), "public/images/partners/logos");
-    logos = fs.readdirSync(logosDir).filter((file) => file.endsWith(".png"));
+    logos = fs
+      .readdirSync(logosDir)
+      .filter((file) => file.endsWith(".png"))
+      .sort((a, b) => a.localeCompare(b));
   } catch (error) {
     console.warn("Could not read partners logo directory", error);
   }
@@ -59,25 +61,35 @@ export function PartnerRibbon({ locale = "vi" }: { locale?: "vi" | "en" }) {
         </div>
       </ScrollReveal>
 
-      <ScrollReveal delay={70} className="b2b-partners__track-wrap b2b-partners-marquee">
+      <div className="b2b-partners__track-wrap b2b-partners-marquee">
         <div className="b2b-partners__track b2b-partners-track">
           {displayLogos.map((filename, i) => (
-            <div key={`${filename}-${i}`} className="b2b-partner-logo">
+            <div
+              key={`${filename}-${i}`}
+              className="b2b-partner-logo"
+              aria-hidden={i >= logos.length ? "true" : undefined}
+            >
               <div className="b2b-partner-logo__tile">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={`/images/partners/logos/${filename}`}
-                  alt={`${t.altPrefix} ${filename.replace(".png", "").replace(/_/g, " ")}`}
-                  width={200}
-                  height={100}
-                  className="object-contain"
-                  style={{ height: "54px", width: "auto" }}
-                  unoptimized
+                  alt={
+                    i < logos.length
+                      ? `${t.altPrefix} ${filename.replace(".png", "").replace(/_/g, " ")}`
+                      : ""
+                  }
+                  width={132}
+                  height={52}
+                  loading="eager"
+                  decoding="async"
+                  draggable={false}
+                  className="b2b-partner-logo__img"
                 />
               </div>
             </div>
           ))}
         </div>
-      </ScrollReveal>
+      </div>
     </section>
   );
 }

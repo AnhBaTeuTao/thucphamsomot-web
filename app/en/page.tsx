@@ -1,44 +1,31 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { makeMetadata } from "@/lib/seo";
 import { B2BHeroSection } from "@/components/b2b/hero-section";
 import { PartnerRibbon } from "@/components/b2b/partner-ribbon";
 import { TrustPillars } from "@/components/b2b/trust-pillars";
 import { B2BCatalog } from "@/components/b2b/catalog-section";
-import { LeadCaptureSection } from "@/components/b2b/lead-capture";
+import {
+  ColdChainDispatchSection,
+  FinalCtaBandSection,
+  HomeFaqSection,
+  IndustriesShowcaseSection,
+  KitchenKnowledgeSection,
+  ProcessCertificationsSection,
+} from "@/components/b2b/home-sections";
 
 export const metadata = makeMetadata({
-  title: "B2B Food Supplier for Canteens in Dong Nai",
+  title: "B2B Food Supplier for Restaurants & Canteens in Dong Nai | TPS1",
   description:
-    "B2B food supplier for canteens, factories, schools and hospitals in Dong Nai. ISO 22000 & HACCP certified, quotes within 24 hours, full VAT invoices.",
+    "Delivering peace of mind in every meal. TPS1 supplies fresh produce, meat, seafood, frozen goods, and dry goods for restaurants, corporate canteens, factories, and schools in Dong Nai & Ho Chi Minh City.",
   path: "/en",
 });
-
-const processSteps = [
-  {
-    num: "01",
-    title: "Send product list",
-    desc: "Upload an Excel, PDF, or photo of your required ingredients.",
-  },
-  {
-    num: "02",
-    title: "Receive quote in 24h",
-    desc: "Our sales team analyzes and sends a detailed pricing plan matching your volume.",
-  },
-  {
-    num: "03",
-    title: "Confirm & Deliver",
-    desc: "Confirm via phone or email. We deliver on schedule with agreed specifications.",
-  },
-];
 
 export default function EnglishHomePage() {
   return (
     <main>
-      {/* 1. HERO */}
+      {/* 1. HERO SECTION */}
       <B2BHeroSection locale="en" />
 
-      {/* 2. SOCIAL PROOF – Partner ribbon */}
+      {/* 2. PARTNER RIBBON */}
       <PartnerRibbon locale="en" />
 
       {/* 3. TRUST PILLARS */}
@@ -47,133 +34,23 @@ export default function EnglishHomePage() {
       {/* 4. B2B CATALOG */}
       <B2BCatalog locale="en" />
 
-      {/* 5. PROCESS – How it works */}
-      <section className="b2b-process" aria-labelledby="process-heading">
-        <div className="container-shell">
-          <div style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto 56px" }}>
-            <div className="section-label">Workflow</div>
-            <h2 id="process-heading" className="section-title">
-              3 steps — Simple &amp; Transparent
-            </h2>
-            <p className="section-desc" style={{ margin: "0 auto" }}>
-              No complexity, no wasted time. TPS1 optimizes the process so you get the fastest quote.
-            </p>
-          </div>
+      {/* 5. INDUSTRIES */}
+      <IndustriesShowcaseSection locale="en" />
 
-          <div className="b2b-process-steps-grid">
-            {/* Connector line */}
-            <div
-              className="process-connector-line"
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                top: "32px",
-                left: "16.5%",
-                right: "16.5%",
-                height: "2px",
-                background: "transparent",
-                borderTop: "2px dashed rgba(15,111,75,0.3)",
-                zIndex: 0,
-              }}
-            />
-            {/* Animated glowing dot */}
-            <div
-              aria-hidden="true"
-              className="process-dot-anim"
-              style={{
-                position: "absolute",
-                top: "30px",
-                left: "16.5%",
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                background: "#14b87a",
-                boxShadow: "0 0 10px #14b87a, 0 0 20px #14b87a",
-                zIndex: 1,
-              }}
-            />
-            {processSteps.map((step) => (
-              <div key={step.num} className="b2b-process-step" style={{ position: "relative" }}>
-                <div className="b2b-process-step__num">{step.num}</div>
-                <h3 style={{ fontSize: "1.05rem", fontWeight: 800, marginBottom: "10px", color: "#133127" }}>
-                  {step.title}
-                </h3>
-                <p style={{ fontSize: "0.9rem", color: "#59665f", lineHeight: 1.7, margin: 0 }}>
-                  {step.desc}
-                </p>
-              </div>
-            ))}
-          </div>
+      {/* 6. SERVICE AREAS */}
+      <ColdChainDispatchSection locale="en" />
 
-          {/* Mobile: 1-col */}
-          <style>{`
-            .b2b-process-steps-grid {
-              display: grid;
-              grid-template-columns: repeat(3, 1fr);
-              gap: 24px;
-              position: relative;
-            }
-            @media (max-width: 768px) {
-              .b2b-process-steps-grid {
-                grid-template-columns: 1fr !important;
-                gap: 20px !important;
-              }
-              .process-connector-line,
-              .process-dot-anim {
-                display: none !important;
-              }
-              .b2b-process-step {
-                padding: 24px 20px !important;
-              }
-              .b2b-process-step h3 {
-                font-size: 1.25rem !important;
-                margin-bottom: 10px !important;
-              }
-              .b2b-process-step p {
-                font-size: 15px !important;
-                line-height: 1.55 !important;
-              }
-            }
-          `}</style>
-        </div>
-      </section>
+      {/* 7. PROCESS & CERTIFICATIONS */}
+      <ProcessCertificationsSection locale="en" />
 
-      {/* 6. LEAD CAPTURE (Dropzone + Form) */}
-      <LeadCaptureSection locale="en" />
+      {/* 8. KITCHEN KNOWLEDGE */}
+      <KitchenKnowledgeSection locale="en" />
 
-      {/* 8. FINAL CTA BAND */}
-      <section className="b2b-cta-band" aria-label="Bottom call to action">
-        <div className="container-shell" style={{ position: "relative", zIndex: 1 }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              gap: "24px",
-            }}
-          >
-            <div className="section-label" style={{ color: "#4ade80" }}>
-              Ready to partner
-            </div>
-            <h2 className="section-title-light b2b-cta-title" style={{ maxWidth: "640px", margin: 0 }}>
-              Get a food supply quote <br className="b2b-cta-br" />for your kitchen today.
-            </h2>
-            <p style={{ color: "rgba(255,255,255,0.62)", fontSize: "1rem", lineHeight: 1.7, maxWidth: "480px", margin: 0 }}>
-              Response within 24 hours. No commitment required.
-              Just send your list — TPS1 handles the rest.
-            </p>
-            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
-              <Link href="/en/bao-gia" className="btn-hero-primary" style={{ fontSize: "1rem" }}>
-                Send quote request <ArrowRight size={18} />
-              </Link>
-              <Link href="/ho-so-nang-luc" className="btn-hero-secondary">
-                Download company profile
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 9. FAQ */}
+      <HomeFaqSection locale="en" />
+
+      {/* 10. FINAL CTA BAND */}
+      <FinalCtaBandSection locale="en" />
     </main>
   );
 }

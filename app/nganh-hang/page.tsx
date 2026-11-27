@@ -1,171 +1,210 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, Phone, Truck } from "lucide-react";
 import { makeMetadata } from "@/lib/seo";
-import { PageShell } from "@/components/page-shell";
 import { siteConfig } from "@/lib/site";
+import { INDUSTRY_SECTORS } from "@/lib/industries-showcase";
+import { IndustrySpotlight } from "@/components/b2b/industry-spotlight";
 
 export const metadata: Metadata = makeMetadata({
-  title: "Thực phẩm cho nhà hàng, quán ăn, bếp ăn, trường học",
+  title: "Hệ sinh thái 6 mô hình bếp ăn B2B | Thực Phẩm Số Một",
   description:
-    "TPS1 cung cấp thực phẩm tươi, rõ nguồn gốc cho nhà hàng, quán ăn, bếp công ty, trường học, bệnh viện và đơn vị suất ăn tại Đồng Nai, TP.HCM và tỉnh lân cận.",
+    "Khám phá đặc thù vận hành, tiêu chuẩn sơ chế và lịch xe lạnh riêng cho 6 mô hình bếp ăn: Nhà hàng, Quán ăn F&B, Trường học, Nhà máy KCN, Bệnh viện và Suất ăn.",
   path: "/nganh-hang",
 });
 
-const INDUSTRIES = [
+const B2B_PROOF_METRICS = [
   {
-    slug: "nha-hang-khach-san",
-    emoji: "🍽️",
-    title: "Nhà hàng, khách sạn",
-    subtitle: "Nhà hàng · Khách sạn · Tiệc cưới · Resort",
-    description:
-      "Mỗi món ăn ngon bắt đầu từ nguyên liệu chuẩn. TPS1 chọn hàng tươi, đều cỡ, đúng quy cách để bếp trưởng yên tâm giữ trọn hương vị cho từng đĩa ăn.",
-    tags: ["Hàng hóa đạt chuẩn", "Linh hoạt thanh toán", "Giao đúng giờ mở bếp"],
-    accent: "#be185d",
-    accentBg: "rgba(190,24,93,0.07)",
-    accentBorder: "rgba(190,24,93,0.18)",
+    value: "109+",
+    label: "Doanh nghiệp và bếp ăn đang hợp tác",
   },
   {
-    slug: "quan-an",
-    emoji: "🥢",
-    title: "Quán ăn, chuỗi F&B",
-    subtitle: "Quán cơm · Phở, bún, hủ tiếu · Chuỗi cửa hàng",
-    description:
-      "Quán ăn cần hàng tươi mỗi sáng, lượng vừa đủ cho ngày bán. TPS1 giao đúng giờ quán cần, để chủ quán dành trọn tâm sức cho nồi nước dùng và những vị khách quen.",
-    tags: ["Hàng tươi mỗi sáng", "Linh hoạt thanh toán", "Giao đúng lịch trình"],
-    accent: "#c2410c",
-    accentBg: "rgba(194,65,12,0.07)",
-    accentBorder: "rgba(194,65,12,0.18)",
+    value: "5.000+",
+    label: "Mã sản phẩm trong danh mục",
   },
   {
-    slug: "bep-an-tap-the",
-    emoji: "🏭",
-    title: "Bếp ăn công ty, nhà máy",
-    subtitle: "Khu công nghiệp · Nhà máy · Văn phòng",
-    description:
-      "Bếp công ty nấu theo ca, theo định mức và không được phép trễ giờ. TPS1 lập lịch giao theo từng ca bếp, để bữa cơm của người lao động luôn nóng và đủ đầy.",
-    tags: ["Giao đúng từng ca", "Định mức rõ ràng", "Hóa đơn VAT đầy đủ"],
-    accent: "#0f6f4b",
-    accentBg: "rgba(15,111,75,0.07)",
-    accentBorder: "rgba(15,111,75,0.18)",
+    value: "99,8%",
+    label: "Đơn hàng giao đúng hẹn",
   },
   {
-    slug: "truong-hoc",
-    emoji: "🏫",
-    title: "Trường học",
-    subtitle: "Mầm non · Tiểu học · Trung học · Nội trú",
-    description:
-      "Bữa ăn bán trú cần sự cẩn trọng gấp đôi. TPS1 cung cấp hàng rõ nguồn gốc, đủ hồ sơ an toàn thực phẩm, giao đúng giờ để nhà trường an tâm trao từng phần cơm đến các em.",
-    tags: ["Nguồn gốc rõ ràng", "Hồ sơ an toàn đầy đủ", "Giao đúng giờ bếp nhận"],
-    accent: "#b45309",
-    accentBg: "rgba(180,83,9,0.07)",
-    accentBorder: "rgba(180,83,9,0.18)",
+    value: "Từ 2017",
+    label: "Phục vụ Đồng Nai, TP.HCM và tỉnh lân cận",
   },
-  {
-    slug: "benh-vien",
-    emoji: "🏥",
-    title: "Bệnh viện",
-    subtitle: "Suất ăn người bệnh · Nhân viên y tế",
-    description:
-      "Bếp bệnh viện phục vụ nhiều chế độ ăn khác nhau. TPS1 giữ nhịp giao ổn định và kiểm soát an toàn theo ISO 22000, HACCP, để mỗi khay cơm đến tay người bệnh đều được chuẩn bị chu đáo.",
-    tags: ["Đạt chuẩn ISO 22000, HACCP", "Đa dạng nhóm hàng", "Giao hàng ổn định"],
-    accent: "#6d28d9",
-    accentBg: "rgba(109,40,217,0.07)",
-    accentBorder: "rgba(109,40,217,0.18)",
-  },
-  {
-    slug: "suat-an-cong-nghiep",
-    emoji: "🍱",
-    title: "Đơn vị suất ăn",
-    subtitle: "Nhà thầu suất ăn · Căng tin doanh nghiệp",
-    description:
-      "Nhà thầu suất ăn cần quy cách đồng đều để giữ chi phí mỗi suất. TPS1 cung cấp hàng chuẩn quy cách, báo trước biến động giá và gợi ý món thay thế theo mùa.",
-    tags: ["Quy cách đồng đều", "Giá sỉ theo sản lượng", "Hỗ trợ xây dựng thực đơn"],
-    accent: "#1a6fa8",
-    accentBg: "rgba(26,111,168,0.07)",
-    accentBorder: "rgba(26,111,168,0.18)",
-  },
-];
-
-const STATS = [
-  { value: "109+", label: "Doanh nghiệp và bếp ăn đang hợp\u00a0tác" },
-  { value: "5.000+", label: "Mã sản phẩm trong danh\u00a0mục" },
-  { value: "99,8%", label: "Đơn hàng giao đúng\u00a0hẹn" },
-  { value: "Từ 2017", label: "Phục vụ Đồng Nai, TP.HCM và tỉnh lân\u00a0cận" },
 ];
 
 export default function NganhHangPage() {
   return (
-    <PageShell
-      eyebrow="Ngành hàng"
-      title={
-        <>
-          <span style={{ display: "block" }}>Mỗi gian bếp</span>
-          <span style={{ display: "block" }}>một nhịp riêng</span>
-        </>
-      }
-      description="Nhà hàng cần hàng chuẩn món, quán ăn cần lượng vừa đủ mỗi sáng, bếp công ty cần đúng ca, trường học cần đủ hồ sơ. TPS1 chuẩn bị nguồn hàng theo đúng nhịp của từng gian bếp."
-    >
-      <div className="nganh-hub">
-
-        {/* Stats strip */}
-        <div className="nganh-hub__stats">
-          {STATS.map((s) => (
-            <div key={s.label} className="nganh-hub__stat">
-              <strong>{s.value}</strong>
-              <span>{s.label}</span>
+    <main className="nh-page">
+      {/* 1. HERO — ĐỒNG BỘ 100% VỚI /QUY-TRINH */}
+      <section className="b2b-process-hero">
+        <Image
+          src="/images/about/hero_v2.jpg"
+          alt="Hệ sinh thái cung ứng thực phẩm B2B Thực Phẩm Số Một"
+          fill
+          className="object-cover b2b-about-hero__bg"
+          priority
+          sizes="100vw"
+        />
+        <div className="b2b-about-hero__overlay" />
+        <div className="container-shell position-relative z-10 text-center">
+          <div className="b2b-about-hero__content" style={{ margin: "0 auto" }}>
+            <div className="section-label" style={{ color: "#4ade80", justifyContent: "center" }}>
+              Ngành hàng phục vụ
             </div>
-          ))}
+            <h1 className="b2b-process-hero__title">
+              Mỗi gian bếp<br />
+              <span style={{ color: "#4ade80" }}>một nhịp vận hành riêng</span>
+            </h1>
+            <p className="b2b-process-hero__desc">
+              Từ nhà hàng, quán ăn đến bếp nhà máy, trường học và bệnh viện, TPS1 chuẩn hóa{" "}
+              <strong className="b2b-hero__sub-hl">quy cách sơ chế, lịch xe lạnh và hồ sơ pháp lý</strong> khớp với từng gian bếp.
+            </p>
+          </div>
         </div>
+      </section>
 
-        {/* Industry cards grid */}
-        <div className="nganh-hub__grid">
-          {INDUSTRIES.map((ind) => (
-            <Link
-              key={ind.slug}
-              href={`/nganh-hang/${ind.slug}`}
-              className="nganh-hub__card"
-              style={{
-                "--card-accent": ind.accent,
-                "--card-bg": ind.accentBg,
-                "--card-border": ind.accentBorder,
-              } as React.CSSProperties}
-            >
-              <div className="nganh-hub__card-icon">{ind.emoji}</div>
-              <div className="nganh-hub__card-body">
-                <p className="nganh-hub__card-sub">{ind.subtitle}</p>
-                <h2 className="nganh-hub__card-title">{ind.title}</h2>
-                <p className="nganh-hub__card-desc">{ind.description}</p>
-                <div className="nganh-hub__tags">
-                  {ind.tags.map((t) => (
-                    <span key={t} className="nganh-hub__tag">{t}</span>
-                  ))}
-                </div>
+      {/* DẢI 4 CHỈ SỐ BẢO CHỨNG CUNG ỨNG B2B */}
+      <section className="nh-metrics-band" aria-label="4 chỉ số bảo chứng cung ứng B2B">
+        <div className="container-shell">
+          <div className="nh-metrics-grid">
+            {B2B_PROOF_METRICS.map((metric) => (
+              <div key={metric.value} className="nh-metric-card">
+                <strong className="nh-metric-card__value">{metric.value}</strong>
+                <span className="nh-metric-card__label">{metric.label}</span>
               </div>
-              <span className="nganh-hub__card-cta">
-                Xem chi tiết <ArrowRight size={15} />
-              </span>
-            </Link>
-          ))}
-        </div>
-
-        {/* CTA band */}
-        <div className="nganh-hub__cta">
-          <div className="nganh-hub__cta-copy">
-            <strong>Chưa thấy gian bếp của mình trong danh sách?</strong>
-            <p>Hãy gọi cho TPS1. Đội kinh doanh sẽ lắng nghe nhu cầu và đề xuất danh mục hàng, lịch giao, báo giá phù hợp với gian bếp của quý khách.</p>
-          </div>
-          <div className="nganh-hub__cta-actions">
-            <Link href="/bao-gia" className="btn-primary">
-              Gửi yêu cầu báo giá <ArrowRight size={17} />
-            </Link>
-            <a href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`} className="btn-secondary">
-              <Phone size={16} /> {siteConfig.phone}
-            </a>
+            ))}
           </div>
         </div>
+      </section>
 
-      </div>
-    </PageShell>
+      {/* 2A. LIGHT CULINARY INTERACTIVE SPOTLIGHT */}
+      <section
+        id="spotlight"
+        className="nh-showcase-section"
+        aria-labelledby="nh-spotlight-heading"
+      >
+        <div className="container-shell">
+          <div className="nh-section-head">
+            <div>
+              <div className="section-label">Sân khấu tương tác ngành hàng</div>
+              <h2 id="nh-spotlight-heading" className="section-title nh-section-head__title">
+                Chạm từng mô hình để xem chuẩn vận hành
+              </h2>
+            </div>
+            <p className="nh-section-head__sub">
+              Từ pha lóc định lượng bếp trưởng đến hồ sơ an toàn trường học và ca kíp nhà máy KCN.
+            </p>
+          </div>
+
+          <IndustrySpotlight items={INDUSTRY_SECTORS} />
+        </div>
+      </section>
+
+      {/* 2B. CULINARY EDITORIAL ASYMMETRIC BENTO GRID */}
+      <section className="nh-bento-section" aria-labelledby="nh-bento-heading">
+        <div className="container-shell">
+          <div className="nh-section-head">
+            <div>
+              <div className="section-label">Hệ sinh thái 6 ngành hàng</div>
+              <h2 id="nh-bento-heading" className="section-title nh-section-head__title">
+                Toàn cảnh giải pháp theo từng loại hình bếp ăn
+              </h2>
+            </div>
+            <p className="nh-section-head__sub">
+              Chọn trực tiếp từng ô ảnh để xem chi tiết danh mục, quy cách đóng gói và chứng từ đi kèm.
+            </p>
+          </div>
+
+          <div className="nh-bento-grid">
+            {INDUSTRY_SECTORS.map((ind) => (
+              <Link
+                key={ind.slug}
+                id={`bento-${ind.slug}`}
+                href={`/nganh-hang/${ind.slug}`}
+                className={`nh-bento-card nh-bento-card--span-${ind.bentoSpan}`}
+              >
+                <div className="nh-bento-card__media">
+                  <Image
+                    src={ind.image}
+                    alt={ind.imageAlt}
+                    fill
+                    sizes={
+                      ind.bentoSpan === 7
+                        ? "(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 58vw"
+                        : ind.bentoSpan === 6
+                          ? "(max-width: 768px) 100vw, 50vw"
+                          : "(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 42vw"
+                    }
+                    className="nh-bento-card__img"
+                  />
+                  <div className="nh-bento-card__photo-bar">
+                    <span className="nh-bento-card__badge">
+                      <b>{ind.num}</b>
+                      <span>{ind.tag}</span>
+                    </span>
+                    <span className="nh-bento-card__time-pill">
+                      <Truck size={14} aria-hidden="true" />
+                      <span>{ind.dispatchTime}</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="nh-bento-card__panel">
+                  <h3 className="nh-bento-card__title">{ind.title}</h3>
+                  <p className="nh-bento-card__desc">{ind.bentoDesc}</p>
+
+                  <div className="nh-bento-card__footer">
+                    <div className="nh-bento-card__chips">
+                      {ind.chips.map((chip) => (
+                        <span key={chip} className="nh-bento-card__chip">
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+
+                    <span className="nh-bento-card__cta">
+                      <span>Khám phá ngành</span>
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. HORIZON CTA STAGE — ĐỒNG BỘ TRANG CHỦ & GIỚI THIỆU */}
+      <section className="tps1-horizon-cta nh-horizon-cta" aria-label="Liên hệ nhận báo giá sỉ">
+        <div className="container-shell">
+          <div className="tps1-horizon-stage">
+            <div className="tps1-horizon-stage__aurora" aria-hidden="true" />
+            <div className="tps1-horizon-stage__grid" aria-hidden="true" />
+            <div className="tps1-horizon-stage__content">
+              <h2 className="section-title-light tps1-about-cta__title">
+                Nhận báo giá riêng cho gian bếp trong 24 giờ
+              </h2>
+              <p className="tps1-about-cta__desc">
+                Gửi danh sách nguyên liệu hoặc thực đơn tuần, TPS1 sẽ thiết kế bảng giá sỉ và lịch xe lạnh khớp với giờ nhận hàng của bếp.
+              </p>
+              <div className="nh-horizon-cta__actions">
+                <Link href="/bao-gia" className="btn-hero-primary tps1-about-cta__btn">
+                  <span>Gửi yêu cầu báo giá</span>
+                  <ArrowRight size={18} aria-hidden="true" />
+                </Link>
+                <a
+                  href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
+                  className="nh-horizon-cta__phone"
+                >
+                  <Phone size={17} aria-hidden="true" />
+                  <span>Hotline: {siteConfig.phone}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -15,7 +15,7 @@ export function SkuCatalogSkeleton({ title }: { title?: string }) {
         <p>Đang tải danh sách mặt hàng...</p>
       </div>
       <div className="sku-list">
-        {Array.from({ length: 8 }).map((_, idx) => (
+        {Array.from({ length: 10 }).map((_, idx) => (
           <div key={idx} className="sku-row cat-skel-card" aria-hidden="true">
             <div className="sku-row__media cat-skel" />
             <div className="sku-row__body">
@@ -64,7 +64,7 @@ export function SkuCatalogList({
           {products.map((product, index) => (
             <article
               key={product.id}
-              className={`sku-row${index >= 8 ? " sku-row--deferred" : ""}`}
+              className={`sku-row${index >= 10 ? " sku-row--deferred" : ""}`}
             >
               <div className="sku-row__media">
                 <Image

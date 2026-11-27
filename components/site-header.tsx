@@ -54,15 +54,17 @@ function swapLocalePath(pathname: string, nextLocale: Locale) {
   const cleanPath = pathname === "/" ? "" : pathname;
   if (nextLocale === "en") {
     if (cleanPath.startsWith("/en")) return cleanPath || "/en";
-    if (cleanPath === "/bao-gia") return "/en/bao-gia";
+    if (cleanPath === "/bao-gia" || cleanPath === "/nhan-bao-gia") return "/en/bao-gia";
     if (cleanPath === "/gioi-thieu") return "/en/about";
-    if (cleanPath === "/san-pham") return "/en/products";
+    if (cleanPath === "/san-pham" || cleanPath.startsWith("/danh-muc")) return "/en/products";
     if (cleanPath === "/quy-trinh") return "/en/delivery";
     if (cleanPath === "/lien-he") return "/en/contact";
-    if (cleanPath === "/nganh-hang" || cleanPath.startsWith("/nganh-hang/") || cleanPath.startsWith("/danh-muc")) {
+    if (cleanPath === "/nganh-hang" || cleanPath.startsWith("/nganh-hang/")) {
       return "/en/ingredients";
     }
-    if (cleanPath.startsWith("/kien-thuc")) return "/en/recipes";
+    if (cleanPath === "/blog" || cleanPath.startsWith("/blog/") || cleanPath.startsWith("/kien-thuc")) {
+      return "/en/news";
+    }
     return "/en";
   }
 
@@ -72,8 +74,8 @@ function swapLocalePath(pathname: string, nextLocale: Locale) {
   if (cleanPath === "/en/products") return "/san-pham";
   if (cleanPath === "/en/delivery") return "/quy-trinh";
   if (cleanPath === "/en/contact") return "/lien-he";
-  if (cleanPath === "/en/ingredients") return "/nganh-hang/bep-an-tap-the";
-  if (cleanPath === "/en/recipes") return "/kien-thuc";
+  if (cleanPath === "/en/ingredients") return "/nganh-hang";
+  if (cleanPath === "/en/news" || cleanPath === "/en/recipes") return "/blog";
   return "/";
 }
 

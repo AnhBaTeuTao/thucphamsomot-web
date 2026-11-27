@@ -118,7 +118,251 @@ export function SpReveal({
   );
 }
 
-// ─── Legacy SkuRow export (preserved intact for /danh-muc/[slug]) ──────────
+// ─── English Localization Helpers for Database SKU Products ─────────────────
+const EN_CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
+  SKU_GROUPS.map((g) => [g.slug, g.labelEn])
+);
+
+const EN_UNIT_MAP: Record<string, string> = {
+  kg: "kg",
+  ký: "kg",
+  g: "g",
+  gram: "g",
+  gói: "pack",
+  bịch: "bag",
+  túi: "pouch",
+  hộp: "box",
+  chai: "bottle",
+  lọ: "jar",
+  hũ: "jar",
+  thùng: "carton",
+  lon: "can",
+  can: "canister",
+  lít: "liter",
+  l: "liter",
+  ml: "ml",
+  trái: "piece",
+  quả: "piece",
+  củ: "piece",
+  bông: "head",
+  bắp: "ear",
+  cây: "stalk",
+  bó: "bunch",
+  con: "whole",
+  vỉ: "tray",
+  khay: "tray",
+  cái: "piece",
+  chiếc: "piece",
+  bộ: "set",
+  đôi: "pair",
+  lốc: "pack",
+  miếng: "piece",
+  cục: "block",
+  bánh: "piece",
+  xâu: "string",
+  chùm: "cluster",
+};
+
+const VI_FOOD_PHRASE_DICT: Array<[RegExp, string]> = [
+  // Prep & quality modifiers
+  [/\bchuẩn VietGAP\b/gi, "VietGAP Certified"],
+  [/\bsơ chế sạch gốc\b/gi, "Pre-trimmed"],
+  [/\brửa ozon đóng túi\b/gi, "Ozone-Washed & Bagged"],
+  [/\bcắt khúc theo ca bếp\b/gi, "Shift-Portioned Cut"],
+  [/\bchọn cỡ đồng đều\b/gi, "Uniformly Graded"],
+  [/\btuyển chọn loại 1\b/gi, "Grade-A Selected"],
+  [/\bloại 1\b/gi, "Grade A"],
+  [/\bgiao sáng sớm\b/gi, "Early Morning Delivery"],
+  [/\bsơ chế sẵn bếp ăn\b/gi, "Kitchen-Ready Prepped"],
+  [/\bđóng sọt chuẩn bếp công nghiệp\b/gi, "Crate-Packed for Canteens"],
+  [/\bhàng tươi mỗi ngày\b/gi, "Daily Fresh"],
+  [/\bsơ chế\b/gi, "Prepped"],
+  [/\bđông lạnh\b/gi, "Frozen"],
+  [/\btươi sống\b/gi, "Fresh"],
+  [/\btươi\b/gi, "Fresh"],
+  [/\bnhập khẩu\b/gi, "Imported"],
+  [/\bkhông hạt\b/gi, "Seedless"],
+  [/\bphi lê\b/gi, "Fillet"],
+  [/\bcắt lát\b/gi, "Sliced"],
+  [/\bthái lát\b/gi, "Sliced"],
+  [/\bxay\b/gi, "Minced"],
+  [/\bnguyên con\b/gi, "Whole"],
+  [/\blàm sạch\b/gi, "Cleaned"],
+  [/\brút xương\b/gi, "Boneless"],
+  [/\bkhông xương\b/gi, "Boneless"],
+  [/\bcó xương\b/gi, "Bone-In"],
+  [/\bĐà Lạt\b/gi, "Da Lat"],
+  // Produce
+  [/\bbông cải xanh\b/gi, "Broccoli"],
+  [/\bbông cải trắng\b/gi, "Cauliflower"],
+  [/\bcải ngọt\b/gi, "Choy Sum (Sweet Mustard Greens)"],
+  [/\bcải thìa\b/gi, "Bok Choy"],
+  [/\bcải thảo\b/gi, "Napa Cabbage"],
+  [/\bcải bó xôi\b/gi, "Spinach"],
+  [/\bcải bẹ xanh\b/gi, "Mustard Greens"],
+  [/\bbắp cải xanh\b/gi, "Green Cabbage"],
+  [/\bbắp cải tím\b/gi, "Red Cabbage"],
+  [/\bbắp cải\b/gi, "Cabbage"],
+  [/\bxà lách lô lô\b/gi, "Lollo Lettuce"],
+  [/\bxà lách\b/gi, "Lettuce"],
+  [/\bcà rốt\b/gi, "Carrot"],
+  [/\bkhoai tây\b/gi, "Potato"],
+  [/\bkhoai lang\b/gi, "Sweet Potato"],
+  [/\bkhoai môn\b/gi, "Taro"],
+  [/\bcà chua\b/gi, "Tomato"],
+  [/\bdưa leo\b/gi, "Cucumber"],
+  [/\bớt chuông đỏ\b/gi, "Red Bell Pepper"],
+  [/\bớt chuông vàng\b/gi, "Yellow Bell Pepper"],
+  [/\bớt chuông xanh\b/gi, "Green Bell Pepper"],
+  [/\bớt chuông\b/gi, "Bell Pepper"],
+  [/\bớt hiểm\b/gi, "Bird's Eye Chili"],
+  [/\bớt sừng\b/gi, "Horn Chili"],
+  [/\bbắp ngọt\b/gi, "Sweet Corn"],
+  [/\bbắp mỹ\b/gi, "Sweet Corn"],
+  [/\bnấm đùi gà\b/gi, "King Oyster Mushroom"],
+  [/\bnấm kim châm\b/gi, "Enoki Mushroom"],
+  [/\bnấm bào ngư\b/gi, "Oyster Mushroom"],
+  [/\bnấm rơm\b/gi, "Straw Mushroom"],
+  [/\bnấm hương\b/gi, "Shiitake Mushroom"],
+  [/\bnấm đông cô\b/gi, "Shiitake Mushroom"],
+  [/\bnấm mèo\b/gi, "Wood Ear Mushroom"],
+  [/\bbơ sáp\b/gi, "Avocado"],
+  [/\bhành lá\b/gi, "Spring Onion"],
+  [/\bhành tây\b/gi, "Yellow Onion"],
+  [/\bhành tím\b/gi, "Shallot"],
+  [/\btỏi củ\b/gi, "Garlic Bulb"],
+  [/\btỏi bóc vỏ\b/gi, "Peeled Garlic"],
+  [/\btỏi\b/gi, "Garlic"],
+  [/\bgừng\b/gi, "Ginger"],
+  [/\bsả cây\b/gi, "Lemongrass Stalk"],
+  [/\bcủ cải trắng\b/gi, "White Radish (Daikon)"],
+  [/\bbí đỏ hồ lô\b/gi, "Butternut Pumpkin"],
+  [/\bbí đỏ\b/gi, "Pumpkin"],
+  [/\bbí đao\b/gi, "Winter Melon"],
+  [/\bbí ngòi\b/gi, "Zucchini"],
+  [/\bbầu sao\b/gi, "Bottle Gourd (Bau Sao)"],
+  [/\bbầu\b/gi, "Bottle Gourd"],
+  [/\bmướp hương\b/gi, "Luffa Gourd"],
+  [/\bsu su\b/gi, "Chayote"],
+  [/\bsu hào\b/gi, "Kohlrabi"],
+  [/\bđậu cove\b/gi, "Green Beans"],
+  [/\bđậu đũa\b/gi, "Yardlong Beans"],
+  [/\bđậu bắp\b/gi, "Okra"],
+  [/\brau muống\b/gi, "Water Spinach (Morning Glory)"],
+  [/\bmồng tơi\b/gi, "Malabar Spinach"],
+  [/\brau dền\b/gi, "Amaranth Greens"],
+  [/\brau ngót\b/gi, "Katuk Sweet Leaf"],
+  [/\bkhổ qua\b/gi, "Bitter Melon"],
+  [/\bcà tím\b/gi, "Eggplant"],
+  [/\bchanh\b/gi, "Lime"],
+  [/\bngò rí\b/gi, "Coriander (Cilantro)"],
+  [/\bngò gai\b/gi, "Sawtooth Herb"],
+  [/\brau răm\b/gi, "Vietnamese Coriander"],
+  [/\bhúng quế\b/gi, "Sweet Basil"],
+  [/\bgiá đỗ\b/gi, "Bean Sprouts"],
+  // Pork, Beef, Poultry, Eggs
+  [/\bthịt ba rọi heo\b/gi, "Pork Belly"],
+  [/\bba rọi heo\b/gi, "Pork Belly"],
+  [/\bba chỉ heo\b/gi, "Pork Belly"],
+  [/\bnạc dăm heo\b/gi, "Pork Collar Butt"],
+  [/\bnạc vai heo\b/gi, "Pork Shoulder"],
+  [/\bnạc đùi heo\b/gi, "Pork Leg Lean"],
+  [/\bthăn heo\b/gi, "Pork Tenderloin"],
+  [/\bsườn non heo\b/gi, "Pork Baby Back Ribs"],
+  [/\bsườn cốt lết\b/gi, "Pork Chop Cutlet"],
+  [/\bcốt lết heo\b/gi, "Pork Chop"],
+  [/\bxương ống heo\b/gi, "Pork Marrow Bones"],
+  [/\bxương cổ heo\b/gi, "Pork Neck Bones"],
+  [/\bgiò heo\b/gi, "Pork Hock"],
+  [/\bthịt heo\b/gi, "Pork"],
+  [/\bthăn nội bò\b/gi, "Beef Tenderloin"],
+  [/\bthăn ngoại bò\b/gi, "Beef Striploin"],
+  [/\bbắp bò\b/gi, "Beef Shank"],
+  [/\bnạm bò\b/gi, "Beef Brisket"],
+  [/\bgầu bò\b/gi, "Beef Brisket Point"],
+  [/\bba chỉ bò\b/gi, "Beef Short Plate"],
+  [/\bthịt bò\b/gi, "Beef"],
+  [/\bức gà\b/gi, "Chicken Breast"],
+  [/\bđùi gà góc tư\b/gi, "Chicken Leg Quarter"],
+  [/\bđùi tỏi gà\b/gi, "Chicken Drumstick"],
+  [/\bcánh gà\b/gi, "Chicken Wing"],
+  [/\bgà ta\b/gi, "Free-Range Chicken"],
+  [/\bgà công nghiệp\b/gi, "Farm Chicken"],
+  [/\bvịt nguyên con\b/gi, "Whole Duck"],
+  [/\bức vịt\b/gi, "Duck Breast"],
+  [/\btrứng gà\b/gi, "Chicken Eggs"],
+  [/\btrứng vịt\b/gi, "Duck Eggs"],
+  [/\btrứng cút\b/gi, "Quail Eggs"],
+  // Seafood
+  [/\bcá basa\b/gi, "Basa Catfish"],
+  [/\bcá điêu hồng\b/gi, "Red Tilapia"],
+  [/\bcá hồi\b/gi, "Salmon"],
+  [/\bcá thu\b/gi, "Mackerel"],
+  [/\bcá ngừ\b/gi, "Tuna"],
+  [/\bcá lóc\b/gi, "Snakehead Fish"],
+  [/\bcá trê\b/gi, "Walking Catfish"],
+  [/\bcá nục\b/gi, "Scad Fish"],
+  [/\btôm thẻ\b/gi, "Whiteleg Shrimp"],
+  [/\btôm sú\b/gi, "Black Tiger Shrimp"],
+  [/\btôm nõn\b/gi, "Peeled Shrimp"],
+  [/\bmực ống\b/gi, "Tube Squid"],
+  [/\bmực lá\b/gi, "Bigfin Reef Squid"],
+  [/\bnghêu\b/gi, "Clams"],
+  // Dry goods, Seasonings, Vegetarian
+  [/\bgạo thơm\b/gi, "Fragrant Jasmine Rice"],
+  [/\bgạo\b/gi, "Rice"],
+  [/\bnước mắm\b/gi, "Fish Sauce"],
+  [/\bnước tương\b/gi, "Soy Sauce"],
+  [/\bdầu ăn\b/gi, "Cooking Oil"],
+  [/\bdầu hào\b/gi, "Oyster Sauce"],
+  [/\btương ớt\b/gi, "Chili Sauce"],
+  [/\btương cà\b/gi, "Tomato Ketchup"],
+  [/\bhạt nêm\b/gi, "Seasoning Powder"],
+  [/\bbột ngọt\b/gi, "MSG Seasoning"],
+  [/\bđường cát\b/gi, "Granulated Sugar"],
+  [/\bmuối i-ốt\b/gi, "Iodized Salt"],
+  [/\btiêu đen\b/gi, "Black Pepper"],
+  [/\bđậu hũ trắng\b/gi, "White Tofu"],
+  [/\bđậu hũ chiên\b/gi, "Fried Tofu"],
+  [/\bđậu hũ non\b/gi, "Silken Tofu"],
+  [/\bđậu hũ\b/gi, "Tofu"],
+  [/\bchả lụa chay\b/gi, "Vegetarian Pork Roll (Cha Lua Chay)"],
+  [/\bchả giò chay\b/gi, "Vegetarian Spring Rolls"],
+  [/\bthực phẩm chay\b/gi, "Vegetarian Food"],
+];
+
+function stripVietnameseDiacritics(input: string): string {
+  return input
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+}
+
+function translateProductNameToEn(name: string): string {
+  let out = name;
+  for (const [pattern, replacement] of VI_FOOD_PHRASE_DICT) {
+    out = out.replace(pattern, replacement);
+  }
+  out = stripVietnameseDiacritics(out).replace(/\s{2,}/g, " ").trim();
+  return out ? out.charAt(0).toUpperCase() + out.slice(1) : name;
+}
+
+function translateUnitToEn(unit: string): string {
+  const key = unit.trim().toLowerCase();
+  if (EN_UNIT_MAP[key]) return EN_UNIT_MAP[key];
+  return stripVietnameseDiacritics(unit);
+}
+
+function localizeSkuProduct(product: SkuProduct, locale: Locale): SkuProduct {
+  if (locale !== "en") return product;
+  return {
+    ...product,
+    categoryLabel: EN_CATEGORY_LABELS[product.category] ?? stripVietnameseDiacritics(product.categoryLabel),
+    name: translateProductNameToEn(product.name),
+    unit: translateUnitToEn(product.unit),
+  };
+}
 export function SkuRow({
   product,
   index = 99,
@@ -129,13 +373,14 @@ export function SkuRow({
   locale?: Locale;
 }) {
   const text = TEXT[locale];
+  const item = localizeSkuProduct(product, locale);
 
   return (
     <article className="sku-row">
       <div className="sku-row__media">
         <Image
-          src={product.image}
-          alt={product.name}
+          src={item.image}
+          alt={item.name}
           fill
           priority={index < 5}
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
@@ -148,25 +393,25 @@ export function SkuRow({
 
       <div className="sku-row__body">
         <div className="sku-row__info">
-          <span className="sku-row__cat">{product.categoryLabel}</span>
-          <h3 className="sku-row__name" title={product.name}>
-            {product.name}
+          <span className="sku-row__cat">{item.categoryLabel}</span>
+          <h3 className="sku-row__name" title={item.name}>
+            {item.name}
           </h3>
         </div>
 
         <div className="sku-row__price-unit">
           <span className="sku-row__unit">
             {text.unit}
-            <strong>{product.unit}</strong>
+            <strong>{item.unit}</strong>
           </span>
           <span className="sku-row__price">{text.priceTag}</span>
         </div>
 
         <div className="sku-row__action">
           <Link
-            href={`${locale === "en" ? "/en/contact" : "/lien-he"}?product=${encodeURIComponent(product.name)}`}
+            href={`${locale === "en" ? "/en/contact" : "/lien-he"}?product=${encodeURIComponent(item.name)}`}
             className="sku-row__add"
-            title={`${text.addToCart}: ${product.name}`}
+            title={`${text.addToCart}: ${item.name}`}
           >
             <span>{text.addToCart}</span>
             <ArrowRight size={14} />
@@ -190,13 +435,14 @@ const SpProductCard = memo(function SpProductCard({
   onToggleAdd: (product: SkuProduct) => void;
 }) {
   const text = TEXT[locale];
+  const item = localizeSkuProduct(product, locale);
 
   return (
     <article className="sp-card">
       <div className="sp-card__media">
         <Image
-          src={product.image}
-          alt={`${product.name} - ${product.categoryLabel} sỉ TPS1`}
+          src={item.image}
+          alt={`${item.name} - ${item.categoryLabel} TPS1`}
           fill
           loading="lazy"
           sizes="(max-width: 640px) 50vw, (max-width: 960px) 33vw, (max-width: 1200px) 25vw, 20vw"
@@ -208,15 +454,15 @@ const SpProductCard = memo(function SpProductCard({
       </div>
 
       <div className="sp-card__body">
-        <span className="sp-card__cat">{product.categoryLabel}</span>
-        <h3 className="sp-card__name" title={product.name}>
-          {product.name}
+        <span className="sp-card__cat">{item.categoryLabel}</span>
+        <h3 className="sp-card__name" title={item.name}>
+          {item.name}
         </h3>
 
         <div className="sp-card__meta-line">
           <span className="sp-card__unit">
             {text.unit}
-            <strong>{product.unit}</strong>
+            <strong>{item.unit}</strong>
           </span>
           <span className="sp-card__price">{text.priceTag}</span>
         </div>
@@ -225,7 +471,7 @@ const SpProductCard = memo(function SpProductCard({
           type="button"
           className={`sp-card__cta${isAdded ? " is-added" : ""}`}
           aria-pressed={isAdded}
-          onClick={() => onToggleAdd(product)}
+          onClick={() => onToggleAdd(item)}
         >
           {isAdded ? (
             <>
