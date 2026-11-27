@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Báo Cáo Kỹ Thuật &amp; So Sánh Code Chi Tiết: thucphamsomot-web.vercel.app vs thucphamsomot.vn</title>
+  <style>
+    :root {
+      --bg: #f3f6f4;
+      --surface: #ffffff;
+      --surface-alt: #f7faf8;
+      --ink: #0f241c;
+      --ink-secondary: #3b5246;
+      --ink-muted: #647a6e;
+      --brand: #0f6f4b;
+      --brand-dark: #06392a;
+      --brand-light: #e5f4ec;
+      --red: #b91c1c;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+      --green: #047857;
+      --green-bg: #ecfdf5;
+      --green-border: #a7f3d0;
+      --blue: #1d4ed8;
+      --blue-bg: #eff6ff;
+      --amber: #b45309;
+      --amber-bg: #fffbeb;
+      --border: #d5e2da;
+      --code-bg: #0b1913;
+      --code-old-bg: #1f1114;
+      --code-new-bg: #0b1d15;
+      --shadow: 0 12px 32px -12px rgba(6, 57, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 32px 24px 90px;
+    }
+
+    /* HERO HEADER */
+    .report-hero {
+      background: linear-gradient(135deg, #052319 0%, #0a4230 55%, #0f6f4b 100%);
+      color: #ffffff;
+      border-radius: 24px;
+      padding: 38px 42px;
+      box-shadow: 0 24px 54px -16px rgba(6, 57, 42, 0.38);
+      margin-bottom: 30px;
+    }
+
+    .report-hero__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .badge--live {
+      background: rgba(52, 211, 153, 0.22);
+      border: 1px solid rgba(110, 231, 183, 0.5);
+      color: #6ee7b7;
+    }
+
+    .badge--prod {
+      background: rgba(251, 191, 36, 0.2);
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      color: #fde68a;
+    }
+
+    .badge--ai {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+    }
+
+    .report-hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.75rem, 3vw, 2.45rem);
+      font-weight: 900;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
+
+    .report-hero p {
+      margin: 0 0 24px;
+      max-width: 1020px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.02rem;
+    }
+
+    .hero-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .hero-meta-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      padding: 14px 18px;
+    }
+
+    .hero-meta-card__label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.72);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .hero-meta-card__val {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      word-break: break-all;
+    }
+
+    .hero-meta-card__val a {
+      color: #6ee7b7;
+      text-decoration: none;
+    }
+
+    /* TOC */
+    .toc-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc-card h2 {
+      margin: 0 0 16px;
+      font-size: 1.18rem;
+      color: var(--brand-dark);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 10px 18px;
+    }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border-radius: 10px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      transition: all 0.18s ease;
+    }
+
+    .toc-link:hover {
+      background: var(--brand-light);
+      border-color: var(--brand);
+      color: var(--brand-dark);
+      transform: translateX(3px);
+    }
+
+    .toc-link__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* MODULE SECTION */
+    .module-section {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      padding: 32px 34px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .module-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--brand-light);
+    }
+
+    .module-head__left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .module-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 14px;
+      border-radius: 10px;
+      background: var(--brand-dark);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+    }
+
+    .module-head h2 {
+      margin: 0;
+      font-size: 1.38rem;
+      font-weight: 850;
+      color: var(--ink);
+    }
+
+    /* LOCATION TABLE INSIDE MODULE */
+    .where-box {
+      background: var(--surface-alt);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .where-box__title {
+      font-size: 12.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--brand-dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .where-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 14px;
+      color: var(--ink-secondary);
+    }
+
+    .where-list li {
+      margin-bottom: 6px;
+    }
+
+    .where-list code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--brand-dark);
+    }
+
+    .action-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+
+    .action-tag--edit {
+      background: var(--blue-bg);
+      color: var(--blue);
+      border: 1px solid rgba(29, 78, 216, 0.25);
+    }
+
+    .action-tag--add {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+    }
+
+    .action-tag--del {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid var(--red-border);
+    }
+
+    /* SIDE BY SIDE CODE DIFF */
+    .diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 16px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 1024px) {
+      .diff-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-box {
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1.5px solid rgba(15, 111, 75, 0.3);
+    }
+
+    .code-box--old {
+      background: var(--code-old-bg);
+      border-color: #7f1d1d;
+    }
+
+    .code-box--new {
+      background: var(--code-new-bg);
+      border-color: #065f46;
+    }
+
+    .code-box--full {
+      background: var(--code-bg);
+      border-color: #0f6f4b;
+      margin-top: 16px;
+    }
+
+    .code-box__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 16px;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-box--old .code-box__header {
+      background: rgba(185, 28, 28, 0.28);
+      color: #fca5a5;
+    }
+
+    .code-box--new .code-box__header {
+      background: rgba(4, 120, 87, 0.32);
+      color: #6ee7b7;
+    }
+
+    .code-box--full .code-box__header {
+      background: rgba(15, 111, 75, 0.28);
+      color: #86efac;
+    }
+
+    .code-box pre {
+      margin: 0;
+      padding: 16px 18px;
+      overflow-x: auto;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.58;
+      color: #e8f5ee;
+      white-space: pre;
+    }
+
+    .hl-del {
+      background: rgba(239, 68, 68, 0.22);
+      color: #fecaca;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .hl-add {
+      background: rgba(16, 185, 129, 0.2);
+      color: #a7f3d0;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .hl-comment {
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    /* DATA TABLE */
+    .data-table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      margin-top: 16px;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      background: var(--surface);
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .data-table th {
+      background: var(--surface-alt);
+      font-weight: 800;
+      color: var(--brand-dark);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .data-table code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 12px;
+      background: var(--surface-alt);
+      padding: 2px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      color: var(--brand-dark);
+    }
+
+    .note-banner {
+      margin-top: 16px;
+      padding: 15px 18px;
+      border-radius: 12px;
+      background: var(--amber-bg);
+      border: 1px solid rgba(180, 83, 9, 0.3);
+      color: #78350f;
+      font-size: 13.8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HERO -->
+    <header class="report-hero">
+      <div class="report-hero__badges">
+        <span class="badge badge--live">● BẢN MỚI NHẤT (VERCEL): thucphamsomot-web.vercel.app (Commit fb8a49e)</span>
+        <span class="badge badge--prod">● BẢN CŨ (SERVER): thucphamsomot.vn (Commit 4f0de6b)</span>
+        <span class="badge badge--ai">BÁO CÁO ĐỐI CHIẾU CODE TỪNG DÒNG CHO AI CODER (100% REPRODUCIBLE)</span>
+      </div>
+      <h1>Báo Cáo Kỹ Thuật Đối Chiếu Code Trước &amp; Sau (Code-Level Diff Specification)</h1>
+      <p>
+        Tài liệu này chỉ rõ <strong>chính xác từng đoạn code cũ trên Server (<code>thucphamsomot.vn</code>)</strong> và <strong>đoạn code mới trên Vercel (<code>thucphamsomot-web.vercel.app</code> — Commit <code>fb8a49e199dbfd9d513267efb558dc1414931ccf</code>)</strong>, kèm theo <strong>đường dẫn file, vị trí dòng (line numbers), thuật toán chuyển động, quy tắc Typography Tiếng Việt, kiến trúc chống giật hover và đồng bộ 100% Tiếng Anh (<code>/en/*</code>)</strong>. Bất kỳ AI Coder nào đọc file này đều có thể tái tạo hoặc phát triển tiếp giống 100% phiên bản của chúng ta mà không cần dò tìm.
+      </p>
+      <div class="hero-meta-grid">
+        <div class="hero-meta-card">
+          <div class="hero-meta-card__label">Bản Server Cũ (Trước khi sửa)</div>
+          <div class="hero-meta-card__val">
+            Web: <a href="https://thucphamsomot.vn" target="_blank">https://thucphamsomot.vn</a><br />
+            Git Commit: <code>4f0de6bee7ab7ddb44f75a072e1733ee57946487</code>
+          </div>
+        </div>
+        <div class="hero-meta-card">
+          <div class="hero-meta-card__label">Bản Vercel &amp; GitHub Public Mới Nhất (Truy Cập Trực Tiếp)</div>
+          <div class="hero-meta-card__val">
+            Web Live: <a href="https://thucphamsomot-web.vercel.app" target="_blank">https://thucphamsomot-web.vercel.app</a><br />
+            GitHub Public Repo: <a href="https://github.com/AnhBaTeuTao/thucphamsomot-web" target="_blank">https://github.com/AnhBaTeuTao/thucphamsomot-web</a><br />
+            GitHub Commit Diff: <a href="https://github.com/AnhBaTeuTao/thucphamsomot-web/commit/fb8a49e199dbfd9d513267efb558dc1414931ccf" target="_blank"><code>fb8a49e199dbfd9d513267efb558dc1414931ccf</code></a>
+          </div>
+        </div>
+        <div class="hero-meta-card">
+          <div class="hero-meta-card__label">Link Trực Tiếp Cho AI Coder Đọc / Clone</div>
+          <div class="hero-meta-card__val">
+            Git URL: <code>https://github.com/AnhBaTeuTao/thucphamsomot-web.git</code> (Public · Nhánh <code>main</code>)<br />
+            Cây thư mục: <a href="https://github.com/AnhBaTeuTao/thucphamsomot-web/tree/main" target="_blank">github.com/AnhBaTeuTao/thucphamsomot-web/tree/main</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- TOC -->
+    <nav class="toc-card" aria-label="Mục lục đối chiếu code">
+      <h2>📌 Mục Lục 18 Điểm Thay Đổi Code Chính (Đã Cập Nhật &amp; Bổ Sung Đầy Đủ)</h2>
+      <div class="toc-grid">
+        <a class="toc-link" href="#diff-1"><span class="toc-link__num">01</span> package.json — Sửa lệnh Build xóa Cache CSS trên Vercel</a>
+        <a class="toc-link" href="#diff-2"><span class="toc-link__num">02</span> app/layout.tsx — Bọc Provider Chuyển Cảnh &amp; Dọn Attribute</a>
+        <a class="toc-link" href="#diff-3"><span class="toc-link__num">03</span> app/page.tsx — Thêm Intro Loader &amp; Tách Component Trang Chủ</a>
+        <a class="toc-link" href="#diff-4"><span class="toc-link__num">04</span> trust-pillars.tsx — Lưới 3×2 Nổi Khối, Chuẩn Casing &amp; Highlight Từ Khóa</a>
+        <a class="toc-link" href="#diff-5"><span class="toc-link__num">05</span> products-grid.tsx — Mobile 2 Cột &amp; Bộ Dịch Tự Động 3.000 SKU Sang Tiếng Anh</a>
+        <a class="toc-link" href="#diff-6"><span class="toc-link__num">06</span> lib/sku-catalog.ts &amp; API Route — Sinh 3.000 SKU Ảo In-Memory</a>
+        <a class="toc-link" href="#diff-7"><span class="toc-link__num">07</span> site-header.tsx &amp; lib/site.ts — Fix Nhảy y=0, 6 Mục VI/EN &amp; 1-to-1 Locale Switch</a>
+        <a class="toc-link" href="#diff-8"><span class="toc-link__num">08</span> home-intro-loader.tsx — Intro ~3.05s: GPU Arc, Pre-Decode &amp; Thu Nhỏ Hạt Mobile</a>
+        <a class="toc-link" href="#diff-9"><span class="toc-link__num">09</span> category-transition-provider.tsx — Chuyển Cảnh 3D Theo Độ Zoom</a>
+        <a class="toc-link" href="#diff-10"><span class="toc-link__num">10</span> hero-section.tsx — Hero 2 Cột + Form Báo Giá Nhanh Song Ngữ VI/EN</a>
+        <a class="toc-link" href="#diff-11"><span class="toc-link__num">11</span> catalog-section.tsx — Bento 12 Cột + Static Hitbox Chống Giật 3D Tilt</a>
+        <a class="toc-link" href="#diff-12"><span class="toc-link__num">12</span> home-sections.tsx — 6 Section Trang Chủ Song Ngữ VI/EN &amp; Cân Bằng 4 Bài Blog</a>
+        <a class="toc-link" href="#diff-13"><span class="toc-link__num">13</span> [MỚI] major-page-transition.tsx — Tan Tại Chỗ Từ Tâm Ra 4 Góc &amp; Thêm /en/ingredients</a>
+        <a class="toc-link" href="#diff-14"><span class="toc-link__num">14</span> [MỚI] food-cutout-hitboxes.ts — 7 Ảnh Cutout Tách Nền Thủ Công &amp; 60 Polygon Hitboxes</a>
+        <a class="toc-link" href="#diff-15"><span class="toc-link__num">15</span> [MỚI] globals.css (Section 22) — Fix Lỗi Dấu Tiếng Việt font-weight 700, Highlight &amp; Justify</a>
+        <a class="toc-link" href="#diff-16"><span class="toc-link__num">16</span> [MỚI] globals.css (Section 23) — Cân Bằng Ngang Hàng (Row Alignment) Cho 11 Lưới Card</a>
+        <a class="toc-link" href="#diff-17"><span class="toc-link__num">17</span> [MỚI] globals.css (Section 24) — Kiến Trúc Chống Giật Chuột (Zero-Jitter Hover Bridge)</a>
+        <a class="toc-link" href="#diff-18"><span class="toc-link__num">18</span> [MỚI] app/en/* — Đồng Bộ 100% Giao Diện &amp; Nội Dung Bản Tiếng Anh Giống Bản Tiếng Việt</a>
+      </div>
+    </nav>
+
+    <!-- ===================================================================
+         DIFF 01: PACKAGE.JSON
+         =================================================================== -->
+    <section class="module-section" id="diff-1">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 01</span>
+          <h2>Sửa lệnh Build xóa Cache Turbopack CSS trên Vercel (<code>package.json</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>package.json</code> tại <strong>dòng 8</strong> (key <code>"scripts.build"</code>).</li>
+          <li><strong>Lý do:</strong> Next.js 16.3.7 dùng Turbopack mặc định. Trên Vercel, nếu giữ <code>.next/cache</code> từ lần deploy trước, khi sửa <code>app/globals.css</code> sẽ bị phục vụ lại file chunk CSS cũ khiến giao diện mất khung thẻ.</li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ CODE CŨ (thucphamsomot.vn — package.json dòng 6–12)</span>
+            <span>Commit 4f0de6b</span>
+          </div>
+          <pre><code>  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+<span class="hl-del">-   "build": "next build",</span>
+    "start": "next start",
+    "lint": "eslint ."
+  },</code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ CODE MỚI (thucphamsomot-web.vercel.app — package.json dòng 6–12)</span>
+            <span>Commit 31b400b</span>
+          </div>
+          <pre><code>  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+<span class="hl-add">+   "build": "rm -rf .next/cache && next build",</span>
+    "start": "next start",
+    "lint": "eslint ."
+  },</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 02: APP/LAYOUT.TSX
+         =================================================================== -->
+    <section class="module-section" id="diff-2">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 02</span>
+          <h2>Bọc Provider Chuyển Cảnh Danh Mục &amp; Chuyển Trang Lớn (<code>app/layout.tsx</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>app/layout.tsx</code> tại <strong>dòng 19–20</strong> (thêm import) và <strong>dòng 60–81</strong> (bọc <code>&lt;CategoryTransitionProvider&gt;</code> và <code>&lt;MajorPageTransition&gt;</code> quanh <code>{children}</code>).</li>
+          <li><span class="action-tag action-tag--add">THÊM MỚI</span> Script <code>EXTENSION_ATTR_CLEANUP_SCRIPT</code> ở <code>&lt;head&gt;</code> để gỡ các attribute <code>bis_skin_checked</code> do extension trình duyệt chèn vào gây lỗi React Hydration.</li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ CODE CŨ (thucphamsomot.vn — app/layout.tsx dòng 55–72)</span>
+            <span>Commit 4f0de6b</span>
+          </div>
+          <pre><code>export default function RootLayout({ children }: Readonly&lt;{ children: React.ReactNode }&gt;) {
+  return (
+<span class="hl-del">-   &lt;html lang="vi"&gt;</span>
+      &lt;head&gt;
+        &lt;link rel="preconnect" href="https://www.googletagmanager.com" /&gt;
+        &lt;link rel="preconnect" href="https://wsrv.nl" /&gt;
+      &lt;/head&gt;
+<span class="hl-del">-     &lt;body&gt;</span>
+        &lt;GoogleAdsTag /&gt;
+        &lt;MetaPixel /&gt;
+        &lt;CustomerSessionProvider&gt;
+          &lt;CartProvider&gt;
+            &lt;SeoJsonLd /&gt;
+<span class="hl-del">-           &lt;SiteHeader /&gt;</span>
+<span class="hl-del">-           {children}</span>
+            &lt;CompanyProfileWidget /&gt;
+            &lt;SocialWidget /&gt;
+            &lt;SiteFooter /&gt;</code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ CODE MỚI (thucphamsomot-web.vercel.app — app/layout.tsx dòng 57–83)</span>
+            <span>Commit 31b400b</span>
+          </div>
+          <pre><code><span class="hl-add">+ import { MajorPageTransition } from "@/components/b2b/major-page-transition";</span>
+<span class="hl-add">+ import { CategoryTransitionProvider } from "@/components/b2b/category-transition-provider";</span>
+
+export default function RootLayout({ children }: Readonly&lt;{ children: React.ReactNode }&gt;) {
+  return (
+<span class="hl-add">+   &lt;html lang="vi" suppressHydrationWarning&gt;</span>
+      &lt;head&gt;
+<span class="hl-add">+       &lt;script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: EXTENSION_ATTR_CLEANUP_SCRIPT }} /&gt;</span>
+        &lt;link rel="preconnect" href="https://www.googletagmanager.com" /&gt;
+        &lt;link rel="preconnect" href="https://wsrv.nl" /&gt;
+      &lt;/head&gt;
+<span class="hl-add">+     &lt;body suppressHydrationWarning&gt;</span>
+        &lt;GoogleAdsTag /&gt;
+        &lt;MetaPixel /&gt;
+        &lt;CustomerSessionProvider&gt;
+          &lt;CartProvider&gt;
+            &lt;SeoJsonLd /&gt;
+<span class="hl-add">+           &lt;CategoryTransitionProvider&gt;</span>
+<span class="hl-add">+             &lt;SiteHeader /&gt;</span>
+<span class="hl-add">+             &lt;MajorPageTransition&gt;{children}&lt;/MajorPageTransition&gt;</span>
+<span class="hl-add">+           &lt;/CategoryTransitionProvider&gt;</span>
+            &lt;CompanyProfileWidget /&gt;
+            &lt;SocialWidget /&gt;
+            &lt;SiteFooter /&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 03: APP/PAGE.TSX
+         =================================================================== -->
+    <section class="module-section" id="diff-3">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 03</span>
+          <h2>Cấu Trúc Trang Chủ <code>app/page.tsx</code>: Thêm <code>HomeIntroLoader</code> &amp; Tách 6 Section Vào <code>home-sections.tsx</code></h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>app/page.tsx</code> (rút gọn từ 245 dòng xuống còn <strong>60 dòng</strong>).</li>
+          <li><span class="action-tag action-tag--add">THÊM MỚI</span> Chèn <code>&lt;HomeIntroLoader /&gt;</code> làm phần tử đầu tiên trong <code>&lt;main&gt;</code> (dòng 27).</li>
+          <li><span class="action-tag action-tag--edit">TÁCH MODULE</span> Toàn bộ các section bên dưới <code>&lt;B2BCatalog /&gt;</code> được chuyển sang file mới <code>components/b2b/home-sections.tsx</code>.</li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ CODE CŨ (thucphamsomot.vn — app/page.tsx)</span>
+            <span>245 dòng inline</span>
+          </div>
+          <pre><code>export default function HomePage() {
+  return (
+    &lt;main&gt;
+      {/* Không có HomeIntroLoader */}
+      &lt;B2BHeroSection /&gt;
+      &lt;PartnerRibbon /&gt;
+      &lt;TrustPillars /&gt;
+      &lt;B2BCatalog /&gt;
+
+<span class="hl-del">-     {/* 5. INDUSTRIES viết inline 40 dòng */}</span>
+<span class="hl-del">-     {/* 6. SERVICE AREAS viết inline 35 dòng */}</span>
+<span class="hl-del">-     {/* 7. PROCESS &amp; CERTIFICATIONS viết inline 65 dòng */}</span>
+<span class="hl-del">-     {/* 8. LEAD CAPTURE &lt;LeadCaptureSection /&gt; */}</span>
+<span class="hl-del">-     {/* 9. FINAL CTA BAND viết inline 25 dòng */}</span>
+    &lt;/main&gt;
+  );
+}</code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ CODE MỚI (thucphamsomot-web.vercel.app — app/page.tsx dòng 1–60)</span>
+            <span>60 dòng</span>
+          </div>
+          <pre><code><span class="hl-add">+ import { HomeIntroLoader } from "@/components/b2b/home-intro-loader";</span>
+import { B2BHeroSection } from "@/components/b2b/hero-section";
+import { PartnerRibbon } from "@/components/b2b/partner-ribbon";
+import { TrustPillars } from "@/components/b2b/trust-pillars";
+import { B2BCatalog } from "@/components/b2b/catalog-section";
+<span class="hl-add">+ import {</span>
+<span class="hl-add">+   ColdChainDispatchSection,</span>
+<span class="hl-add">+   FinalCtaBandSection,</span>
+<span class="hl-add">+   HomeFaqSection,</span>
+<span class="hl-add">+   IndustriesShowcaseSection,</span>
+<span class="hl-add">+   KitchenKnowledgeSection,</span>
+<span class="hl-add">+   ProcessCertificationsSection,</span>
+<span class="hl-add">+ } from "@/components/b2b/home-sections";</span>
+
+export default function HomePage() {
+  return (
+    &lt;main&gt;
+<span class="hl-add">+     &lt;HomeIntroLoader /&gt;</span>
+      &lt;B2BHeroSection /&gt;
+      &lt;PartnerRibbon /&gt;
+      &lt;TrustPillars /&gt;
+      &lt;B2BCatalog /&gt;
+<span class="hl-add">+     &lt;IndustriesShowcaseSection /&gt;</span>
+<span class="hl-add">+     &lt;ColdChainDispatchSection /&gt;</span>
+<span class="hl-add">+     &lt;ProcessCertificationsSection /&gt;</span>
+<span class="hl-add">+     &lt;KitchenKnowledgeSection /&gt;</span>
+<span class="hl-add">+     &lt;HomeFaqSection /&gt;</span>
+<span class="hl-add">+     &lt;FinalCtaBandSection /&gt;</span>
+    &lt;/main&gt;
+  );
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 04: TRUST PILLARS (VÌ SAO KHÁCH HÀNG CHỌN TPS1?)
+         =================================================================== -->
+    <section class="module-section" id="diff-4">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 04</span>
+          <h2>Section "Vì Sao Khách Hàng Chọn TPS1?": Lưới 3×2 Nổi Khối, Chuẩn Casing &amp; Highlight Từ Khóa (<code>trust-pillars.tsx</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu? (Đã cập nhật theo Commit fb8a49e)</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>components/b2b/trust-pillars.tsx</code> (toàn bộ <strong>dòng 1 – 184</strong>):
+            <ul>
+              <li>Chuyển sang hệ thống class chuẩn <code>.b2b-pillars-head</code>, <code>.b2b-pillars-grid</code>, <code>.b2b-pillar-card b2b-pillar-card--tone-${1..6}</code> và đặt <strong>Icon nằm phía trên tiêu đề <code>h3</code></strong>.</li>
+              <li><strong>Cập nhật mới:</strong> Đổi kiểu <code>desc</code> từ <code>string</code> sang <code>ReactNode</code> để nhấn mạnh các cụm từ quan trọng bằng <code>&lt;strong className="tps1-key-hl"&gt;</code> ở cả bản Tiếng Việt và Tiếng Anh.</li>
+              <li><strong>Cập nhật mới:</strong> Xóa bỏ toàn bộ ký tự <code>\u00A0</code> (hard non-breaking space) trong tiêu đề <code>"Giao hàng theo lịch của bếp"</code> để trình duyệt không ép co chữ gây biến dạng dấu <code>ế</code> và <code>ủ</code>.</li>
+            </ul>
+          </li>
+          <li><span class="action-tag action-tag--edit">SỬA CSS</span> <code>app/globals.css</code> tại <strong>dòng 13286 – 13520</strong> và <strong>Section 22 (dòng 19576–19630)</strong>: Tăng viền <code>1.5px solid rgba(15,111,75,0.18)</code>, bóng đổ 3 lớp, tiêu đề <code>.b2b-pillar-card__title</code> dùng <code>font-weight: 700 !important; line-height: 1.36 !important;</code>.</li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ CODE CŨ (thucphamsomot.vn — trust-pillars.tsx &amp; globals.css)</span>
+            <span>Thẻ bị chìm, thiếu highlight từ khóa, nối cứng \u00A0</span>
+          </div>
+          <pre><code><span class="hl-comment">// 1. JSX &amp; Data cũ trong components/b2b/trust-pillars.tsx:</span>
+<span class="hl-del">- title: "Giao hàng theo lịch của\u00A0bếp",</span>
+<span class="hl-del">- desc: "Khách hàng có thể đặt lịch giao theo ca, theo ngày hoặc theo tuần...",</span>
+&lt;div
+  key={p.title}
+  className="b2b-pillar-card"
+  style={{
+    padding: "30px 28px",
+<span class="hl-del">-   border: "1px solid rgba(15, 111, 75, 0.12)",</span>
+<span class="hl-del">-   boxShadow: "0 8px 30px rgba(0, 0, 0, 0.03)",</span>
+  }}
+&gt;
+  &lt;div style={{ display: "flex", alignItems: "center", gap: "16px" }}&gt;
+    &lt;div className="b2b-pillar-icon"&gt;&lt;Icon size={28} /&gt;&lt;/div&gt;
+    &lt;h3&gt;{p.title}&lt;/h3&gt;
+  &lt;/div&gt;
+  &lt;p&gt;{p.desc}&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ CODE MỚI NHẤT (Commit fb8a49e — trust-pillars.tsx &amp; globals.css)</span>
+            <span>Lưới 3×2 nổi khối + Highlight .tps1-key-hl + Chuẩn dấu Tiếng Việt</span>
+          </div>
+          <pre><code><span class="hl-comment">// 1. Data &amp; JSX mới trong components/b2b/trust-pillars.tsx (dòng 35–180):</span>
+<span class="hl-add">+ title: "Giao hàng theo lịch của bếp", // Không dùng \u00A0</span>
+<span class="hl-add">+ desc: (</span>
+<span class="hl-add">+   &lt;&gt;</span>
+<span class="hl-add">+     Khách hàng có thể &lt;strong className="tps1-key-hl"&gt;đặt lịch giao theo ca, theo ngày hoặc theo tuần&lt;/strong&gt; để phù hợp với giờ chuẩn bị và nấu ăn. Thực phẩm được vận chuyển bằng &lt;strong className="tps1-key-hl"&gt;xe lạnh chuyên dụng&lt;/strong&gt; để giữ độ tươi khi đến bếp.</span>
+<span class="hl-add">+   &lt;/&gt;</span>
+<span class="hl-add">+ ),</span>
+&lt;article key={`pillar-tone-${pillar.tone}`} className={`b2b-pillar-card b2b-pillar-card--tone-${pillar.tone}`}&gt;
+  &lt;div className="b2b-pillar-icon" aria-hidden="true"&gt;&lt;Icon size={25} strokeWidth={2} /&gt;&lt;/div&gt;
+  &lt;h3 className="b2b-pillar-card__title"&gt;{pillar.title}&lt;/h3&gt;
+  &lt;p className="b2b-pillar-card__desc"&gt;{pillar.desc}&lt;/p&gt;
+&lt;/article&gt;
+
+<span class="hl-comment">/* 2. CSS chuẩn hóa trong app/globals.css (Section 22 &amp; 23): */</span>
+<span class="hl-add">+ .b2b-pillar-card__title {</span>
+<span class="hl-add">+   font-size: clamp(1.16rem, 1.38vw, 1.32rem) !important;</span>
+<span class="hl-add">+   font-weight: 700 !important; /* Khớp đúng file woff2 700, không mất nét dấu ế/ủ */</span>
+<span class="hl-add">+   line-height: 1.36 !important;</span>
+<span class="hl-add">+   min-height: calc(1.36em * 2); /* Cân bằng ngang hàng giữa thẻ 1 dòng và 2 dòng */</span>
+<span class="hl-add">+ }</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 05: MOBILE 2-COLUMN PRODUCT GRID & EN 3,000 SKU TRANSLATION
+         =================================================================== -->
+    <section class="module-section" id="diff-5">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 05</span>
+          <h2>Trang Danh Mục Hàng Hóa (<code>/san-pham</code> &amp; <code>/en/products</code>): Mobile 2 Cột + Bộ Dịch Tự Động 3.000 SKU Sang Tiếng Anh</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu? (Đã cập nhật theo Commit fb8a49e)</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA CSS</span> <code>app/globals.css</code> tại <strong>dòng 16799 – 16812</strong> và <strong>dòng 17532 – 17610</strong>: Ép <code>.sp-grid</code> hiển thị 2 sản phẩm / hàng trên Mobile (<code>&lt;= 640px</code>).</li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>app/san-pham/products-grid.tsx</code> tại <strong>dòng 120 – 335</strong>:
+            <ul>
+              <li><strong>Bổ sung mới cho bản Tiếng Anh (<code>/en/products</code>):</strong> Thêm từ điển cụm từ ẩm thực <code>VI_FOOD_PHRASE_DICT</code> (hơn 140 cặp từ vựng nguyên liệu &amp; quy cách sơ chế), bảng đơn vị tính <code>EN_UNIT_MAP</code> (<code>Kg -&gt; kg</code>, <code>Khay -&gt; Tray</code>, <code>Gói -&gt; Pack</code>, <code>Thùng -&gt; Carton</code>, <code>Chai -&gt; Bottle</code>...), hàm <code>stripVietnameseDiacritics()</code> (chuyển tên riêng đặc sản không có trong từ điển sang chữ cái Latin không dấu sạch lỗi) và hàm <code>localizeSkuProduct(product, locale)</code>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ CODE CŨ (Mobile 1 cột &amp; /en/products hiển thị tên/đơn vị Tiếng Việt có dấu)</span>
+            <span>app/globals.css &amp; products-grid.tsx</span>
+          </div>
+          <pre><code><span class="hl-comment">/* 1. Trong app/globals.css: thiếu rule 2 cột cho mobile */</span>
+.sp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+<span class="hl-comment">// 2. Trong app/san-pham/products-grid.tsx:</span>
+<span class="hl-del">- // Render trực tiếp product.name và product.unit bằng tiếng Việt ngay cả khi locale === "en"</span>
+<span class="hl-del">- sizes="(max-width: 480px) 100vw, (max-width: 720px) 50vw..."</span></code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ CODE MỚI NHẤT (Mobile 2 cột + Tự động dịch 3.000 SKU sang Tiếng Anh chuẩn)</span>
+            <span>app/san-pham/products-grid.tsx dòng 120–335</span>
+          </div>
+          <pre><code><span class="hl-comment">// 1. Bộ dịch tự động 3.000 SKU trong app/san-pham/products-grid.tsx:</span>
+<span class="hl-add">+ const EN_UNIT_MAP: Record&lt;string, string&gt; = {</span>
+<span class="hl-add">+   kg: "kg", goi: "Pack", tui: "Bag", khay: "Tray", hop: "Box",</span>
+<span class="hl-add">+   thung: "Carton", chai: "Bottle", can: "Jerrycan", bo: "Bunch", ...</span>
+<span class="hl-add">+ };</span>
+<span class="hl-add">+ function translateVietnameseFoodNameToEn(name: string): string {</span>
+<span class="hl-add">+   let out = ` ${name.trim()} `;</span>
+<span class="hl-add">+   for (const [viPhrase, enPhrase] of VI_FOOD_PHRASE_DICT) {</span>
+<span class="hl-add">+     out = out.replace(new RegExp(viPhrase, "gi"), ` ${enPhrase} `);</span>
+<span class="hl-add">+   }</span>
+<span class="hl-add">+   return stripVietnameseDiacritics(out).replace(/\s+/g, " ").trim();</span>
+<span class="hl-add">+ }</span>
+<span class="hl-add">+ function localizeSkuProduct(p: SkuProduct, locale: "vi" | "en"): SkuProduct {</span>
+<span class="hl-add">+   if (locale !== "en") return p;</span>
+<span class="hl-add">+   return { ...p, name: translateVietnameseFoodNameToEn(p.name), unit: translateUnitToEn(p.unit) };</span>
+<span class="hl-add">+ }</span>
+
+<span class="hl-comment">/* 2. Mobile 2 cột trong app/globals.css: */</span>
+@media (max-width: 640px) {
+<span class="hl-add">+ .sp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }</span>
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 06: 3,000 VIRTUAL SKUS IN LIB/SKU-CATALOG.TS & API ROUTE
+         =================================================================== -->
+    <section class="module-section" id="diff-6">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 06</span>
+          <h2>Hệ Thống 3.000 Dữ Liệu Ảo In-Memory (<code>lib/sku-catalog.ts</code> &amp; <code>app/api/sku-products/route.ts</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>lib/sku-catalog.ts</code>:
+            <ul>
+              <li><strong>Dòng 89 – 404:</strong> Thêm mảng <code>SEED_SPECS</code> định nghĩa 10 nhóm hàng, mỗi nhóm gồm <strong>30 tên sản phẩm gốc (<code>baseNames</code>) × 10 quy cách sơ chế (<code>prepVariants</code>)</strong>, xuất xứ, đơn vị và danh sách ảnh cutout thực tế.</li>
+              <li><strong>Dòng 406 – 456:</strong> Thêm hàm <code>buildMockCatalog3000()</code> sinh tự động đúng <strong>300 sản phẩm × 10 nhóm = 3.000 sản phẩm</strong>.</li>
+              <li><strong>Dòng 463 – 499:</strong> Thêm hàm <code>foldVietnamese()</code> và bộ chỉ mục tìm kiếm sẵn trong RAM (<code>MOCK_INDEXED_ALL</code>, <code>MOCK_INDEXED_BY_CATEGORY</code>, <code>MOCK_CATEGORY_COUNTS</code>).</li>
+              <li><strong>Dòng 505 – 553:</strong> Cập nhật <code>getSkuPage()</code> để khi chưa cấu hình biến môi trường Supabase (như trên Vercel Staging), hàm trả về đầy đủ kết quả lọc, tìm kiếm, phân trang và số đếm từng danh mục từ 3.000 sản phẩm ảo thay vì trả mảng rỗng.</li>
+            </ul>
+          </li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>app/api/sku-products/route.ts</code> tại <strong>dòng 10 – 20</strong>: Xóa đoạn chặn lỗi <code>500 Supabase not configured</code> để API luôn gọi thẳng <code>getSkuPage()</code> và trả về 3.000 SKU ảo.</li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ CODE CŨ (thucphamsomot.vn — lib/sku-catalog.ts &amp; route.ts)</span>
+            <span>Báo lỗi 500 hoặc trả mảng rỗng nếu thiếu Supabase</span>
+          </div>
+          <pre><code><span class="hl-comment">// 1. Trong app/api/sku-products/route.ts (dòng 13–15):</span>
+<span class="hl-del">- if (!isSkuCatalogConfigured()) {</span>
+<span class="hl-del">-   return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });</span>
+<span class="hl-del">- }</span>
+
+<span class="hl-comment">// 2. Trong lib/sku-catalog.ts (dòng 94–97 cũ):</span>
+export async function getSkuPage(params): Promise&lt;SkuPage&gt; {
+  const url = process.env.SUPABASE_PRODUCTS_URL || "";
+  const key = process.env.SUPABASE_PRODUCTS_ANON_KEY || "";
+  if (!url || !key) {
+<span class="hl-del">-   return { products: [], totalCount: 0, totalPages: 1, page: 1, pageSize: SKU_PAGE_SIZE };</span>
+  }
+  // ...
+}</code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ CODE MỚI (thucphamsomot-web.vercel.app — lib/sku-catalog.ts &amp; route.ts)</span>
+            <span>Tự động phục vụ 3.000 SKU ảo trên Vercel</span>
+          </div>
+          <pre><code><span class="hl-comment">// 1. Trong app/api/sku-products/route.ts (dòng 11–18):</span>
+  try {
+    const data = await getSkuPage({ group: category, q, page });
+    return NextResponse.json(data, {
+<span class="hl-add">+     headers: isSkuCatalogConfigured()</span>
+<span class="hl-add">+       ? { 'Cache-Control': 's-maxage=60, stale-while-revalidate=300' }</span>
+<span class="hl-add">+       : { 'Cache-Control': 'no-store' },</span>
+    });
+  }
+
+<span class="hl-comment">// 2. Trong lib/sku-catalog.ts (dòng 430–454 &amp; 514–552):</span>
+<span class="hl-add">+ // Điền đủ 300 sản phẩm cho mỗi nhóm trong 10 nhóm => 3.000 sản phẩm</span>
+<span class="hl-add">+ for (const spec of SEED_SPECS) {</span>
+<span class="hl-add">+   const existing = countByCat.get(spec.slug) ?? 0;</span>
+<span class="hl-add">+   const needed = Math.max(0, 300 - existing);</span>
+<span class="hl-add">+   for (let i = 0; i &lt; needed; i += 1) { ... }</span>
+<span class="hl-add">+ }</span>
+  if (!url || !key) {
+<span class="hl-add">+   // Lọc theo group + tìm kiếm tiếng Việt không dấu + cắt trang 24 sản phẩm/trang</span>
+<span class="hl-add">+   return { products, totalCount, totalPages, page: safePage, pageSize: SKU_PAGE_SIZE, categoryCounts: MOCK_CATEGORY_COUNTS };</span>
+  }</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 07: SITE-HEADER.TSX & LIB/SITE.TS (MOBILE SCROLL JUMP FIX, 2-TAP CATALOG, 6-ITEM EN NAV & 1-TO-1 LOCALE SWITCHER)
+         =================================================================== -->
+    <section class="module-section" id="diff-7">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 07</span>
+          <h2>Header, Mobile Drawer &amp; 1-to-1 Locale Switcher (<code>components/site-header.tsx</code>, <code>lib/site.ts</code> &amp; <code>components/b2b/top-bar.tsx</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu? (Đã cập nhật theo Commit fb8a49e)</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>lib/site.ts</code> (dòng 35 – 66): Đồng bộ mảng <code>navItems.en</code> đủ 6 mục tương ứng 1-1 với bản Tiếng Việt: <code>About Us (/en/about)</code>, <code>Product Catalog (/en/products)</code>, <code>Industries (/en/ingredients)</code>, <code>Delivery Process (/en/delivery)</code>, <code>Blog (/en/news)</code>, <code>Contact (/en/contact)</code>.</li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>components/site-header.tsx</code>:
+            <ul>
+              <li><strong>Dòng 189 – 286:</strong> Nâng cấp hàm <code>swapLocalePath(pathname, nextLocale)</code> ánh xạ chính xác từng trang con giữa Tiếng Việt và Tiếng Anh (<code>/gioi-thieu &lt;-&gt; /en/about</code>, <code>/san-pham &lt;-&gt; /en/products</code>, <code>/nganh-hang &lt;-&gt; /en/ingredients</code>, <code>/quy-trinh &lt;-&gt; /en/delivery</code>, <code>/blog &lt;-&gt; /en/news</code>, <code>/lien-he &lt;-&gt; /en/contact</code>).</li>
+              <li><strong>Dòng 305 – 353:</strong> Đồng bộ chiều cao thực tế Header qua CSS variables <code>--site-header-height</code> &amp; <code>--site-header-bottom</code>, không gán <code>document.body.style.overflow = "hidden"</code> khi mở menu Mobile để tránh trình duyệt nhảy scroll về <code>y = 0</code>.</li>
+              <li><strong>Dòng 765 – 797:</strong> Sửa sự kiện <code>onClick</code> của mục <strong>"Danh Mục Hàng Hóa" / "Product Catalog"</strong> trong Mobile Drawer: chạm lần 1 mở 10 danh mục con, chạm lần 2 chuyển sang trang danh mục.</li>
+            </ul>
+          </li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>components/b2b/top-bar.tsx</code>: Tự động nhận diện <code>pathname.startsWith("/en")</code> để dịch toàn bộ dải băng thông báo xanh trên cùng sang Tiếng Anh.</li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ CODE CŨ (thucphamsomot.vn — site-header.tsx &amp; lib/site.ts)</span>
+            <span>Nhảy về đầu trang, thiếu mục Industries ở EN, đổi ngôn ngữ bị lệch trang</span>
+          </div>
+          <pre><code><span class="hl-comment">// 1. Khi bấm vào chữ "Danh Mục Hàng Hóa" trên Mobile:</span>
+&lt;Link
+  href={item.href}
+  className="site-mobile-nav__link"
+<span class="hl-del">- onClick={() =&gt; { setMenuOpen(false); setMobileCatalogOpen(false); }}</span>
+&gt;
+  {item.label}
+&lt;/Link&gt;
+
+<span class="hl-comment">// 2. navItems.en cũ trong lib/site.ts chỉ có 5 mục (thiếu Industries /en/ingredients)</span></code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ CODE MỚI NHẤT (Commit fb8a49e — site-header.tsx &amp; lib/site.ts)</span>
+            <span>Tap 1 mở 10 danh mục con + Ánh xạ 1-1 toàn bộ 6 trang VI &lt;-&gt; EN</span>
+          </div>
+          <pre><code><span class="hl-comment">// 1. Ánh xạ 1-1 VI &lt;-&gt; EN trong components/site-header.tsx:</span>
+<span class="hl-add">+ const VI_TO_EN_MAP: Record&lt;string, string&gt; = {</span>
+<span class="hl-add">+   "/": "/en", "/gioi-thieu": "/en/about", "/san-pham": "/en/products",</span>
+<span class="hl-add">+   "/nganh-hang": "/en/ingredients", "/quy-trinh": "/en/delivery",</span>
+<span class="hl-add">+   "/blog": "/en/news", "/lien-he": "/en/contact",</span>
+<span class="hl-add">+ };</span>
+
+<span class="hl-comment">// 2. Mobile 2-Tap Accordion:</span>
+&lt;Link
+  href={item.href}
+  className="site-mobile-nav__accordion-link"
+<span class="hl-add">+ onClick={(e) =&gt; {</span>
+<span class="hl-add">+   if (!mobileCatalogOpen) {</span>
+<span class="hl-add">+     e.preventDefault(); setMobileCatalogOpen(true); return;</span>
+<span class="hl-add">+   }</span>
+<span class="hl-add">+   setMenuOpen(false); setMobileCatalogOpen(false);</span>
+<span class="hl-add">+   dispatchMajorPageTransition(item.href, pathname);</span>
+<span class="hl-add">+ }}</span>
+&gt;
+  &lt;span&gt;{item.label}&lt;/span&gt;
+&lt;/Link&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 08: HOME INTRO LOADER (MOBILE & GPU 60FPS UPGRADE)
+         =================================================================== -->
+    <section class="module-section" id="diff-8">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 08</span>
+          <h2>Hoạt Ảnh Intro Mở Trang Chủ ~3.05 Giây: Tối Ưu GPU 60fps, Pre-Decode Logo &amp; Thu Nhỏ Hiệu Ứng Tóe Hạt Trên Mobile (<code>home-intro-loader.tsx</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu? (Đã cập nhật theo Commit fb8a49e)</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--add">FILE MỚI &amp; NÂNG CẤP</span> <code>components/b2b/home-intro-loader.tsx</code> (1.360 dòng) + CSS trong <code>app/globals.css</code> (<strong>dòng 11639 – 12670 &amp; 19450 – 19574</strong>).</li>
+          <li><strong>Các cải tiến quan trọng chống đơ/lag và chống hiệu ứng tóe quá to trên điện thoại:</strong>
+            <ul>
+              <li><strong>Pre-decode Logo trên GPU trước khi chạy (<code>warmDecodeLogo()</code> dòng 210–231):</strong> Gọi <code>img.decode()</code> cho <code>/brand/logo-full.png</code> ngay khi nạp module để không bị khựng khung hình ở mốc <code>0ms–680ms</code>.</li>
+              <li><strong>Chuyển vòng cung cam <code>.tps1-intro__orange-arc</code> sang 100% GPU Compositor:</strong> Loại bỏ hoàn toàn animation <code>stroke-dashoffset</code> (vốn bắt CPU rasterize lại vector mỗi frame gây giật ở pha bung lá), thay bằng <code>transform: scale() rotate()</code> + <code>opacity</code> với <code>transform-box: fill-box; transform-origin: center;</code>.</li>
+              <li><strong>Xóa vầng đen đục quanh các hạt sáng <code>.tps1-intro__spark</code>:</strong> Bỏ <code>box-shadow: 0 2px 6px rgba(15, 111, 75, 0.25)</code> khiến hạt vàng/cam nhìn như có quầng xám bẩn trên nền trắng, thay bằng <code>filter: brightness(1.04)</code> trong trẻo.</li>
+              <li><strong>Thu nhỏ bán kính tóe lá &amp; hạt sáng (<code>CANOPY_PARTICLES</code>) trên Mobile:</strong> Nhân tọa độ <code>tx, ty, peakY</code> và kích thước hạt với hệ số <code>canopyScale = isMobile ? Number(Math.max(0.48, Math.min(0.62, (stageW / 284) * 0.92)).toFixed(3)) : 1</code> (~<code>0.54x</code> trên điện thoại), đồng thời giảm <code>.tps1-intro__seed-pulse</code> trên mobile từ <code>150px</code> xuống <code>96px</code> để hiệu ứng tóe vừa vặn trong khung tròn Mobile.</li>
+              <li><strong>Cân đối 2 dải ảnh chạy ngang trên/dưới Mobile:</strong> Đặt <code>.tps1-intro__wall-card { width: clamp(124px, 34vw, 148px); height: calc(100% - 4px); border-radius: 12px; }</code> để ảnh ngang tỷ lệ ~16:10 sắc nét, không bị bó vuông nhỏ.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="code-box code-box--full">
+        <div class="code-box__header">
+          <span>📄 ĐOẠN CODE TRỌNG TÂM TRONG components/b2b/home-intro-loader.tsx &amp; app/globals.css</span>
+          <span>Pre-Decode GPU + Mobile Canopy Scale (0.54x) + Pure GPU Transform Arc</span>
+        </div>
+        <pre><code>// 1. Pre-decode ảnh Logo vào GPU memory trước khi chạy timeline (home-intro-loader.tsx):
+function warmDecodeLogo(): void {
+  if (typeof window === "undefined") return;
+  const img = new window.Image();
+  img.decoding = "async";
+  img.src = "/brand/logo-full.png";
+  if (typeof img.decode === "function") img.decode().catch(() =&gt; {});
+}
+
+// 2. Thu nhỏ bán kính &amp; kích thước hạt tóe (CANOPY_PARTICLES) trên điện thoại (~0.54x):
+const canopyScale = m.isMobile
+  ? Number(Math.max(0.48, Math.min(0.62, (m.stageW / 284) * 0.92)).toFixed(3))
+  : 1;
+// Áp dụng cho từng particle:
+"--tx": `${Math.round(p.tx * canopyScale)}px`,
+"--ty": `${Math.round(p.ty * canopyScale)}px`,
+"--peak-y": `${Math.round(p.peakY * canopyScale)}px`,
+"--sz": `${Math.max(4, Math.round(p.size * (m.isMobile ? canopyScale * 1.08 : 1)))}px`,
+
+/* 3. Vòng cung cam chạy thuần GPU Compositor (không dùng stroke-dashoffset) trong app/globals.css: */
+.tps1-intro__orange-arc {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: tps1OrangeArcGpu 680ms cubic-bezier(0.22, 1, 0.36, 1) 40ms both;
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 09: CATEGORY TRANSITION PROVIDER (NEW FILE)
+         =================================================================== -->
+    <section class="module-section" id="diff-9">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 09</span>
+          <h2>Hoạt Ảnh Chuyển Trang Danh Mục Thích Ứng Độ Zoom (<code>category-transition-provider.tsx</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--add">FILE MỚI</span> <code>components/b2b/category-transition-provider.tsx</code> (1.487 dòng) và <code>lib/category-transition-config.ts</code> (688 dòng).</li>
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>app/danh-muc/[slug]/page.tsx</code> (dòng 36–67): Bọc <code>&lt;SkuCatalogList&gt;</code> trong <code>&lt;Suspense&gt;</code> và gắn <code>&lt;TransitionReady expectedPath={`/danh-muc/${itemSlug}`} /&gt;</code> để báo cho màn hình chuyển cảnh biết khi dữ liệu trang đích đã tải xong.</li>
+        </ul>
+      </div>
+
+      <div class="code-box code-box--full">
+        <div class="code-box__header">
+          <span>📄 ĐOẠN CODE TRỌNG TÂM TRONG components/b2b/category-transition-provider.tsx (Dòng 272–292)</span>
+          <span>Bảng mật độ vật thể theo mức Zoom trình duyệt (50% -&gt; 150%)</span>
+        </div>
+        <pre><code>function getCategoryZoomDensityProfile(zoomPct: number, isMobile: boolean): ZoomDensityProfile {
+  if (isMobile) {
+    return { front: 2, mid: 4, back: 2, sizeScale: 1.0, centerScale: 1.0 }; // 8 vật thể
+  }
+  if (zoomPct &gt;= 135) {
+    return { front: 3, mid: 3, back: 2, sizeScale: 0.8, centerScale: 0.92 }; // Zoom 150%: 8 vật thể
+  }
+  if (zoomPct &gt;= 112) {
+    return { front: 3, mid: 4, back: 3, sizeScale: 0.9, centerScale: 0.96 }; // Zoom 125%: 10 vật thể
+  }
+  if (zoomPct &gt;= 92) {
+    return { front: 3, mid: 5, back: 4, sizeScale: 1.0, centerScale: 1.0 }; // Zoom 100%: 12 vật thể
+  }
+  if (zoomPct &gt;= 78) {
+    return { front: 4, mid: 7, back: 5, sizeScale: 1.15, centerScale: 1.12 }; // Zoom 80%: 16 vật thể
+  }
+  if (zoomPct &gt;= 63) {
+    return { front: 4, mid: 10, back: 8, sizeScale: 1.34, centerScale: 1.28 }; // Zoom 67%: 22 vật thể
+  }
+  return { front: 6, mid: 13, back: 11, sizeScale: 1.58, centerScale: 1.48 }; // Zoom 50%: 30 vật thể
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 10, 11, 12: HERO, CATALOG BENTO, HOME SECTIONS
+         =================================================================== -->
+    <section class="module-section" id="diff-10">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 10, 11 &amp; 12</span>
+          <h2>Hero 2 Cột + Catalog Bento 12 Cột (Chống Giật Hitbox) + 6 Section Trang Chủ Song Ngữ Trong <code>home-sections.tsx</code></h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu? (Đã cập nhật theo Commit fb8a49e)</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">THAY ĐỔI 10</span> <code>components/b2b/hero-section.tsx</code> (dòng 1 – 695): Chuyển Hero sang Grid 2 cột (<code>.b2b-hero-inner</code>): Cột trái chứa tiêu đề + Slogan vàng + 3 Pill cam kết + 4 ô thống kê Count-Up 2×2; Cột phải chứa Form Yêu Cầu Báo Giá Nhanh. Hỗ trợ đầy đủ <code>locale?: "vi" | "en"</code> và không dùng ký tự <code>\u00A0</code> trong tiêu đề.</li>
+          <li id="diff-11"><span class="action-tag action-tag--edit">THAY ĐỔI 11</span> <code>components/b2b/catalog-section.tsx</code> (dòng 1 – 378): Nâng cấp lưới 5 nhóm hàng thành Panoramic Bento 12 cột (2 thẻ trên <code>span 6</code>, 3 thẻ dưới <code>span 4</code>) + 10 chip nhanh KiotViet. <strong>Cập nhật mới:</strong> Bọc mỗi thẻ trong wrapper tĩnh <code>&lt;div className="b2b-category-card-hitbox"&gt;</code> để lắng nghe sự kiện chuột <code>useSmoothTilt</code> trên khung tĩnh, triệt tiêu hoàn toàn lỗi rung/giật thẻ khi rê chuột ở mép dưới.</li>
+          <li id="diff-12"><span class="action-tag action-tag--add">THAY ĐỔI 12</span> <code>components/b2b/home-sections.tsx</code> (dòng 1 – 740): Chứa 6 section của Trang chủ (<code>IndustriesShowcaseSection</code>, <code>ColdChainDispatchSection</code>, <code>ProcessCertificationsSection</code>, <code>KitchenKnowledgeSection</code> với đúng 4 bài cột phải cân bằng chiều cao 100%, <code>HomeFaqSection</code>, <code>FinalCtaBandSection</code>). Tất cả 6 component đều nhận prop <code>locale?: "vi" | "en"</code> để dùng chung cho cả <code>app/page.tsx</code> và <code>app/en/page.tsx</code>.</li>
+        </ul>
+      </div>
+
+      <div class="diff-grid">
+        <div class="code-box code-box--old">
+          <div class="code-box__header">
+            <span>❌ TRƯỚC KHI SỬA (useSmoothTilt gắn trực tiếp lên thẻ đang dịch chuyển &amp; cột phải 5 bài)</span>
+            <span>catalog-section.tsx &amp; home-sections.tsx</span>
+          </div>
+          <pre><code>// 1. Trong catalog-section.tsx: gắn onMouseMove lên chính thẻ đang translate3d gây giật ở mép dưới
+&lt;CategoryLink className="b2b-category-card" onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}&gt;
+
+// 2. Trong home-sections.tsx: chỉ hỗ trợ Tiếng Việt và cột phải có 5 bài
+export function KitchenKnowledgeSection() {
+  const [featured, ...restArticles] = knowledgeArticles;
+<span class="hl-del">- const streamArticles = restArticles; // 5 bài viết làm cột phải bị dài thừa</span></code></pre>
+        </div>
+
+        <div class="code-box code-box--new">
+          <div class="code-box__header">
+            <span>✅ SAU KHI SỬA (Static Hitbox chống giật + Hỗ trợ locale="vi"|"en" + Cân bằng 4 bài)</span>
+            <span>catalog-section.tsx &amp; home-sections.tsx</span>
+          </div>
+          <pre><code>// 1. Trong components/b2b/catalog-section.tsx (dòng 150–185):
+<span class="hl-add">+ &lt;div className="b2b-category-card-hitbox" onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}&gt;</span>
+<span class="hl-add">+   &lt;CategoryLink ref={cardRef} className="b2b-category-card"&gt;...&lt;/CategoryLink&gt;</span>
+<span class="hl-add">+ &lt;/div&gt;</span>
+
+// 2. Trong components/b2b/home-sections.tsx:
+<span class="hl-add">+ export function KitchenKnowledgeSection({ locale = "vi" }: { locale?: "vi" | "en" }) {</span>
+  const [featured, ...restArticles] = getLocalizedArticles(locale);
+<span class="hl-add">+ const streamArticles = restArticles.slice(0, 4); // Giữ đúng 4 bài cân bằng chiều cao</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 13: MAJOR PAGE TRANSITION (IN-PLACE CIRCULAR DISPERSE & /EN/INGREDIENTS)
+         =================================================================== -->
+    <section class="module-section" id="diff-13">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 13 [MỚI]</span>
+          <h2>Hoạt Ảnh Chuyển Trang Lớn: Tan Biến Tại Chỗ Từ Tâm Ra 4 Góc (Circular Radial Disperse) &amp; Bổ Sung <code>/en/ingredients</code> (<code>major-page-transition.tsx</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA FILE</span> <code>components/b2b/major-page-transition.tsx</code> (toàn bộ <strong>dòng 1 – 668</strong>):
+            <ul>
+              <li><strong>Bổ sung route <code>"/en/ingredients"</code> vào <code>MAJOR_NAV_PAGES</code> (dòng 69 – 74):</strong> Đảm bảo toàn bộ 12 đường dẫn điều hướng chính ở cả Tiếng Việt (<code>/</code>, <code>/gioi-thieu</code>, <code>/san-pham</code>, <code>/nganh-hang</code>, <code>/quy-trinh</code>, <code>/blog</code>, <code>/lien-he</code>) và Tiếng Anh (<code>/en</code>, <code>/en/about</code>, <code>/en/products</code>, <code>/en/ingredients</code>, <code>/en/delivery</code>, <code>/en/news</code>, <code>/en/contact</code>) đều kích hoạt hoạt ảnh chuyển trang đồng nhất.</li>
+              <li><strong>Cơ chế mở màn Tan Tại Chỗ (In-Place Circular Disperse — dòng 320 – 455):</strong> Loại bỏ hoàn toàn kiểu màn trập quét ngang từ trái sang phải và bỏ hiệu ứng kéo văng thực phẩm ra rìa màn hình. Khi trang đích đã sẵn sàng (pha <code>exit</code>, <code>EXIT_MS = 640ms</code>):
+                <ol>
+                  <li><strong>Khung chữ trung tâm (<code>.tps1-mpt__center</code>) biến mất đầu tiên</strong> trong <code>0ms – 170ms</code> để mở vùng nhìn ở tâm.</li>
+                  <li><strong>Màn nền xanh mờ (<code>.tps1-mpt__curtain</code>) tan ngay lập tức</strong> trong <code>0ms – 150ms</code> để lộ trực tiếp giao diện trang mới đang nằm ngay bên dưới.</li>
+                  <li><strong>Các thực phẩm đã lấp đầy màn hình giữ nguyên tọa độ <code>(curX = p.x, curY = p.y)</code> và tan biến tại chỗ</strong> (thu nhỏ <code>scale</code> + hạ <code>opacity</code> về <code>0</code>) theo làn sóng hình tròn lan từ tâm màn hình <code>(vw/2, vh/2)</code> ra 4 góc (<code>exitDelay = 0.06 + radialNorm * 0.56</code>).</li>
+                </ol>
+              </li>
+              <li><strong>Trì hoãn nạp ảnh cutout sau khi xong Intro (dòng 485 – 515):</strong> Chỉ gọi <code>preloadAllFoodCutouts()</code> sau khi sự kiện <code>tps1-intro-finished</code> phát ra (hoặc sau <code>3400ms</code>), giúp 27 tác vụ bake bóng đổ Canvas không tranh chấp CPU/GPU với Logo Intro lúc mới vào trang chủ.</li>
+            </ul>
+          </li>
+          <li><span class="action-tag action-tag--add">FILE MỚI</span> <code>lib/food-packing-engine.ts</code> (392 dòng): Thuật toán 2D Collision-Free Polygon Packing lấp kín màn hình bằng các ảnh thực phẩm tách nền không đè lên nhau, dựa trên đa giác biên thực tế (Polygon Hitbox).</li>
+        </ul>
+      </div>
+
+      <div class="code-box code-box--full">
+        <div class="code-box__header">
+          <span>📄 ĐOẠN CODE TRỌNG TÂM TRONG components/b2b/major-page-transition.tsx (Dòng 69–75 &amp; 345–398)</span>
+          <span>Cấu hình /en/ingredients + Thuật toán Tan Tại Chỗ Từ Tâm Ra 4 Góc (In-Place Radial Disperse)</span>
+        </div>
+        <pre><code>// 1. Đầy đủ các trang điều hướng chính VI &amp; EN (bao gồm /en/ingredients):
+  "/en/ingredients": {
+    eyebrow: "TAILORED FOR EVERY KITCHEN MODEL",
+    title: "Industries We Serve",
+    subtitle: "Restaurants · Hotels · Canteens · Schools · Industrial Catering",
+    accent: "#10b981",
+  },
+
+// 2. Pha EXIT (640ms): Thực phẩm đứng yên tại chỗ (curX = p.x, curY = p.y) và tan theo bán kính từ tâm ra 4 góc:
+const dxCenter = p.x - halfW;
+const dyCenter = p.y - halfH;
+const distFromCenter = Math.hypot(dxCenter, dyCenter);
+const radialNorm = Math.min(1, distFromCenter / maxCornerRadius); // 0 tại tâm -> 1 tại 4 góc
+const exitDelay = 0.06 + radialNorm * 0.56;
+const exitSpan = 0.34;
+const rawExit = clamp01((progress - exitDelay) / exitSpan);
+const ep = easeInOutCubic(rawExit);
+
+curX = p.x; // Giữ nguyên vị trí X (không kéo văng ra ngoài)
+curY = p.y; // Giữ nguyên vị trí Y
+curRot = p.rotation + p.spinIn * 0.08 * ep;
+curScale = Math.max(0.02, 1 - ep * 0.88);
+alpha = clamp01(1 - ep * 1.08);</code></pre>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 14: 7 MANUAL FOOD CUTOUTS & 60 POLYGON HITBOXES
+         =================================================================== -->
+    <section class="module-section" id="diff-14">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 14 [MỚI]</span>
+          <h2>Cập Nhật 7 Ảnh Thực Phẩm Tách Nền Thủ Công &amp; Tái Tạo 60 Polygon Hitboxes (<code>lib/food-cutout-hitboxes.ts</code>)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">CẬP NHẬT 7 FILE ẢNH CUTOUT</span> Đã thay thế bằng bản tách nền thủ công sắc nét, trim sát biên alpha và đóng gói WebP/PNG chất lượng cao (<code>q=96, alphaQuality=100</code>):
+            <ul>
+              <li><code>public/images/transition-cutouts/beef-tenderloin-medallion.webp</code> (Thăn nội bò cắt khoanh)</li>
+              <li><code>public/images/transition-cutouts/pork-chop-cutlet.webp</code> (Sườn cốt lết heo)</li>
+              <li><code>public/images/transition-cutouts/pork-baby-back-ribs.webp</code> (Sườn non heo)</li>
+              <li><code>public/images/transition-cutouts/seafood-scallop-shell.webp</code> (Cồi sò điệp)</li>
+              <li><code>public/images/transition-cutouts/poultry-chicken-breast.webp</code> (Ức gà phi lê)</li>
+              <li><code>public/images/transition-cutouts/pork-tenderloin.webp</code> (Thăn chuột heo)</li>
+              <li><code>public/images/food-cutouts/fresh-avocado.png</code> (Bơ sáp tươi tách nền sạch bóng đen)</li>
+            </ul>
+          </li>
+          <li><span class="action-tag action-tag--add">FILE MỚI</span> <code>lib/food-cutout-hitboxes.ts</code> (69 dòng) &amp; <code>scripts/clean-cutouts-and-hitboxes.mjs</code>: Quét kênh alpha của toàn bộ 60 ảnh thực phẩm tách nền trong <code>/images/transition-cutouts/</code> và <code>/images/food-cutouts/</code>, tạo đa giác lồi 24 đỉnh chuẩn hóa <code>[-0.5..0.5]</code> và tỷ lệ khung hình <code>aspect = width / height</code> để thuật toán xếp hình 2D không bao giờ vẽ méo ảnh hoặc chồng lấn.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 15: VIETNAMESE TYPOGRAPHY, FONT-WEIGHT 700 DIACRITIC FIX, HIGHLIGHT & SMART JUSTIFY
+         =================================================================== -->
+    <section class="module-section" id="diff-15">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 15 [MỚI]</span>
+          <h2>Chuẩn Hóa Typography Toàn Trang: Fix Lỗi Mất Nét Dấu Tiếng Việt (<code>font-weight: 700</code>), Highlight <code>.tps1-key-hl</code> &amp; Căn Đều Thông Minh (<code>app/globals.css</code> Section 22)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA CSS</span> <code>app/globals.css</code> tại <strong>Section 22 (dòng 19576 – 20155)</strong> và chuẩn hóa văn bản trên 14 file component/trang:
+            <ul>
+              <li><strong>1. Khắc phục triệt để lỗi mất nét dấu Tiếng Việt (như chữ <code>"của bếp"</code> bị mất nét trái dấu mũ <code>ế</code> và dấu hỏi <code>ủ</code> dính thành vòng tròn):</strong> Bộ font <code>@fontsource/be-vietnam-pro</code> trong dự án chỉ nạp các file <code>.woff2</code> tới độ đậm tối đa là <strong><code>700</code></strong> (<code>400, 500, 600, 700</code>). Khi CSS cũ khai báo <code>font-weight: 800</code>, <code>850</code> hoặc <code>900</code>, trình duyệt tự động bôi đậm giả (synthetic bold / faux-bold) hoặc rơi về font dự phòng của hệ điều hành khiến các dấu phức hợp của Tiếng Việt (<code>ế, ề, ể, ễ, ệ, ủ, ẩ, ẫ, ộ</code>) bị biến dạng ở cỡ chữ vừa. Giải pháp: Chuẩn hóa toàn bộ tiêu đề <code>h1, h2, h3, h4</code> và các class tiêu đề thẻ về <strong><code>font-weight: 700 !important;</code></strong> kết hợp <code>line-height: 1.34 – 1.38</code> và xóa toàn bộ ký tự nối cứng <code>\u00A0</code> / <code>&amp;nbsp;</code>.</li>
+              <li><strong>2. Quy tắc viết hoa chuẩn câu (Sentence case):</strong> Đổi toàn bộ các nhãn/tiêu đề viết hoa lộn xộn kiểu <em>"Chuẩn Bếp Trưởng"</em>, <em>"Theo Giờ Mở Bếp"</em>, <em>"Nhà hàng, khách sạn và Tiệc cưới"</em> về đúng chuẩn câu Tiếng Việt: chỉ viết hoa chữ cái đầu câu và danh từ riêng/viết tắt (<code>TPS1, B2B, F&amp;B, VSATTP, ISO 22000, HACCP, VAT, KCN</code>).</li>
+              <li><strong>3. Highlight ý quan trọng (<code>.tps1-key-hl</code>) không làm thụt đầu dòng:</strong> Đặt <code>padding: 0; background: transparent; color: #0b5d3e; font-weight: 700; text-decoration: underline; text-decoration-color: rgba(15, 111, 75, 0.32); text-underline-offset: 4px;</code> để khi cụm từ được đánh dấu rớt xuống đầu dòng thứ 2 sẽ thẳng hàng tuyệt đối với lề trái của đoạn văn (không bao giờ dùng trong các bài viết Blog).</li>
+              <li><strong>4. Căn đều 2 bên thông minh (Smart Justify):</strong> Chỉ áp dụng <code>text-align: justify; text-align-last: left;</code> cho các cột văn bản tự sự rộng (<code>&gt;= 769px</code> như câu chuyện Về Chúng Tôi, đoạn mở đầu trang). Các thẻ card hẹp chia 2–4 cột giữ <code>text-align: left !important; text-wrap: pretty;</code> để các dòng chứa từ viết tắt dài như <code>VSATTP, ISO 22000, HACCP</code> không bị kéo giãn khoảng trắng.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="code-box code-box--full">
+        <div class="code-box__header">
+          <span>📄 ĐOẠN CODE TRỌNG TÂM TRONG app/globals.css (Section 22 — Dòng 19580–20150)</span>
+          <span>Chuẩn hóa font-weight: 700, .tps1-key-hl không padding &amp; Smart Justify</span>
+        </div>
+        <pre><code>/* 1. Khóa font-weight: 700 khớp 100% với @fontsource/be-vietnam-pro 700.woff2 (chống lỗi mất nét dấu ế, ủ): */
+h1, h2, h3, h4,
+.b2b-pillar-card__title, .nh-spotlight__stage-title, .nh-bento-card__title,
+.tps1-cine-card__title, .sp-bento-card__title, .blog-grid-card__title {
+  font-family: var(--font-display), "Be Vietnam Pro", system-ui, sans-serif !important;
+  font-weight: 700 !important;
+  font-synthesis: none;
+}
+
+/* 2. Highlight từ khóa quan trọng (.tps1-key-hl) thẳng lề trái tuyệt đối khi xuống dòng: */
+.tps1-key-hl {
+  display: inline;
+  font-weight: 700;
+  color: #0b5d3e;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+  text-decoration-color: rgba(15, 111, 75, 0.32);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+
+/* 3. Căn đều 2 bên cho khối văn bản rộng, căn trái tự nhiên cho thẻ hẹp nhiều cột: */
+@media (min-width: 769px) {
+  .tps1-about-story__prose p, .tps1-about-editorial__lead p, .blog-article-prose p {
+    text-align: justify;
+    text-align-last: left;
+  }
+}
+.b2b-pillar-card__desc, .nh-spotlight__pill-text, .nh-bento-card__desc, .sp-bento-card__desc {
+  text-align: left !important;
+  text-wrap: pretty;
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 16: HORIZONTAL CARD ROW ALIGNMENT ACROSS ALL 11 GRIDS
+         =================================================================== -->
+    <section class="module-section" id="diff-16">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 16 [MỚI]</span>
+          <h2>Cân Bằng Ngang Hàng Tuyệt Đối (Horizontal Row Alignment) Cho Toàn Bộ 11 Lưới Card Ở Cả Tiếng Việt &amp; Tiếng Anh (<code>app/globals.css</code> Section 23)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA CSS</span> <code>app/globals.css</code> tại <strong>Section 23 (dòng 20158 – 20335)</strong>:
+            <ul>
+              <li><strong>Nguyên nhân lỗi cũ:</strong> Khi các thẻ nằm chung một hàng có độ dài tiêu đề hoặc mô tả khác nhau (ví dụ thẻ <em>"Schools"</em> tiêu đề 1 dòng + mô tả 3 dòng nằm cạnh thẻ <em>"Hospitals"</em> tiêu đề 1 dòng + mô tả 2 dòng), khối nội dung dùng <code>justify-content: flex-end</code> sẽ đẩy tiêu đề của thẻ ngắn tụt thấp xuống hơn so với thẻ bên cạnh.</li>
+              <li><strong>Giải pháp đồng bộ trên toàn bộ 11 lưới thẻ (VI &amp; EN):</strong> Đặt <code>display: block !important</code> + khóa <code>min-height</code> cố định theo số dòng cho cả phần Tiêu đề (<code>h3</code>) lẫn phần Mô tả (<code>p</code>) trên màn hình <code>&gt;= 769px</code> cho tất cả 11 hệ thống card:
+                <code>.tps1-cine-card</code> (6 thẻ Ngành hàng trang chủ), <code>.b2b-pillar-card</code> (6 thẻ Vì sao chọn TPS1), <code>.b2b-category-card</code> (5 thẻ Danh mục Bento), <code>.tps1-wave-station</code> (4 trạm Quy trình trang chủ), <code>.tps1-cert-showcase</code> (3 thẻ Chứng nhận), <code>.tps1-panorama-pane</code> (4 cột Khu vực giao hàng), <code>.nh-bento-card</code> (6 thẻ trang <code>/nganh-hang</code> &amp; <code>/en/ingredients</code>), <code>.sp-bento-card</code> &amp; <code>.sp-process-step</code> (trang <code>/san-pham</code> &amp; <code>/en/products</code>), <code>.b2b-policy-card</code> (trang <code>/quy-trinh</code> &amp; <code>/en/delivery</code>), <code>.contact-commitments-grid .card</code> (trang <code>/lien-he</code> &amp; <code>/en/contact</code>), và <code>.blog-grid-card</code> (trang <code>/blog</code> &amp; <code>/en/news</code>).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="code-box code-box--full">
+        <div class="code-box__header">
+          <span>📄 ĐOẠN CODE TRỌNG TÂM TRONG app/globals.css (Section 23 — Dòng 20160–20330)</span>
+          <span>Khóa min-height tiêu đề &amp; mô tả để mọi thẻ trên cùng 1 hàng luôn thẳng tắp</span>
+        </div>
+        <pre><code>@media (min-width: 769px) {
+  /* 1. 6 Thẻ Ngành hàng trang chủ (.tps1-cine-card): */
+  .tps1-cine-card__title {
+    display: block !important;
+    line-height: 1.32 !important;
+    min-height: calc(1.32em * 1.15) !important;
+  }
+  .tps1-cine-card__desc {
+    display: block !important;
+    line-height: 1.55 !important;
+    min-height: calc(1.55em * 3) !important; /* Khóa chuẩn 3 dòng cho cả VI &amp; EN */
+  }
+
+  /* 2. 6 Thẻ Vì sao chọn TPS1 (.b2b-pillar-card): */
+  .b2b-pillar-card__title {
+    display: block !important;
+    line-height: 1.35 !important;
+    min-height: calc(1.35em * 2) !important; /* Thẻ 1 dòng và 2 dòng có đáy tiêu đề bằng nhau */
+  }
+
+  /* 3. 6 Thẻ Bento trang Ngành hàng (.nh-bento-card) &amp; Sản phẩm (.sp-bento-card): */
+  .nh-bento-card__title { min-height: calc(1.34em * 2) !important; }
+  .nh-bento-card__desc  { min-height: calc(1.58em * 3) !important; }
+  .sp-bento-card__title { min-height: calc(1.34em * 2) !important; }
+  .sp-bento-card__desc  { min-height: calc(1.58em * 3) !important; }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 17: ZERO-JITTER HOVER ARCHITECTURE
+         =================================================================== -->
+    <section class="module-section" id="diff-17">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 17 [MỚI]</span>
+          <h2>Kiến Trúc Chống Giật Chuột Khi Hover Mép Dưới Thẻ (Zero-Jitter Hover Bridge — <code>app/globals.css</code> Section 24)</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><span class="action-tag action-tag--edit">SỬA CSS</span> <code>app/globals.css</code> tại <strong>Section 24 (dòng 20337 – 20465)</strong> và <code>components/b2b/catalog-section.tsx</code>:
+            <ul>
+              <li><strong>Nguyên nhân lỗi giật liên tục:</strong> Khi người dùng đưa trỏ chuột vào sát mép dưới của một thẻ có hiệu ứng <code>:hover { transform: translateY(-5px); }</code>, ngay khoảnh khắc thẻ nhấc lên <code>5px</code>, mép dưới của thẻ rời khỏi vị trí con trỏ chuột. Trình duyệt lập tức hủy trạng thái <code>:hover</code> làm thẻ rơi xuống lại trúng con trỏ chuột, tạo ra vòng lặp <code>hover -&gt; nhấc lên -&gt; mất hover -&gt; rơi xuống</code> giật liên tục 60 lần/giây.</li>
+              <li><strong>Giải pháp 3 tầng triệt để cho toàn bộ thẻ và nút trên web:</strong>
+                <ol>
+                  <li>Tạo lớp đệm tiếp xúc vô hình <code>:hover::after { content: ""; position: absolute; left: 0; right: 0; bottom: -10px; height: 12px; background: transparent; pointer-events: auto; }</code> mở rộng xuống dưới đáy thẻ đúng bằng quãng đường thẻ nhấc lên để giữ trạng thái <code>:hover</code> ổn định tuyệt đối.</li>
+                  <li>Chuyển các thẻ có lớp ảnh nền bên trong (<code>.tps1-cine-card</code>, <code>.tps1-panorama-pane</code>, <code>.nh-bento-card</code>, <code>.blog-grid-card</code>...) sang <code>overflow: visible !important</code> ở thẻ cha để không cắt mất <code>::after</code>, đồng thời gán <code>border-radius: inherit !important; overflow: hidden !important;</code> cho lớp bọc ảnh bên trong để giữ bo góc hoàn hảo.</li>
+                  <li>Kích hoạt hiệu ứng nhấc thẻ từ phần tử bao tĩnh bên ngoài đối với các thẻ có wrapper (<code>.tps1-cine-card-wrap:hover .tps1-cine-card</code>, <code>.sp-bento-slot:hover .sp-bento-card</code>, <code>.b2b-category-card-hitbox</code>).</li>
+                </ol>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="code-box code-box--full">
+        <div class="code-box__header">
+          <span>📄 ĐOẠN CODE TRỌNG TÂM TRONG app/globals.css (Section 24 — Dòng 20340–20465)</span>
+          <span>Cầu nối Hit-Area ::after dưới đáy thẻ &amp; Static Wrapper Hover Trigger</span>
+        </div>
+        <pre><code>/* 1. Cầu nối vô hình 12px dưới đáy mọi thẻ &amp; nút có translateY khi hover: */
+.b2b-pillar-card:hover::after,
+.tps1-cine-card:hover::after,
+.tps1-wave-station:hover::after,
+.tps1-cert-showcase:hover::after,
+.tps1-panorama-pane:hover::after,
+.nh-metric-card:hover::after,
+.nh-bento-card:hover::after,
+.sp-bento-card:hover::after,
+.sp-card:hover::after,
+.b2b-policy-card:hover::after,
+.blog-grid-card:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  height: 12px;
+  background: transparent;
+  pointer-events: auto;
+}
+
+/* 2. Bắt sự kiện hover từ khung bao tĩnh để thẻ con nhấc lên không bao giờ thoát khỏi vùng trỏ chuột: */
+.tps1-cine-card-wrap:hover .tps1-cine-card {
+  transform: translateY(-5px);
+}
+.sp-bento-slot:hover .sp-bento-card {
+  transform: translateY(-3px);
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DIFF 18: 100% ENGLISH VERSION (/EN/*) PARITY WITH VIETNAMESE VERSION
+         =================================================================== -->
+    <section class="module-section" id="diff-18">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">THAY ĐỔI 18 [MỚI]</span>
+          <h2>Đồng Bộ 100% Giao Diện, Bố Cục &amp; Nội Dung Bản Tiếng Anh (<code>/en/*</code>) Giống Hệt Bản Tiếng Việt</h2>
+        </div>
+      </div>
+
+      <div class="where-box">
+        <div class="where-box__title">📍 Chỉnh ở đâu?</div>
+        <ul class="where-list">
+          <li><strong>Trước khi sửa:</strong> Các trang trong thư mục <code>app/en/*</code> dùng giao diện sơ sài cũ (<code>SectionHeading</code> đơn giản, thiếu hẳn các section mới, còn sót nhiều đoạn Tiếng Việt chưa dịch trên <code>/en/about</code>, thiếu trang <code>/en/delivery</code>, và <code>/en/ingredients</code> chưa có hoạt ảnh chuyển trang).</li>
+          <li><strong>Sau khi sửa (Đồng bộ 100% cấu trúc DOM, class CSS, hiệu ứng và dịch chuẩn thuật ngữ B2B F&amp;B sang Tiếng Anh):</strong>
+            <ul>
+              <li><span class="action-tag action-tag--edit">TRANG CHỦ EN</span> <code>app/en/page.tsx</code>: Render đủ 10 section giống hệt <code>app/page.tsx</code> với <code>locale="en"</code> (<code>HomeIntroLoader</code>, <code>B2BHeroSection</code>, <code>PartnerRibbon</code>, <code>TrustPillars</code>, <code>B2BCatalog</code>, <code>IndustriesShowcaseSection</code>, <code>ColdChainDispatchSection</code>, <code>ProcessCertificationsSection</code>, <code>KitchenKnowledgeSection</code>, <code>HomeFaqSection</code>, <code>FinalCtaBandSection</code>).</li>
+              <li><span class="action-tag action-tag--edit">VỀ CHÚNG TÔI EN</span> <code>app/en/about/page.tsx</code> &amp; <code>components/b2b/about-page-client.tsx</code>: Dùng chung component <code>&lt;AboutPageClient locale="en" /&gt;</code> (Hero 3D parallax, 4 thẻ chỉ số, Câu chuyện &amp; Cam kết của bếp, Tầm nhìn &amp; Sứ mệnh, 4 Giá trị cốt lõi, Hành trình 2017–2026, Hồ sơ pháp lý &amp; Bảo hiểm 5 tỷ VNĐ).</li>
+              <li><span class="action-tag action-tag--edit">DANH MỤC HÀNG HÓA EN</span> <code>app/en/products/page.tsx</code> &amp; <code>app/san-pham/products-grid.tsx</code>: Đầy đủ 6 phân khu như <code>/san-pham</code> + tự động dịch toàn bộ 3.000 tên sản phẩm, 10 danh mục và đơn vị tính sang Tiếng Anh chuẩn (các tên riêng đặc sản không có trong từ điển Tiếng Anh được chuyển sang chữ không dấu sạch lỗi).</li>
+              <li><span class="action-tag action-tag--edit">NGÀNH HÀNG EN</span> <code>app/en/ingredients/page.tsx</code>, <code>lib/industries-showcase.ts</code> (<code>INDUSTRY_SECTORS_EN</code>) &amp; <code>components/b2b/industry-spotlight.tsx</code>: Đồng bộ 100% bố cục với <code>/nganh-hang</code> (Hero + 4 thẻ Metric + Interactive Spotlight 6 mô hình bếp + Bento Grid 6 ngành hàng + 3 bước phối hợp + CTA Band) và đã bổ sung hoạt ảnh chuyển trang trong <code>MAJOR_NAV_PAGES["/en/ingredients"]</code>.</li>
+              <li><span class="action-tag action-tag--add">QUY TRÌNH GIAO HÀNG EN</span> <code>app/en/delivery/page.tsx</code>: Trang mới đồng bộ 100% với <code>/quy-trinh</code> (Hero + 4 thẻ SLA + Timeline 6 bước khép kín + 3 thẻ Chính sách xử lý sự cố trong 2 giờ + CTA Band).</li>
+              <li><span class="action-tag action-tag--edit">BLOG &amp; LIÊN HỆ EN</span> <code>app/en/news/page.tsx</code> (dùng <code>&lt;BlogExploreGrid locale="en" /&gt;</code>), <code>app/en/contact/page.tsx</code>, <code>components/lead-form.tsx</code> &amp; <code>components/site-footer.tsx</code>: Dịch và đồng bộ 100% với <code>/blog</code> và <code>/lien-he</code>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PHỤ LỤC: BẢNG TỔNG HỢP TOÀN BỘ FILE CODE THAY ĐỔI
+         =================================================================== -->
+    <section class="module-section" id="diff-summary">
+      <div class="module-head">
+        <div class="module-head__left">
+          <span class="module-num">BẢNG TỔNG HỢP</span>
+          <h2>Danh Sách Toàn Bộ File Code Đã Sửa &amp; Thêm Mới (Kèm Dòng Code Cụ Thể Cho AI Coder — Commit fb8a49e)</h2>
+        </div>
+      </div>
+
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Loại</th>
+              <th>Vị trí dòng (Lines)</th>
+              <th>Tóm tắt chính xác đoạn code thay đổi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>package.json</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Dòng 8</td>
+              <td>Đổi <code>"build": "next build"</code> thành <code>"build": "rm -rf .next/cache &amp;&amp; next build"</code> để xóa cache Turbopack CSS trên Vercel.</td>
+            </tr>
+            <tr>
+              <td><code>app/layout.tsx</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Dòng 19–20, 57–83</td>
+              <td>Thêm <code>EXTENSION_ATTR_CLEANUP_SCRIPT</code>, bọc <code>&lt;CategoryTransitionProvider&gt;</code> và <code>&lt;MajorPageTransition&gt;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>app/page.tsx</code> &amp; <code>app/en/page.tsx</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Dòng 1–60</td>
+              <td>Đồng bộ 100% 10 section trang chủ giữa bản Tiếng Việt và Tiếng Anh (<code>locale="en"</code>), mở màn bằng <code>&lt;HomeIntroLoader /&gt;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>components/b2b/home-intro-loader.tsx</code></td>
+              <td><span class="action-tag action-tag--add">Mới &amp; Tối ưu</span></td>
+              <td>Dòng 1–1360</td>
+              <td>Intro ~3.05s: Thêm <code>warmDecodeLogo()</code>, vòng cung cam chạy thuần GPU Compositor, xóa bóng đục <code>.tps1-intro__spark</code>, thu nhỏ hạt tóe trên Mobile (<code>0.54x</code>).</td>
+            </tr>
+            <tr>
+              <td><code>components/b2b/major-page-transition.tsx</code></td>
+              <td><span class="action-tag action-tag--add">Mới &amp; Nâng cấp</span></td>
+              <td>Dòng 1–668</td>
+              <td>Hoạt ảnh chuyển trang lớn: Khung chữ tâm tắt trước (0–170ms), nền tắt (0–150ms), thực phẩm tan tại chỗ từ tâm ra 4 góc (40–640ms); hỗ trợ đủ 12 route VI/EN gồm cả <code>/en/ingredients</code>.</td>
+            </tr>
+            <tr>
+              <td><code>lib/food-packing-engine.ts</code> &amp; <code>lib/food-cutout-hitboxes.ts</code></td>
+              <td><span class="action-tag action-tag--add">Mới</span></td>
+              <td>Dòng 1–392 &amp; 1–69</td>
+              <td>Thuật toán xếp kín thực phẩm không chồng lấn dựa trên 60 đa giác biên (24-vertex polygon hitboxes) và cập nhật 7 ảnh thực phẩm tách nền thủ công.</td>
+            </tr>
+            <tr>
+              <td><code>components/b2b/category-transition-provider.tsx</code> &amp; <code>lib/category-transition-config.ts</code></td>
+              <td><span class="action-tag action-tag--add">Mới</span></td>
+              <td>Dòng 1–1487 &amp; 1–688</td>
+              <td>Hoạt ảnh chuyển cảnh 3D cutout theo từng danh mục hàng hóa, tự động thích ứng mật độ 8–30 vật thể theo mức zoom trình duyệt (50%–150%).</td>
+            </tr>
+            <tr>
+              <td><code>components/b2b/trust-pillars.tsx</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Dòng 1–184</td>
+              <td>Lưới 6 thẻ 3×2 nổi khối, hỗ trợ song ngữ VI/EN, nhấn mạnh từ khóa bằng <code>&lt;strong className="tps1-key-hl"&gt;</code>, bỏ <code>\u00A0</code> chống lỗi dấu Tiếng Việt.</td>
+            </tr>
+            <tr>
+              <td><code>components/b2b/catalog-section.tsx</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Dòng 1–378</td>
+              <td>Lưới Bento 12 cột + 10 chip nhanh KiotViet, bọc tĩnh <code>.b2b-category-card-hitbox</code> cho <code>useSmoothTilt</code> chống giật khi hover mép dưới, hỗ trợ <code>locale="vi"|"en"</code>.</td>
+            </tr>
+            <tr>
+              <td><code>components/b2b/home-sections.tsx</code></td>
+              <td><span class="action-tag action-tag--add">Mới</span></td>
+              <td>Dòng 1–740</td>
+              <td>6 section trang chủ (Ngành hàng, Xe lạnh, Chứng nhận VSATTP/ISO 22000/HACCP, 4 bài Blog cân bằng chiều cao, FAQ, CTA Band) hỗ trợ đầy đủ <code>locale="vi"|"en"</code>.</td>
+            </tr>
+            <tr>
+              <td><code>lib/industries-showcase.ts</code> &amp; <code>components/b2b/industry-spotlight.tsx</code></td>
+              <td><span class="action-tag action-tag--add">Mới</span></td>
+              <td>Dòng 1–285 &amp; 1–195</td>
+              <td>Dữ liệu song ngữ (<code>INDUSTRY_SECTORS</code> &amp; <code>INDUSTRY_SECTORS_EN</code>) và giao diện Spotlight tương tác 6 mô hình bếp cho <code>/nganh-hang</code> và <code>/en/ingredients</code>.</td>
+            </tr>
+            <tr>
+              <td><code>components/b2b/about-page-client.tsx</code> &amp; <code>app/en/about/page.tsx</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Dòng 1–720</td>
+              <td>Đồng bộ 100% trang Về Chúng Tôi giữa <code>/gioi-thieu</code> và <code>/en/about</code> qua prop <code>locale="vi"|"en"</code>, highlight ý chính bằng <code>.tps1-key-hl</code>.</td>
+            </tr>
+            <tr>
+              <td><code>app/san-pham/products-grid.tsx</code> &amp; <code>app/en/products/page.tsx</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Dòng 120–910</td>
+              <td>Hiển thị 2 sản phẩm/hàng trên Mobile; bổ sung bộ dịch tự động 3.000 SKU (<code>VI_FOOD_PHRASE_DICT</code>, <code>EN_UNIT_MAP</code>, <code>stripVietnameseDiacritics</code>) cho <code>/en/products</code>.</td>
+            </tr>
+            <tr>
+              <td><code>app/en/ingredients/page.tsx</code>, <code>app/en/delivery/page.tsx</code>, <code>app/en/news/page.tsx</code>, <code>app/en/contact/page.tsx</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa &amp; Mới</span></td>
+              <td>Toàn bộ file</td>
+              <td>Đồng bộ 100% cấu trúc giao diện và nội dung Tiếng Anh tương ứng với <code>/nganh-hang</code>, <code>/quy-trinh</code>, <code>/blog</code> và <code>/lien-he</code>.</td>
+            </tr>
+            <tr>
+              <td><code>components/site-header.tsx</code>, <code>components/site-footer.tsx</code>, <code>components/b2b/top-bar.tsx</code>, <code>lib/site.ts</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>Toàn bộ file</td>
+              <td>Menu 6 mục song ngữ VI/EN, chuyển đổi ngôn ngữ 1-1 (<code>swapLocalePath</code>), chống nhảy scroll <code>y=0</code> trên Mobile, Mobile 2-Tap Catalog.</td>
+            </tr>
+            <tr>
+              <td><code>app/globals.css</code></td>
+              <td><span class="action-tag action-tag--edit">Sửa</span></td>
+              <td>
+                Dòng 9642–12670 (Intro &amp; Chuyển trang)<br />
+                Dòng 13286–17610 (TrustPillars &amp; /san-pham)<br />
+                Dòng 19576–20155 (Section 22: Typography &amp; Fix dấu <code>font-weight: 700</code>)<br />
+                Dòng 20158–20335 (Section 23: Cân bằng ngang hàng 11 lưới Card)<br />
+                Dòng 20337–20465 (Section 24: Chống giật chuột <code>:hover::after</code>)
+              </td>
+              <td>Toàn bộ kiến trúc CSS cho hoạt ảnh 60fps, chuẩn hóa chữ Tiếng Việt không lỗi dấu, highlight <code>.tps1-key-hl</code> không thụt dòng, cân bằng tiêu đề ngang hàng và triệt tiêu lỗi giật hover.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note-banner">
+        <strong>🔗 LINK GITHUB PUBLIC &amp; LỆNH GIT TRỰC TIẾP DÀNH CHO AI CODER:</strong><br />
+        • <strong>Repository GitHub (Đã mở Public 100%):</strong> <a href="https://github.com/AnhBaTeuTao/thucphamsomot-web" target="_blank">https://github.com/AnhBaTeuTao/thucphamsomot-web</a> (Clone URL: <code>https://github.com/AnhBaTeuTao/thucphamsomot-web.git</code>)<br />
+        • <strong>Xem toàn bộ mã nguồn nhánh <code>main</code>:</strong> <a href="https://github.com/AnhBaTeuTao/thucphamsomot-web/tree/main" target="_blank">https://github.com/AnhBaTeuTao/thucphamsomot-web/tree/main</a><br />
+        • <strong>Xem trực tiếp Commit Diff mới nhất (<code>fb8a49e</code>):</strong> <a href="https://github.com/AnhBaTeuTao/thucphamsomot-web/commit/fb8a49e199dbfd9d513267efb558dc1414931ccf" target="_blank">https://github.com/AnhBaTeuTao/thucphamsomot-web/commit/fb8a49e199dbfd9d513267efb558dc1414931ccf</a><br />
+        • <strong>Xem Commit Diff giai đoạn 1 (<code>31b400b</code>):</strong> <a href="https://github.com/AnhBaTeuTao/thucphamsomot-web/commit/31b400be0ff4e203a0efab3c6ff4f0eb506f1017" target="_blank">https://github.com/AnhBaTeuTao/thucphamsomot-web/commit/31b400be0ff4e203a0efab3c6ff4f0eb506f1017</a><br />
+        • <strong>Lệnh cho AI Coder kéo toàn bộ bản chuẩn về máy hoặc đồng bộ sang Server chính thức (<code>thucphamsomot.vn</code>):</strong><br />
+        <code>git clone https://github.com/AnhBaTeuTao/thucphamsomot-web.git</code> (hoặc trong repo hiện tại: <code>git pull https://github.com/AnhBaTeuTao/thucphamsomot-web.git main</code> rồi chạy <code>git push origin HEAD:main</code>).
+      </div>
+    </section>
+  </div>
+</body>
+</html>
