@@ -20841,32 +20841,15 @@ h4,
 }
 
 /* Khi khách hàng TẮT HIỆU ỨNG (html.tps1-fx-disabled):
-   - Ẩn tức thì màn hình Intro, màn chuyển trang lớn và chuyển cảnh danh mục
-   - Dừng các hiệu ứng cuộn băng chuyền vô tận và tắt nghiêng 3D / nhấc thẻ để máy yếu chạy nhẹ 100% */
+   Chỉ tắt 3 hoạt ảnh chuyển cảnh toàn màn hình (Logo Intro mở trang chủ,
+   Hoạt ảnh chuyển trang của các mục Menu chính, và Hoạt ảnh chuyển cảnh 10 nhóm hàng),
+   giữ nguyên 100% các hiệu ứng giao diện và tương tác khác trên trang */
 html.tps1-fx-disabled .tps1-intro,
 html.tps1-fx-disabled .tps1-mpt,
 html.tps1-fx-disabled .tps1-cat-transition {
   display: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
-}
-
-html.tps1-fx-disabled *,
-html.tps1-fx-disabled *::before,
-html.tps1-fx-disabled *::after {
-  animation-duration: 0.001ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.001ms !important;
-  scroll-behavior: auto !important;
-}
-
-html.tps1-fx-disabled .b2b-category-card,
-html.tps1-fx-disabled .tps1-cine-card,
-html.tps1-fx-disabled .b2b-pillar-card,
-html.tps1-fx-disabled .nh-bento-card,
-html.tps1-fx-disabled .sp-bento-card,
-html.tps1-fx-disabled .sp-card {
-  transform: none !important;
 }
 
 
