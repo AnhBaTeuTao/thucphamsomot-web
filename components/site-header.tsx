@@ -11,7 +11,7 @@ import {
   type FocusEvent,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
-import { Menu, X, Users, ChevronDown, Check, ArrowRight, Sparkles } from "lucide-react";
+import { Menu, X, Users, ChevronDown, Check, ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { navItemsByLocale, siteConfig, type Locale } from "@/lib/site";
 import { SKU_GROUPS, type SkuGroup } from "@/lib/sku-catalog";
@@ -20,12 +20,6 @@ import { TopBar } from "@/components/b2b/top-bar";
 import { dispatchMajorPageTransition } from "@/components/b2b/major-page-transition";
 import { CATEGORY_TRANSITION_CONFIG } from "@/lib/category-transition-config";
 import { CategoryLink } from "@/components/b2b/category-link";
-import {
-  applyTps1FxDomState,
-  isTps1FxDisabled,
-  setTps1FxDisabled,
-  TPS1_FX_CHANGE_EVENT,
-} from "@/lib/fx-preference";
 
 const orderAppUrl = "https://dathang.thucphamsomot.vn/";
 
@@ -164,37 +158,10 @@ function SiteHeaderChrome({ pathname }: { pathname: string }) {
     setPreviewSlug(defaultPreviewSlug);
   }
   const [headerBottom, setHeaderBottom] = useState(108);
-  const [fxDisabled, setFxDisabledState] = useState(false);
   const [panelOffset, setPanelOffset] = useState<{ shiftX: number; caretLeft: number }>({
     shiftX: 0,
     caretLeft: 360,
   });
-
-  useEffect(() => {
-    const initial = isTps1FxDisabled();
-    applyTps1FxDomState(initial);
-    /* eslint-disable react-hooks/set-state-in-effect -- Sync client localStorage FX state on mount */
-    setFxDisabledState(initial);
-    /* eslint-enable react-hooks/set-state-in-effect */
-
-    const handleFxEvent = (e: Event) => {
-      const detail = (e as CustomEvent<{ disabled: boolean }>).detail;
-      if (typeof detail?.disabled === "boolean") {
-        setFxDisabledState(detail.disabled);
-      } else {
-        setFxDisabledState(isTps1FxDisabled());
-      }
-    };
-
-    window.addEventListener(TPS1_FX_CHANGE_EVENT, handleFxEvent);
-    return () => window.removeEventListener(TPS1_FX_CHANGE_EVENT, handleFxEvent);
-  }, []);
-
-  const toggleFxMode = useCallback(() => {
-    const nextDisabled = !fxDisabled;
-    setFxDisabledState(nextDisabled);
-    setTps1FxDisabled(nextDisabled);
-  }, [fxDisabled]);
 
   const locale = localeFromPath(pathname);
   const isEnglish = locale === "en";
@@ -703,34 +670,6 @@ function SiteHeaderChrome({ pathname }: { pathname: string }) {
           </nav>
 
           <div className="site-header__actions">
-            <button
-              type="button"
-              className={`tps1-fx-toggle${fxDisabled ? " is-off" : " is-on"}`}
-              onClick={toggleFxMode}
-              aria-pressed={!fxDisabled}
-              title={
-                isEnglish
-                  ? fxDisabled
-                    ? "Turn visual effects ON"
-                    : "Turn visual effects OFF (Recommended for low-end devices)"
-                  : fxDisabled
-                    ? "Bật lại hiệu ứng chuyển cảnh"
-                    : "Tắt hiệu ứng chuyển cảnh (Dành cho máy yếu hoặc thích lướt nhanh)"
-              }
-            >
-              <span className="tps1-fx-toggle__dot" aria-hidden="true" />
-              <Sparkles size={13} className="tps1-fx-toggle__icon" aria-hidden="true" />
-              <span className="tps1-fx-toggle__label">
-                {isEnglish
-                  ? fxDisabled
-                    ? "FX: Off"
-                    : "FX: On"
-                  : fxDisabled
-                    ? "Hiệu ứng: Tắt"
-                    : "Hiệu ứng: Bật"}
-              </span>
-            </button>
-
             <div className="site-header__lang-dropdown" ref={langRef}>
               <button
                 className="lang-dropdown-toggle"
